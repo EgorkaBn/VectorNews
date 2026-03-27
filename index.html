@@ -62,7 +62,10 @@
         @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.9);} }
         .datetime { display: flex; gap: 16px; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
         .date, .time { background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; }
-        .masthead { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+        .masthead {
+            padding: 24px 20px;
+            border-bottom: 1px solid var(--border);
+        }
         .masthead-inner {
             max-width: 1400px;
             margin: 0 auto;
@@ -91,6 +94,12 @@
         .stat { background: var(--surface); padding: 8px 16px; text-align: center; }
         .stat-value { font-size: 20px; font-weight: 700; }
         .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
+        .update-info {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 8px;
+            text-align: right;
+        }
         .nav {
             position: sticky;
             top: 0;
@@ -372,6 +381,12 @@
             padding: 40px;
             color: var(--text-secondary);
         }
+        .last-update {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-align: right;
+        }
     </style>
 </head>
 <body>
@@ -384,11 +399,14 @@
 <div class="masthead">
     <div class="masthead-inner">
         <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</p></div>
-        <div class="stats">
-            <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
-            <div class="stat"><div class="stat-value">7</div><div class="stat-label">ДНЕЙ АРХИВА</div></div>
-            <div class="stat"><div class="stat-value" id="totalNews">—</div><div class="stat-label">НОВОСТЕЙ</div></div>
-            <div class="stat"><div class="stat-value">30</div><div class="stat-label">МИН</div></div>
+        <div>
+            <div class="stats">
+                <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
+                <div class="stat"><div class="stat-value">7</div><div class="stat-label">ДНЕЙ АРХИВА</div></div>
+                <div class="stat"><div class="stat-value" id="totalNews">—</div><div class="stat-label">НОВОСТЕЙ</div></div>
+                <div class="stat"><div class="stat-value">3</div><div class="stat-label">ОБНОВЛЕНИЯ</div></div>
+            </div>
+            <div class="last-update" id="lastUpdateInfo">Последнее обновление: загрузка...</div>
         </div>
     </div>
 </div>
@@ -421,13 +439,13 @@
         <span class="news-count" id="newsCount">—</span>
     </div>
     <div class="news-grid" id="newsGrid">
-        <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 16 источников...</p></div>
+        <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
     </div>
 </main>
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-logo">ВЕКТОР</div>
-        <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней</div>
+        <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней · Обновление в 07:00, 13:00, 19:00 МСК</div>
         <div class="footer-cols">
             <div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">ИСТОЧНИКИ</div>
@@ -443,7 +461,7 @@
             <div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">О СИСТЕМЕ</div>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
-                    Автообновление: каждые 30 минут<br>
+                    Обновление: 07:00, 13:00, 19:00 МСК<br>
                     Полные тексты новостей загружаются через Cloudflare Worker<br>
                     Все права принадлежат авторам
                 </div>
@@ -465,6 +483,7 @@
 
 <script>
     const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
+    const UPDATE_TIMES = [7, 13, 19]; // часы обновления по МСК
     
     const SOURCES = [
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
@@ -489,6 +508,7 @@
     let currentCategory = 'all';
     let currentDays = 0;
     let customDate = null;
+    let isUpdating = false;
 
     function formatDate(date) {
         return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -595,9 +615,13 @@
         }
     }
 
-    async function loadAllNews() {
-        const grid = document.getElementById('newsGrid');
-        grid.innerHTML = `<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 16 источников...</p></div>`;
+    async function updateNews() {
+        if (isUpdating) return;
+        isUpdating = true;
+        
+        const updateInfo = document.getElementById('lastUpdateInfo');
+        updateInfo.innerHTML = '🔄 Обновление новостей...';
+        
         let allFresh = [];
         for (let i = 0; i < SOURCES.length; i++) {
             const items = await fetchRSS(SOURCES[i]);
@@ -605,13 +629,23 @@
         }
 
         allFresh.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+        
+        // Сохраняем новые новости вместе с архивом
         const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
         const seen = new Set(cached.map(n => n.url));
         allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
+        
+        // Ограничиваем 200 последними новостями
         if (allNews.length > 200) allNews = allNews.slice(0, 200);
+        
         localStorage.setItem('vector_news', JSON.stringify(allNews));
         document.getElementById('totalNews').textContent = allNews.length;
+        
+        const now = new Date();
+        updateInfo.innerHTML = `📰 Последнее обновление: ${now.toLocaleString('ru-RU')}`;
+        
         renderNews();
+        isUpdating = false;
     }
 
     function getFilteredNews() {
@@ -640,10 +674,9 @@
         const filtered = getFilteredNews();
         const grid = document.getElementById('newsGrid');
         document.getElementById('newsCount').textContent = `${filtered.length} материалов`;
-        document.getElementById('totalNews').textContent = allNews.length;
 
         if (!filtered.length) {
-            grid.innerHTML = `<div class="loader"><p style="font-size: 40px;">😕</p><p>Нет новостей за выбранный период</p><p style="font-size: 12px; color: #666;">Попробуйте изменить дату или обновить страницу</p></div>`;
+            grid.innerHTML = `<div class="loader"><p style="font-size: 40px;">😕</p><p>Нет новостей за выбранный период</p><p style="font-size: 12px; color: #666;">Попробуйте изменить дату или дождитесь следующего обновления</p></div>`;
             return;
         }
 
@@ -686,7 +719,6 @@
         modal.classList.add('active');
         document.body.style.overflow = 'hidden';
         
-        // Загружаем полный текст
         const fullText = await loadFullNews(news.url);
         if (fullText && fullText.length > 50) {
             modalText.innerHTML = escapeHtml(fullText);
@@ -700,22 +732,66 @@
         document.body.style.overflow = '';
     }
 
+    function scheduleUpdate() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+        
+        // Находим следующий час обновления
+        let nextUpdateHour = null;
+        for (const hour of UPDATE_TIMES) {
+            if (hour > currentHour || (hour === currentHour && currentMinutes >= 0)) {
+                nextUpdateHour = hour;
+                break;
+            }
+        }
+        if (nextUpdateHour === null) {
+            nextUpdateHour = UPDATE_TIMES[0] + 24;
+        }
+        
+        const nextUpdate = new Date(now);
+        nextUpdate.setHours(nextUpdateHour, 0, 0, 0);
+        if (nextUpdate <= now) {
+            nextUpdate.setDate(nextUpdate.getDate() + 1);
+            nextUpdate.setHours(UPDATE_TIMES[0], 0, 0, 0);
+        }
+        
+        const delay = nextUpdate - now;
+        console.log(`Следующее обновление в: ${nextUpdate.toLocaleString('ru-RU')}`);
+        
+        setTimeout(() => {
+            updateNews();
+            scheduleUpdate(); // Планируем следующее
+        }, delay);
+    }
+
     function init() {
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
+        // Восстанавливаем новости из кэша
         try {
             const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
             if (cached.length) {
                 allNews = cached;
                 renderNews();
                 document.getElementById('totalNews').textContent = allNews.length;
+                const lastUpdate = localStorage.getItem('vector_news_last_update');
+                if (lastUpdate) {
+                    document.getElementById('lastUpdateInfo').innerHTML = `📰 Последнее обновление: ${new Date(lastUpdate).toLocaleString('ru-RU')}`;
+                }
+            } else {
+                // Если кэша нет, загружаем сразу
+                updateNews();
             }
-        } catch (e) {}
+        } catch (e) {
+            updateNews();
+        }
+        
+        // Планируем регулярные обновления
+        scheduleUpdate();
 
-        loadAllNews();
-        setInterval(loadAllNews, 30 * 60 * 1000);
-
+        // Категории
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -725,6 +801,7 @@
             });
         });
 
+        // Таймлайн
         document.querySelectorAll('.timeline-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
@@ -735,6 +812,7 @@
             });
         });
 
+        // Кастомная дата
         document.getElementById('applyDate').addEventListener('click', () => {
             const val = document.getElementById('customDate').value;
             if (val) {
@@ -745,10 +823,19 @@
             }
         });
 
+        // Модальное окно
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('newsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('newsModal')) closeModal();
         });
+        
+        // Кнопка ручного обновления (можно добавить)
+        const refreshBtn = document.createElement('button');
+        refreshBtn.textContent = '↻';
+        refreshBtn.style.cssText = 'background: var(--accent); border: none; border-radius: 30px; padding: 6px 12px; color: white; cursor: pointer; font-size: 14px; margin-left: 12px;';
+        refreshBtn.title = 'Обновить новости вручную';
+        refreshBtn.onclick = () => updateNews();
+        document.querySelector('.masthead-inner .stats').after(refreshBtn);
     }
 
     init();
