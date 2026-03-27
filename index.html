@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=yes">
     <title>ВЕКТОР — Мировые новости</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,12 +12,14 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         body {
             font-family: 'Inter', sans-serif;
             background: #080810;
             color: #e8e8f4;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         :root {
             --c-bg: #080810;
@@ -42,11 +44,17 @@
             --shadow-card: 0 4px 24px rgba(0,0,0,0.45);
         }
         #progress {
-            position: fixed; top: 0; left: 0; height: 2px; z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            z-index: 9999;
             background: linear-gradient(90deg, #5b5bd6, #a78bfa, #ff3366);
-            width: 0; opacity: 0;
+            width: 0;
+            opacity: 0;
             transition: width .25s ease, opacity .3s;
         }
+        /* ============ АДАПТИВНАЯ ШАПКА ============ */
         .topbar {
             height: 36px;
             background: #0f0f1a;
@@ -57,39 +65,42 @@
         .topbar-inner {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 0 20px;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
         }
         .live-pill {
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             color: #ff3366;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .live-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: #ff3366;
             animation: blink 1.4s ease infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
         .topbar-date, .topbar-right {
-            font-size: 11px;
+            font-size: 9px;
             color: #44445a;
         }
         .topbar-right {
             display: flex;
-            gap: 16px;
+            gap: 12px;
+            white-space: nowrap;
         }
         .masthead {
-            padding: 22px 40px;
+            padding: 16px 20px;
             border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .masthead-inner {
@@ -98,113 +109,122 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
         }
         .wordmark {
             font-family: 'Unbounded', sans-serif;
             font-weight: 900;
-            font-size: 38px;
-            letter-spacing: -2px;
+            font-size: 28px;
+            letter-spacing: -1.5px;
             background: linear-gradient(135deg, #fff 30%, #5b5bd6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .wordmark-sub {
-            font-size: 10px;
+            font-size: 8px;
             font-weight: 600;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: #44445a;
             text-transform: uppercase;
-            margin-top: 4px;
+            margin-top: 2px;
         }
         .masthead-stats {
             display: flex;
             border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 14px;
-            overflow: hidden;
+            border-radius: 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .stat-cell {
-            padding: 10px 22px;
+            padding: 8px 12px;
             background: #0f0f1a;
             text-align: center;
+            white-space: nowrap;
         }
         .stat-cell + .stat-cell {
             border-left: 1px solid rgba(255,255,255,0.07);
         }
         .stat-num {
             font-family: 'Unbounded', sans-serif;
-            font-size: 18px;
+            font-size: 14px;
             font-weight: 700;
         }
         .stat-lbl {
-            font-size: 10px;
+            font-size: 8px;
             color: #44445a;
             text-transform: uppercase;
         }
+        /* ============ НАВИГАЦИЯ (АДАПТИВ) ============ */
         .navbar {
             position: sticky;
             top: 0;
             z-index: 200;
-            background: rgba(8,8,16,0.88);
-            backdrop-filter: blur(24px);
+            background: rgba(8,8,16,0.95);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .navbar-inner {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 0 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 50px;
+            min-height: 48px;
+            gap: 8px;
         }
         .nav-cats {
             display: flex;
-            gap: 2px;
+            gap: 4px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            flex: 1;
+        }
+        .nav-cats::-webkit-scrollbar {
+            display: none;
         }
         .cat-btn {
-            padding: 6px 15px;
-            border-radius: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
             background: none;
             border: none;
-            font-size: 13px;
-            font-weight: 500;
-            color: #8888aa;
-            cursor: pointer;
-        }
-        .cat-btn:hover {
-            background: rgba(255,255,255,0.05);
-            color: #e8e8f4;
-        }
-        .cat-btn.active {
-            background: rgba(91,91,214,0.14);
-            color: #a5a5ff;
-        }
-        .cat-sep {
-            width: 1px;
-            height: 18px;
-            background: rgba(255,255,255,0.07);
-            margin: 0 4px;
-        }
-        .nav-tools {
-            display: flex;
-            gap: 6px;
-        }
-        .tool-btn {
-            height: 34px;
-            padding: 0 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.07);
-            background: none;
             font-size: 12px;
             font-weight: 500;
             color: #8888aa;
             cursor: pointer;
+            white-space: nowrap;
+            transition: all .2s;
+        }
+        .cat-btn.active {
+            background: rgba(91,91,214,0.2);
+            color: #a5a5ff;
+        }
+        .nav-tools {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .tool-btn {
+            height: 34px;
+            padding: 0 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: none;
+            font-size: 11px;
+            font-weight: 500;
+            color: #8888aa;
+            cursor: pointer;
+            white-space: nowrap;
         }
         .tool-btn.primary {
             background: #5b5bd6;
             border-color: #5b5bd6;
             color: #fff;
         }
+        /* ============ ТАЙМЛАЙН (АДАПТИВ) ============ */
         .timeline-bar {
             background: #0f0f1a;
             border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -212,108 +232,138 @@
         .timeline-inner {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 0 40px;
+            padding: 8px 12px;
             display: flex;
             align-items: center;
-            height: 42px;
             gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .timeline-inner::-webkit-scrollbar {
+            display: none;
         }
         .tl-label {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #44445a;
             text-transform: uppercase;
+            white-space: nowrap;
         }
         .tl-btn {
-            height: 26px;
-            padding: 0 12px;
-            border-radius: 30px;
+            padding: 4px 10px;
+            border-radius: 20px;
             background: none;
             border: none;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #8888aa;
             cursor: pointer;
+            white-space: nowrap;
         }
         .tl-btn.active {
-            background: rgba(91,91,214,0.14);
+            background: rgba(91,91,214,0.2);
             border: 1px solid #5b5bd6;
             color: #a5a5ff;
         }
+        .tl-datepick {
+            display: flex;
+            gap: 4px;
+            white-space: nowrap;
+        }
         .tl-datepick input {
-            height: 26px;
-            padding: 0 10px;
-            border-radius: 30px;
+            padding: 4px 8px;
+            border-radius: 20px;
             border: 1px solid rgba(255,255,255,0.07);
             background: transparent;
             color: #e8e8f4;
-            font-size: 12px;
+            font-size: 10px;
         }
         .tl-datepick button {
-            height: 26px;
-            padding: 0 12px;
-            border-radius: 30px;
+            padding: 4px 10px;
+            border-radius: 20px;
             border: 1px solid #5b5bd6;
-            background: rgba(91,91,214,0.14);
+            background: rgba(91,91,214,0.2);
             color: #a5a5ff;
-            font-size: 12px;
+            font-size: 10px;
             cursor: pointer;
         }
         .archive-count {
             margin-left: auto;
-            font-size: 11px;
+            font-size: 10px;
             color: #44445a;
+            white-space: nowrap;
         }
+        /* ============ ОСНОВНОЙ КОНТЕНТ ============ */
         .content-wrap {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 36px 40px 80px;
+            padding: 20px 16px 60px;
         }
         .feed-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 28px;
+            align-items: baseline;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .feed-heading h2 {
             font-family: 'Unbounded', sans-serif;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             color: #8888aa;
         }
         .feed-badge {
-            font-size: 11px;
+            font-size: 10px;
             background: #161625;
             border: 1px solid rgba(255,255,255,0.07);
-            padding: 2px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
         }
+        /* ============ СЕТКА НОВОСТЕЙ (АДАПТИВ) ============ */
         .news-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
-            gap: 18px;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        @media (min-width: 640px) {
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .news-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .content-wrap {
+                padding: 32px 40px 80px;
+            }
         }
         .card {
             background: #0f0f1a;
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 20px;
-            padding: 22px 24px 20px;
+            padding: 18px 16px;
             transition: all .2s;
+            cursor: pointer;
         }
-        .card:hover {
-            border-color: rgba(255,255,255,0.14);
-            box-shadow: 0 4px 24px rgba(0,0,0,0.45);
-            transform: translateY(-2px);
+        .card:active {
+            transform: scale(0.98);
         }
         .card-meta {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .tag {
-            padding: 3px 9px;
+            padding: 3px 8px;
             border-radius: 20px;
-            font-size: 10.5px;
+            font-size: 9px;
             font-weight: 700;
             text-transform: uppercase;
         }
@@ -323,56 +373,126 @@
         .tag-security { background: rgba(245,158,11,0.12); color: #ffc84a; }
         .tag-economy { background: rgba(16,185,129,0.12); color: #5eebb8; }
         .card-time {
-            font-size: 11px;
+            font-size: 10px;
             color: #44445a;
         }
         .card-title {
-            font-size: 15.5px;
+            font-size: 15px;
             font-weight: 700;
-            line-height: 1.48;
-            margin-bottom: 12px;
-        }
-        .card-title a {
-            color: inherit;
-            text-decoration: none;
-        }
-        .card-title a:hover {
-            color: #a5a5ff;
+            line-height: 1.45;
+            margin-bottom: 10px;
         }
         .card-desc {
-            font-size: 13px;
+            font-size: 12px;
             color: #8888aa;
-            line-height: 1.65;
+            line-height: 1.55;
             margin-bottom: 12px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .card-orig {
-            font-size: 11.5px;
-            color: #44445a;
-            font-style: italic;
-            border-left: 2px solid #5b5bd6;
-            padding-left: 10px;
-            margin-bottom: 12px;
-        }
         .card-footer {
             display: flex;
             justify-content: space-between;
+            align-items: center;
             padding-top: 12px;
             border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 11px;
+            gap: 8px;
+            flex-wrap: wrap;
         }
         .card-source {
             display: flex;
             align-items: center;
-            gap: 7px;
-            font-size: 12px;
+            gap: 6px;
             color: #8888aa;
         }
         .card-read {
-            font-size: 12px;
+            color: #a5a5ff;
             font-weight: 600;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        /* ============ МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА НОВОСТИ ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8,8,16,0.98);
+            z-index: 10000;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            position: sticky;
+            top: 0;
+            background: #080810;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            z-index: 10;
+        }
+        .modal-header h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8888aa;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            padding: 20px 16px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+        .modal-meta {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #44445a;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .modal-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #c0c0e0;
+            margin-bottom: 32px;
+        }
+        .modal-source {
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 12px;
+            color: #44445a;
+        }
+        .modal-source a {
             color: #a5a5ff;
             text-decoration: none;
         }
@@ -381,12 +501,12 @@
             background: #0f0f1a;
             border: 1px solid rgba(255,255,255,0.07);
             border-radius: 20px;
-            padding: 80px 40px;
+            padding: 40px 20px;
             text-align: center;
         }
         .state-spinner {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid #161625;
             border-top-color: #5b5bd6;
             border-radius: 50%;
@@ -395,18 +515,18 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
         .state-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 8px;
         }
         .state-sub {
-            font-size: 13px;
+            font-size: 12px;
             color: #44445a;
         }
         .site-footer {
             background: #0f0f1a;
             border-top: 1px solid rgba(255,255,255,0.07);
-            padding: 40px 40px 36px;
+            padding: 32px 20px 24px;
         }
         .footer-inner {
             max-width: 1440px;
@@ -414,61 +534,52 @@
         }
         .footer-wordmark {
             font-family: 'Unbounded', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 900;
             margin-bottom: 6px;
         }
         .footer-tagline {
-            font-size: 12px;
+            font-size: 11px;
             color: #44445a;
-            margin-bottom: 28px;
+            margin-bottom: 20px;
         }
         .footer-cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
         }
-        .footer-section-title {
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #44445a;
-            margin-bottom: 12px;
+        @media (min-width: 640px) {
+            .footer-cols {
+                flex-direction: row;
+                justify-content: space-between;
+            }
         }
         .sources-wrap {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
+            max-width: 400px;
         }
         .source-chip {
-            font-size: 11px;
+            font-size: 9px;
             color: #44445a;
             background: #161625;
             border: 1px solid rgba(255,255,255,0.07);
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 20px;
         }
         .footer-info {
-            font-size: 12px;
-            color: #44445a;
-            line-height: 2;
-        }
-        .footer-copy {
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.07);
             font-size: 11px;
             color: #44445a;
+            line-height: 1.8;
         }
-        @media (max-width: 960px) {
-            .masthead-stats { display: none; }
-            .wordmark { font-size: 28px; }
-            .news-grid { grid-template-columns: 1fr; }
-            .footer-cols { grid-template-columns: 1fr; }
-            .masthead, .topbar-inner, .navbar-inner, .timeline-inner, .content-wrap, .footer-inner {
-                padding-left: 20px;
-                padding-right: 20px;
-            }
+        .footer-copy {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 10px;
+            color: #44445a;
+            text-align: center;
         }
     </style>
 </head>
@@ -477,11 +588,11 @@
 <div class="topbar">
     <div class="topbar-inner">
         <div class="topbar-left">
-            <div class="live-pill"><div class="live-dot"></div>Live</div>
+            <div class="live-pill"><div class="live-dot"></div>LIVE</div>
             <div class="topbar-date" id="topDate"></div>
         </div>
         <div class="topbar-right">
-            <span>16 источников</span>
+            <span>16 ист.</span>
             <span>·</span>
             <span id="lastUpdate">Загрузка...</span>
         </div>
@@ -491,45 +602,44 @@
     <div class="masthead-inner">
         <div>
             <div class="wordmark">ВЕКТОР</div>
-            <div class="wordmark-sub">Мировые новости · Аналитика</div>
+            <div class="wordmark-sub">МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</div>
         </div>
         <div class="masthead-stats">
-            <div class="stat-cell"><div class="stat-num">16</div><div class="stat-lbl">Источников</div></div>
-            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">Дней архива</div></div>
-            <div class="stat-cell"><div class="stat-num" id="statTotal">—</div><div class="stat-lbl">Новостей</div></div>
-            <div class="stat-cell"><div class="stat-num">30<span style="font-size:12px;">мин</span></div><div class="stat-lbl">Обновление</div></div>
+            <div class="stat-cell"><div class="stat-num">16</div><div class="stat-lbl">ИСТ</div></div>
+            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">АРХИВ</div></div>
+            <div class="stat-cell"><div class="stat-num" id="statTotal">—</div><div class="stat-lbl">НОВ</div></div>
+            <div class="stat-cell"><div class="stat-num">30</div><div class="stat-lbl">МИН</div></div>
         </div>
     </div>
 </header>
 <nav class="navbar">
     <div class="navbar-inner">
         <div class="nav-cats">
-            <button class="cat-btn active" data-filter="all">Все новости</button>
-            <div class="cat-sep"></div>
+            <button class="cat-btn active" data-filter="all">Все</button>
             <button class="cat-btn" data-filter="politics">🏛 Политика</button>
             <button class="cat-btn" data-filter="war">⚔️ Война</button>
-            <button class="cat-btn" data-filter="cyber">🛡 Кибербезопасность</button>
-            <button class="cat-btn" data-filter="security">⚠️ Происшествия</button>
-            <button class="cat-btn" data-filter="economy">💰 Экономика</button>
+            <button class="cat-btn" data-filter="cyber">🛡 Кибер</button>
+            <button class="cat-btn" data-filter="security">⚠️ ЧП</button>
+            <button class="cat-btn" data-filter="economy">💰 Эконом</button>
         </div>
         <div class="nav-tools">
-            <button class="tool-btn primary" id="refreshBtn">↻ Обновить</button>
-            <button class="tool-btn" id="dailyDigestBtn">📄 Дайджест</button>
+            <button class="tool-btn primary" id="refreshBtn">↻</button>
+            <button class="tool-btn" id="dailyDigestBtn">📄</button>
             <button class="tool-btn" id="clearArchiveBtn">🗑</button>
         </div>
     </div>
 </nav>
 <div class="timeline-bar">
     <div class="timeline-inner">
-        <span class="tl-label">Архив</span>
+        <span class="tl-label">АРХИВ</span>
         <button class="tl-btn active" data-days="0">Сегодня</button>
         <button class="tl-btn" data-days="1">Вчера</button>
-        <button class="tl-btn" data-days="2">2 дня назад</button>
-        <button class="tl-btn" data-days="3">3 дня назад</button>
-        <button class="tl-btn" data-days="7">За неделю</button>
+        <button class="tl-btn" data-days="2">2 дня</button>
+        <button class="tl-btn" data-days="3">3 дня</button>
+        <button class="tl-btn" data-days="7">Неделя</button>
         <div class="tl-datepick">
             <input type="date" id="customDateInput">
-            <button id="customDateBtn">Показать</button>
+            <button id="customDateBtn">→</button>
         </div>
         <span class="archive-count" id="archiveInfo"></span>
     </div>
@@ -537,7 +647,7 @@
 <main class="content-wrap">
     <div class="feed-header">
         <div class="feed-heading">
-            <h2>Последние новости</h2>
+            <h2>ПОСЛЕДНИЕ НОВОСТИ</h2>
             <span class="feed-badge" id="newsCount">—</span>
         </div>
     </div>
@@ -555,29 +665,46 @@
         <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней</div>
         <div class="footer-cols">
             <div>
-                <div class="footer-section-title">Источники</div>
+                <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">ИСТОЧНИКИ</div>
                 <div class="sources-wrap">
-                    <span class="source-chip">CNN</span><span class="source-chip">TechCrunch</span><span class="source-chip">Bloomberg</span>
-                    <span class="source-chip">BBC News</span><span class="source-chip">Reuters</span><span class="source-chip">The Guardian</span>
-                    <span class="source-chip">РИА Новости</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
-                    <span class="source-chip">Хроники Туркменистана</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Asia-Plus</span>
-                    <span class="source-chip">Sputnik Таджикистан</span><span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span>
-                    <span class="source-chip">Kaktus.media</span>
+                    <span class="source-chip">CNN</span><span class="source-chip">BBC</span><span class="source-chip">Reuters</span>
+                    <span class="source-chip">Guardian</span><span class="source-chip">Bloomberg</span><span class="source-chip">TechCrunch</span>
+                    <span class="source-chip">РИА</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
+                    <span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span><span class="source-chip">Kaktus</span>
+                    <span class="source-chip">Asia-Plus</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Хроники ТМ</span>
+                    <span class="source-chip">Sputnik TJ</span>
                 </div>
             </div>
             <div>
-                <div class="footer-section-title">О системе</div>
+                <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">О СИСТЕМЕ</div>
                 <div class="footer-info">
-                    Автообновление каждые 30 минут<br>
-                    Перевод статей: MyMemory API<br>
-                    Архив хранится 7 дней<br>
-                    Дайджест формируется в 21:00 МСК
+                    Обновление: 30 мин<br>
+                    Перевод: MyMemory (с задержкой)<br>
+                    Архив: 7 дней<br>
+                    Дайджест: 21:00 МСК
                 </div>
             </div>
         </div>
-        <div class="footer-copy">© 2025 ВЕКТОР · Новости из открытых источников</div>
+        <div class="footer-copy">© 2025 ВЕКТОР · Новости из открытых источников · Все права принадлежат авторам</div>
     </div>
 </footer>
+
+<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА НОВОСТИ -->
+<div id="newsModal" class="modal">
+    <div class="modal-header">
+        <h3>📰 ВЕКТОР · Чтение</h3>
+        <button class="close-modal" id="closeModalBtn">✕</button>
+    </div>
+    <div class="modal-content">
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta">
+            <span id="modalSource"></span>
+            <span id="modalDate"></span>
+        </div>
+        <div class="modal-text" id="modalText"></div>
+        <div class="modal-source" id="modalOriginalLink"></div>
+    </div>
+</div>
 
 <script>
     const SOURCES = [
@@ -603,12 +730,16 @@
     let currentFilter = 'all';
     let currentDate = null;
     const STORAGE_KEY = 'news_archive_7days';
+    let translateQueue = [];
+    let isTranslating = false;
 
     function dateKey(d) { return d.toISOString().split('T')[0]; }
     function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function ago(str) {
         try {
-            const d = new Date(str), m = Math.floor((new Date() - d) / 60000);
+            const d = new Date(str);
+            if (isNaN(d.getTime())) return 'недавно';
+            const m = Math.floor((new Date() - d) / 60000);
             if (m < 1) return 'только что';
             if (m < 60) return `${m} мин назад`;
             if (m < 1440) return `${Math.floor(m/60)} ч назад`;
@@ -631,53 +762,87 @@
         return 'politics';
     }
 
-    async function translate(text) {
-        if (!text) return text;
+    async function translateText(text) {
+        if (!text || text.length < 5) return text;
         try {
-            const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ru`);
-            const d = await r.json();
-            return d.responseData?.translatedText || text;
-        } catch { return text; }
+            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0, 800))}&langpair=en|ru`);
+            const data = await res.json();
+            return data.responseData?.translatedText || text;
+        } catch (e) {
+            console.warn('Translation error:', e);
+            return text;
+        }
+    }
+
+    async function processTranslateQueue() {
+        if (isTranslating || translateQueue.length === 0) return;
+        isTranslating = true;
+        while (translateQueue.length > 0) {
+            const { text, resolve } = translateQueue.shift();
+            try {
+                const translated = await translateText(text);
+                resolve(translated);
+            } catch (e) {
+                resolve(text);
+            }
+            await new Promise(r => setTimeout(r, 1200));
+        }
+        isTranslating = false;
+    }
+
+    function translateWithDelay(text) {
+        return new Promise((resolve) => {
+            translateQueue.push({ text, resolve });
+            processTranslateQueue();
+        });
     }
 
     async function fetchSource(src) {
-    const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
-    try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 10000);
-        const res = await fetch(workerUrl, { signal: controller.signal });
-        clearTimeout(timeout);
-        if (!res.ok) return [];
-        const data = await res.json();
-        if (data.status !== 'ok' || !data.items) return [];
-        
-        const news = [];
-        for (let i = 0; i < Math.min(data.items.length, 8); i++) {
-            const item = data.items[i];
-            let title = item.title || '';
-            let desc = (item.description || '').substring(0, 400);
+        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 12000);
+            const res = await fetch(workerUrl, { signal: controller.signal });
+            clearTimeout(timeout);
+            if (!res.ok) return [];
+            const data = await res.json();
+            if (data.status !== 'ok' || !data.items) return [];
             
-            // Убираем перевод для всех языков — новости остаются на языке оригинала
-            news.push({
-                id: `${src.name}-${i}-${Date.now()}`,
-                title: title.substring(0, 150),
-                origTitle: null,
-                desc: desc,
-                url: item.link,
-                source: src.name,
-                publishedAt: item.pubDate,
-                date: dateKey(new Date(item.pubDate)),
-                topic: detectTopic(title + ' ' + desc)
-            });
+            const news = [];
+            for (let i = 0; i < Math.min(data.items.length, 8); i++) {
+                const item = data.items[i];
+                let title = item.title || '';
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
+                let originalTitle = null;
+                
+                if (src.lang === 'en') {
+                    originalTitle = title;
+                    title = await translateWithDelay(title);
+                    if (desc.length > 20) {
+                        desc = await translateWithDelay(desc);
+                    }
+                }
+                
+                news.push({
+                    id: `${src.name}-${i}-${Date.now()}`,
+                    title: title.substring(0, 200),
+                    originalTitle: originalTitle,
+                    description: desc,
+                    fullText: desc,
+                    url: item.link,
+                    source: src.name,
+                    publishedAt: item.pubDate,
+                    date: dateKey(new Date(item.pubDate)),
+                    topic: detectTopic(title + ' ' + desc)
+                });
+            }
+            console.log(`✅ ${src.name}: ${news.length} новостей`);
+            return news;
+        } catch (e) {
+            console.warn(`❌ ${src.name}:`, e.message);
+            return [];
         }
-        
-        console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
-        return news;
-    } catch (e) {
-        console.warn(`❌ ${src.name}:`, e.message);
-        return [];
     }
-}
 
     async function loadAll() {
         const container = document.getElementById('newsContainer');
@@ -686,7 +851,10 @@
         for (let i = 0; i < SOURCES.length; i++) {
             const items = await fetchSource(SOURCES[i]);
             allFresh.push(...items);
-            document.getElementById('loadingStatus').innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+            const statusEl = document.getElementById('loadingStatus');
+            if (statusEl) {
+                statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+            }
         }
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         const seen = new Set(stored.map(n => n.url));
@@ -704,38 +872,64 @@
         return list;
     }
 
+    function openNewsModal(news) {
+        document.getElementById('modalTitle').innerHTML = esc(news.title);
+        document.getElementById('modalSource').innerHTML = `📰 ${esc(news.source)}`;
+        document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)}`;
+        document.getElementById('modalText').innerHTML = esc(news.description) || 'Полный текст новости доступен по ссылке на источник.';
+        document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${esc(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
+        document.getElementById('newsModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('newsModal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
     function render() {
         const list = getFiltered();
         document.getElementById('newsCount').textContent = `${list.length} материалов`;
         document.getElementById('statTotal').textContent = allNewsArchive.length;
-        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate === 'week' ? 'За 7 дней' : currentDate ? currentDate : 'Сегодня'}</strong> · В архиве: ${allNewsArchive.length}`;
+        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate === 'week' ? 'За 7 дней' : currentDate ? currentDate : 'Сегодня'}</strong> · ${allNewsArchive.length}`;
         const container = document.getElementById('newsContainer');
         if (!list.length) {
-            container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div></div>`;
+            container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить страницу</div></div>`;
             return;
         }
         const topicNames = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
         const topicIcons = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
         container.innerHTML = list.map(n => `
-            <div class="card" data-topic="${n.topic}">
+            <div class="card" data-news-id="${n.id}">
                 <div class="card-meta">
                     <span class="tag tag-${n.topic}">${topicIcons[n.topic] || '📰'} ${topicNames[n.topic] || 'Новости'}</span>
                     <span class="card-time">${ago(n.publishedAt)}</span>
                 </div>
-                <div class="card-title"><a href="${n.url}" target="_blank">${esc(n.title)}</a></div>
-                ${n.desc ? `<div class="card-desc">${esc(n.desc)}</div>` : ''}
-                ${n.origTitle ? `<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0,110))}…</div>` : ''}
+                <div class="card-title">${esc(n.title)}</div>
+                <div class="card-desc">${esc(n.description.substring(0, 150))}${n.description.length > 150 ? '...' : ''}</div>
                 <div class="card-footer">
                     <div class="card-source">📰 ${esc(n.source)}</div>
-                    <a href="${n.url}" target="_blank" class="card-read">Читать →</a>
+                    <div class="card-read" data-news-id="${n.id}">Читать →</div>
                 </div>
             </div>
         `).join('');
+        
+        document.querySelectorAll('.card, .card-read').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const card = el.closest('.card');
+                if (card) {
+                    const newsId = card.dataset.newsId;
+                    const news = list.find(n => n.id === newsId);
+                    if (news) openNewsModal(news);
+                }
+            });
+        });
     }
 
     function tick() {
         const n = new Date();
-        document.getElementById('lastUpdate').textContent = `Обновлено: ${n.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
+        document.getElementById('lastUpdate').textContent = `Обн: ${n.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
         document.getElementById('topDate').textContent = n.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
     }
 
@@ -745,7 +939,7 @@
         if (!list.length) { alert('Нет новостей за сегодня'); return; }
         let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title><style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6}</style></head><body><h1>ВЕКТОР — Дайджест ${new Date().toLocaleDateString('ru-RU')}</h1><p>Новостей: ${list.length}</p>`;
         list.forEach(n => {
-            html += `<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.desc)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`;
+            html += `<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.description)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`;
         });
         html += '</body></html>';
         const a = document.createElement('a');
@@ -808,6 +1002,10 @@
                 allNewsArchive = [];
                 render();
             }
+        });
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('newsModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('newsModal')) closeModal();
         });
         loadAll();
         setInterval(loadAll, 30 * 60000);
