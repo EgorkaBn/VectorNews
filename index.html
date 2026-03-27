@@ -8,6 +8,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #080810;
+            color: #e8e8f4;
+            min-height: 100vh;
+        }
         :root {
             --c-bg: #080810;
             --c-surface: #0f0f1a;
@@ -30,220 +41,252 @@
             --radius-lg: 20px;
             --shadow-card: 0 4px 24px rgba(0,0,0,0.45);
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--c-bg);
-            color: var(--c-text);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-        }
-        a { color: inherit; text-decoration: none; }
-        button { cursor: pointer; font-family: inherit; }
         #progress {
             position: fixed; top: 0; left: 0; height: 2px; z-index: 999;
-            background: linear-gradient(90deg, var(--c-accent), #a78bfa, var(--c-live));
+            background: linear-gradient(90deg, #5b5bd6, #a78bfa, #ff3366);
             width: 0; opacity: 0;
             transition: width .25s ease, opacity .3s;
         }
         .topbar {
             height: 36px;
-            background: var(--c-surface);
-            border-bottom: 1px solid var(--c-border);
-            display: flex; align-items: center;
+            background: #0f0f1a;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: center;
         }
         .topbar-inner {
-            max-width: 1440px; margin: 0 auto;
+            max-width: 1440px;
+            margin: 0 auto;
             padding: 0 40px;
             width: 100%;
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 16px;
-        }
-        .topbar-left {
-            display: flex; align-items: center; gap: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         .live-pill {
-            display: flex; align-items: center; gap: 5px;
-            font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-            color: var(--c-live); text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #ff3366;
+            text-transform: uppercase;
         }
         .live-dot {
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--c-live);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ff3366;
             animation: blink 1.4s ease infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
-        .topbar-date {
-            font-size: 11px; color: var(--c-muted); font-weight: 500;
+        .topbar-date, .topbar-right {
+            font-size: 11px;
+            color: #44445a;
         }
         .topbar-right {
-            font-size: 11px; color: var(--c-muted);
-            display: flex; align-items: center; gap: 16px;
+            display: flex;
+            gap: 16px;
         }
-        #lastUpdate { font-size: 11px; color: var(--c-muted); }
         .masthead {
-            background: var(--c-bg);
-            border-bottom: 1px solid var(--c-border);
             padding: 22px 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .masthead-inner {
-            max-width: 1440px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between; gap: 24px;
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         .wordmark {
             font-family: 'Unbounded', sans-serif;
             font-weight: 900;
             font-size: 38px;
             letter-spacing: -2px;
-            line-height: 1;
-            background: linear-gradient(135deg, #fff 30%, var(--c-accent) 100%);
+            background: linear-gradient(135deg, #fff 30%, #5b5bd6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
         .wordmark-sub {
-            font-size: 10px; font-weight: 600; letter-spacing: 3px;
-            color: var(--c-muted); text-transform: uppercase;
-            margin-top: 4px; margin-left: 2px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: #44445a;
+            text-transform: uppercase;
+            margin-top: 4px;
         }
         .masthead-stats {
-            display: flex; align-items: stretch; gap: 1px;
-            border: 1px solid var(--c-border); border-radius: var(--radius-md);
+            display: flex;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 14px;
             overflow: hidden;
         }
         .stat-cell {
-            display: flex; flex-direction: column; align-items: center;
             padding: 10px 22px;
-            background: var(--c-surface);
-            gap: 4px;
+            background: #0f0f1a;
+            text-align: center;
         }
-        .stat-cell + .stat-cell { border-left: 1px solid var(--c-border); }
+        .stat-cell + .stat-cell {
+            border-left: 1px solid rgba(255,255,255,0.07);
+        }
         .stat-num {
             font-family: 'Unbounded', sans-serif;
-            font-size: 18px; font-weight: 700;
-            color: var(--c-text);
+            font-size: 18px;
+            font-weight: 700;
         }
         .stat-lbl {
-            font-size: 10px; font-weight: 500; color: var(--c-muted);
-            text-transform: uppercase; letter-spacing: 0.8px;
+            font-size: 10px;
+            color: #44445a;
+            text-transform: uppercase;
         }
         .navbar {
-            position: sticky; top: 0; z-index: 200;
+            position: sticky;
+            top: 0;
+            z-index: 200;
             background: rgba(8,8,16,0.88);
-            backdrop-filter: blur(24px) saturate(1.5);
-            border-bottom: 1px solid var(--c-border);
+            backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .navbar-inner {
-            max-width: 1440px; margin: 0 auto;
+            max-width: 1440px;
+            margin: 0 auto;
             padding: 0 40px;
-            display: flex; align-items: center; justify-content: space-between;
-            height: 50px; gap: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 50px;
         }
         .nav-cats {
-            display: flex; align-items: center; gap: 2px;
-            overflow-x: auto; scrollbar-width: none;
+            display: flex;
+            gap: 2px;
         }
-        .nav-cats::-webkit-scrollbar { display: none; }
         .cat-btn {
-            padding: 6px 15px; border-radius: var(--radius-sm);
-            background: none; border: none;
-            font-size: 13px; font-weight: 500; white-space: nowrap;
-            color: var(--c-sub); transition: all .18s;
+            padding: 6px 15px;
+            border-radius: 8px;
+            background: none;
+            border: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: #8888aa;
+            cursor: pointer;
         }
-        .cat-btn:hover { background: rgba(255,255,255,.05); color: var(--c-text); }
-        .cat-btn.active { color: #fff; }
-        .cat-btn.active[data-filter="all"]      { background: var(--c-accent-lo); color: #a5a5ff; }
-        .cat-btn.active[data-filter="politics"] { background: rgba(59,130,246,.14); color: #7db9ff; }
-        .cat-btn.active[data-filter="war"]      { background: rgba(244,63,94,.14);  color: #ff8099; }
-        .cat-btn.active[data-filter="cyber"]    { background: rgba(168,85,247,.14); color: #d09fff; }
-        .cat-btn.active[data-filter="security"] { background: rgba(245,158,11,.14); color: #ffc84a; }
-        .cat-btn.active[data-filter="economy"]  { background: rgba(16,185,129,.14); color: #5eebb8; }
-        .cat-sep { width: 1px; height: 18px; background: var(--c-border); flex-shrink: 0; margin: 0 4px; }
+        .cat-btn:hover {
+            background: rgba(255,255,255,0.05);
+            color: #e8e8f4;
+        }
+        .cat-btn.active {
+            background: rgba(91,91,214,0.14);
+            color: #a5a5ff;
+        }
+        .cat-sep {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.07);
+            margin: 0 4px;
+        }
         .nav-tools {
-            display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+            display: flex;
+            gap: 6px;
         }
         .tool-btn {
-            height: 34px; padding: 0 14px; border-radius: var(--radius-sm);
-            border: 1px solid var(--c-border); background: none;
-            font-size: 12px; font-weight: 500;
-            color: var(--c-sub); display: flex; align-items: center; gap: 6px;
-            transition: all .18s;
+            height: 34px;
+            padding: 0 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: none;
+            font-size: 12px;
+            font-weight: 500;
+            color: #8888aa;
+            cursor: pointer;
         }
-        .tool-btn:hover { border-color: var(--c-border-hi); color: var(--c-text); background: rgba(255,255,255,.04); }
         .tool-btn.primary {
-            background: var(--c-accent); border-color: var(--c-accent); color: #fff;
+            background: #5b5bd6;
+            border-color: #5b5bd6;
+            color: #fff;
         }
-        .tool-btn.primary:hover { background: #4a4aba; }
-        .tool-btn.danger { border-color: rgba(244,63,94,.25); color: var(--c-war); }
-        .tool-btn.danger:hover { background: rgba(244,63,94,.1); }
         .timeline-bar {
-            background: var(--c-surface);
-            border-bottom: 1px solid var(--c-border);
+            background: #0f0f1a;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
         }
         .timeline-inner {
-            max-width: 1440px; margin: 0 auto;
+            max-width: 1440px;
+            margin: 0 auto;
             padding: 0 40px;
-            display: flex; align-items: center; gap: 0;
-            height: 42px; overflow-x: auto; scrollbar-width: none;
+            display: flex;
+            align-items: center;
+            height: 42px;
+            gap: 8px;
         }
-        .timeline-inner::-webkit-scrollbar { display: none; }
         .tl-label {
-            font-size: 11px; font-weight: 600; color: var(--c-muted);
-            letter-spacing: .8px; text-transform: uppercase;
-            white-space: nowrap; margin-right: 14px; flex-shrink: 0;
+            font-size: 11px;
+            font-weight: 600;
+            color: #44445a;
+            text-transform: uppercase;
         }
         .tl-btn {
-            height: 26px; padding: 0 12px;
-            border-radius: 30px; border: 1px solid transparent;
-            background: none; font-size: 12px; font-weight: 500;
-            color: var(--c-sub); white-space: nowrap; flex-shrink: 0;
-            transition: all .18s;
+            height: 26px;
+            padding: 0 12px;
+            border-radius: 30px;
+            background: none;
+            border: none;
+            font-size: 12px;
+            font-weight: 500;
+            color: #8888aa;
+            cursor: pointer;
         }
-        .tl-btn:hover { color: var(--c-text); border-color: var(--c-border); }
-        .tl-btn.active { background: var(--c-accent-lo); border-color: var(--c-accent); color: #a5a5ff; }
-        .tl-sep { width: 1px; height: 16px; background: var(--c-border); flex-shrink: 0; margin: 0 8px; }
-        .tl-datepick {
-            display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+        .tl-btn.active {
+            background: rgba(91,91,214,0.14);
+            border: 1px solid #5b5bd6;
+            color: #a5a5ff;
         }
         .tl-datepick input {
-            height: 26px; padding: 0 10px; border-radius: 30px;
-            border: 1px solid var(--c-border); background: transparent;
-            color: var(--c-text); font-size: 12px; font-family: inherit;
+            height: 26px;
+            padding: 0 10px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.07);
+            background: transparent;
+            color: #e8e8f4;
+            font-size: 12px;
         }
-        .tl-datepick input:focus { outline: none; border-color: var(--c-accent); }
         .tl-datepick button {
-            height: 26px; padding: 0 12px; border-radius: 30px;
-            border: 1px solid var(--c-accent); background: var(--c-accent-lo);
-            color: #a5a5ff; font-size: 12px; font-family: inherit; font-weight: 500;
+            height: 26px;
+            padding: 0 12px;
+            border-radius: 30px;
+            border: 1px solid #5b5bd6;
+            background: rgba(91,91,214,0.14);
+            color: #a5a5ff;
+            font-size: 12px;
+            cursor: pointer;
         }
         .archive-count {
-            margin-left: auto; flex-shrink: 0;
-            font-size: 11px; color: var(--c-muted);
+            margin-left: auto;
+            font-size: 11px;
+            color: #44445a;
         }
-        .archive-count strong { color: var(--c-sub); }
         .content-wrap {
-            max-width: 1440px; margin: 0 auto;
+            max-width: 1440px;
+            margin: 0 auto;
             padding: 36px 40px 80px;
         }
         .feed-header {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 28px;
-        }
-        .feed-heading {
-            display: flex; align-items: center; gap: 10px;
         }
         .feed-heading h2 {
             font-family: 'Unbounded', sans-serif;
-            font-size: 13px; font-weight: 700;
-            letter-spacing: 1.5px; text-transform: uppercase;
-            color: var(--c-sub);
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #8888aa;
         }
         .feed-badge {
-            font-size: 11px; font-weight: 600;
-            background: var(--c-elevated);
-            border: 1px solid var(--c-border);
-            color: var(--c-sub);
-            padding: 2px 10px; border-radius: 20px;
+            font-size: 11px;
+            background: #161625;
+            border: 1px solid rgba(255,255,255,0.07);
+            padding: 2px 10px;
+            border-radius: 20px;
         }
         .news-grid {
             display: grid;
@@ -251,166 +294,181 @@
             gap: 18px;
         }
         .card {
-            background: var(--c-surface);
-            border: 1px solid var(--c-border);
-            border-radius: var(--radius-lg);
+            background: #0f0f1a;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
             padding: 22px 24px 20px;
-            display: flex; flex-direction: column;
-            gap: 12px;
-            transition: border-color .2s, box-shadow .2s, transform .2s;
-            position: relative;
-            overflow: hidden;
+            transition: all .2s;
         }
-        .card::after {
-            content: '';
-            position: absolute; inset: 0 auto 0 0;
-            width: 3px;
-            border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-            opacity: 0;
-            transition: opacity .2s;
-        }
-        .card[data-topic="politics"]::after { background: var(--c-politics); }
-        .card[data-topic="war"]::after      { background: var(--c-war); }
-        .card[data-topic="cyber"]::after    { background: var(--c-cyber); }
-        .card[data-topic="security"]::after { background: var(--c-security); }
-        .card[data-topic="economy"]::after  { background: var(--c-economy); }
         .card:hover {
-            border-color: var(--c-border-hi);
-            box-shadow: var(--shadow-card);
+            border-color: rgba(255,255,255,0.14);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.45);
             transform: translateY(-2px);
         }
-        .card:hover::after { opacity: 1; }
         .card-meta {
-            display: flex; align-items: center; justify-content: space-between;
-            gap: 8px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
         }
         .tag {
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 3px 9px; border-radius: 20px;
-            font-size: 10.5px; font-weight: 700; letter-spacing: .3px;
+            padding: 3px 9px;
+            border-radius: 20px;
+            font-size: 10.5px;
+            font-weight: 700;
             text-transform: uppercase;
         }
-        .tag-politics { background: rgba(59,130,246,.12);  color: #7db9ff; border: 1px solid rgba(59,130,246,.2); }
-        .tag-war      { background: rgba(244,63,94,.12);   color: #ff8099; border: 1px solid rgba(244,63,94,.2); }
-        .tag-cyber    { background: rgba(168,85,247,.12);  color: #d09fff; border: 1px solid rgba(168,85,247,.2); }
-        .tag-security { background: rgba(245,158,11,.12);  color: #ffc84a; border: 1px solid rgba(245,158,11,.2); }
-        .tag-economy  { background: rgba(16,185,129,.12);  color: #5eebb8; border: 1px solid rgba(16,185,129,.2); }
+        .tag-politics { background: rgba(59,130,246,0.12); color: #7db9ff; }
+        .tag-war { background: rgba(244,63,94,0.12); color: #ff8099; }
+        .tag-cyber { background: rgba(168,85,247,0.12); color: #d09fff; }
+        .tag-security { background: rgba(245,158,11,0.12); color: #ffc84a; }
+        .tag-economy { background: rgba(16,185,129,0.12); color: #5eebb8; }
         .card-time {
-            font-size: 11px; font-weight: 500; color: var(--c-muted);
-            white-space: nowrap;
+            font-size: 11px;
+            color: #44445a;
         }
         .card-title {
-            font-size: 15.5px; font-weight: 700; line-height: 1.48;
-            color: var(--c-text);
+            font-size: 15.5px;
+            font-weight: 700;
+            line-height: 1.48;
+            margin-bottom: 12px;
         }
-        .card-title a:hover { color: #a5a5ff; }
+        .card-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+        .card-title a:hover {
+            color: #a5a5ff;
+        }
         .card-desc {
-            font-size: 13px; color: var(--c-sub);
+            font-size: 13px;
+            color: #8888aa;
             line-height: 1.65;
+            margin-bottom: 12px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
         .card-orig {
-            font-size: 11.5px; color: var(--c-muted);
-            font-style: italic; line-height: 1.5;
-            border-left: 2px solid var(--c-accent);
+            font-size: 11.5px;
+            color: #44445a;
+            font-style: italic;
+            border-left: 2px solid #5b5bd6;
             padding-left: 10px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            margin-bottom: 12px;
         }
         .card-footer {
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
             padding-top: 12px;
-            border-top: 1px solid var(--c-border);
-            gap: 8px;
-            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.07);
         }
         .card-source {
-            display: flex; align-items: center; gap: 7px;
-            font-size: 12px; font-weight: 500; color: var(--c-sub);
-        }
-        .source-ico {
-            width: 20px; height: 20px; border-radius: 6px;
-            background: var(--c-elevated);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 11px; flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            color: #8888aa;
         }
         .card-read {
-            font-size: 12px; font-weight: 600; color: #a5a5ff;
-            display: flex; align-items: center; gap: 4px;
-            transition: gap .15s, color .15s;
+            font-size: 12px;
+            font-weight: 600;
+            color: #a5a5ff;
+            text-decoration: none;
         }
-        .card-read:hover { color: #7b7bff; gap: 7px; }
         .state-card {
             grid-column: 1 / -1;
-            background: var(--c-surface);
-            border: 1px solid var(--c-border);
-            border-radius: var(--radius-lg);
+            background: #0f0f1a;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 20px;
             padding: 80px 40px;
-            display: flex; flex-direction: column;
-            align-items: center; gap: 16px;
+            text-align: center;
         }
         .state-spinner {
-            width: 40px; height: 40px;
-            border: 3px solid var(--c-elevated);
-            border-top-color: var(--c-accent);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #161625;
+            border-top-color: #5b5bd6;
             border-radius: 50%;
             animation: spin .75s linear infinite;
+            margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .state-title { font-size: 16px; font-weight: 700; color: var(--c-text); }
-        .state-sub { font-size: 13px; color: var(--c-muted); }
+        .state-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .state-sub {
+            font-size: 13px;
+            color: #44445a;
+        }
         .site-footer {
-            background: var(--c-surface);
-            border-top: 1px solid var(--c-border);
+            background: #0f0f1a;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding: 40px 40px 36px;
         }
         .footer-inner {
-            max-width: 1440px; margin: 0 auto;
-            padding: 40px 40px 36px;
+            max-width: 1440px;
+            margin: 0 auto;
         }
         .footer-wordmark {
             font-family: 'Unbounded', sans-serif;
-            font-size: 22px; font-weight: 900; letter-spacing: -1px;
-            color: var(--c-text); margin-bottom: 6px;
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 6px;
         }
-        .footer-tagline { font-size: 12px; color: var(--c-muted); margin-bottom: 28px; }
-        .footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        .footer-tagline {
+            font-size: 12px;
+            color: #44445a;
+            margin-bottom: 28px;
+        }
+        .footer-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
         .footer-section-title {
-            font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-            text-transform: uppercase; color: var(--c-muted); margin-bottom: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #44445a;
+            margin-bottom: 12px;
         }
         .sources-wrap {
-            display: flex; flex-wrap: wrap; gap: 6px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .source-chip {
-            font-size: 11px; color: var(--c-muted);
-            background: var(--c-elevated);
-            border: 1px solid var(--c-border);
-            padding: 3px 10px; border-radius: 20px;
+            font-size: 11px;
+            color: #44445a;
+            background: #161625;
+            border: 1px solid rgba(255,255,255,0.07);
+            padding: 3px 10px;
+            border-radius: 20px;
         }
-        .footer-info { font-size: 12px; color: var(--c-muted); line-height: 2; }
+        .footer-info {
+            font-size: 12px;
+            color: #44445a;
+            line-height: 2;
+        }
         .footer-copy {
-            margin-top: 28px; padding-top: 20px;
-            border-top: 1px solid var(--c-border);
-            font-size: 11px; color: var(--c-muted);
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 11px;
+            color: #44445a;
         }
         @media (max-width: 960px) {
-            .masthead, .topbar-inner, .navbar-inner, .timeline-inner, .content-wrap, .footer-inner {
-                padding-left: 20px; padding-right: 20px;
-            }
             .masthead-stats { display: none; }
             .wordmark { font-size: 28px; }
             .news-grid { grid-template-columns: 1fr; }
             .footer-cols { grid-template-columns: 1fr; }
-            .nav-tools .tool-label { display: none; }
-        }
-        @media (max-width: 600px) {
-            .topbar { display: none; }
-            .masthead { padding: 14px 20px; }
+            .masthead, .topbar-inner, .navbar-inner, .timeline-inner, .content-wrap, .footer-inner {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
         }
     </style>
 </head>
@@ -455,9 +513,9 @@
             <button class="cat-btn" data-filter="economy">💰 Экономика</button>
         </div>
         <div class="nav-tools">
-            <button class="tool-btn primary" id="refreshBtn">↻ <span class="tool-label">Обновить</span></button>
-            <button class="tool-btn" id="dailyDigestBtn">📄 <span class="tool-label">Дайджест</span></button>
-            <button class="tool-btn danger" id="clearArchiveBtn">🗑</button>
+            <button class="tool-btn primary" id="refreshBtn">↻ Обновить</button>
+            <button class="tool-btn" id="dailyDigestBtn">📄 Дайджест</button>
+            <button class="tool-btn" id="clearArchiveBtn">🗑</button>
         </div>
     </div>
 </nav>
@@ -469,7 +527,6 @@
         <button class="tl-btn" data-days="2">2 дня назад</button>
         <button class="tl-btn" data-days="3">3 дня назад</button>
         <button class="tl-btn" data-days="7">За неделю</button>
-        <div class="tl-sep"></div>
         <div class="tl-datepick">
             <input type="date" id="customDateInput">
             <button id="customDateBtn">Показать</button>
@@ -497,59 +554,92 @@
         <div class="footer-wordmark">ВЕКТОР</div>
         <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней</div>
         <div class="footer-cols">
-            <div><div class="footer-section-title">Источники</div><div class="sources-wrap">
-                <span class="source-chip">CNN</span><span class="source-chip">TechCrunch</span><span class="source-chip">Bloomberg</span>
-                <span class="source-chip">BBC News</span><span class="source-chip">Reuters</span><span class="source-chip">The Guardian</span>
-                <span class="source-chip">РИА Новости</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
-                <span class="source-chip">Хроники Туркменистана</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Asia-Plus</span>
-                <span class="source-chip">Sputnik Таджикистан</span><span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span>
-                <span class="source-chip">Kaktus.media</span>
-            </div></div>
-            <div><div class="footer-section-title">О системе</div><div class="footer-info">
-                Автообновление каждые 30 минут<br>Перевод статей: MyMemory API<br>Архив хранится 7 дней<br>Дайджест формируется в 21:00 МСК
-            </div></div>
+            <div>
+                <div class="footer-section-title">Источники</div>
+                <div class="sources-wrap">
+                    <span class="source-chip">CNN</span><span class="source-chip">TechCrunch</span><span class="source-chip">Bloomberg</span>
+                    <span class="source-chip">BBC News</span><span class="source-chip">Reuters</span><span class="source-chip">The Guardian</span>
+                    <span class="source-chip">РИА Новости</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
+                    <span class="source-chip">Хроники Туркменистана</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Asia-Plus</span>
+                    <span class="source-chip">Sputnik Таджикистан</span><span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span>
+                    <span class="source-chip">Kaktus.media</span>
+                </div>
+            </div>
+            <div>
+                <div class="footer-section-title">О системе</div>
+                <div class="footer-info">
+                    Автообновление каждые 30 минут<br>
+                    Перевод статей: MyMemory API<br>
+                    Архив хранится 7 дней<br>
+                    Дайджест формируется в 21:00 МСК
+                </div>
+            </div>
         </div>
         <div class="footer-copy">© 2025 ВЕКТОР · Новости из открытых источников</div>
     </div>
 </footer>
+
 <script>
     const SOURCES = [
-        { name:'CNN', url:'http://rss.cnn.com/rss/edition.rss', lang:'en' },
-        { name:'TechCrunch', url:'https://techcrunch.com/feed', lang:'en' },
-        { name:'Bloomberg', url:'https://www.bloomberg.com/feed', lang:'en' },
-        { name:'BBC News', url:'http://feeds.bbci.co.uk/news/rss.xml', lang:'en' },
-        { name:'Reuters', url:'https://www.reuters.com/rss/topNews', lang:'en' },
-        { name:'The Guardian', url:'https://www.theguardian.com/world/rss', lang:'en' },
-        { name:'РИА Новости', url:'https://ria.ru/export/rss2/index.xml', lang:'ru' },
-        { name:'РБК', url:'https://www.rbc.ru/rss/', lang:'ru' },
-        { name:'Meduza', url:'https://meduza.io/rss/all', lang:'ru' },
-        { name:'Хроники Туркменистана', url:'https://www.hronikatm.com/feed/', lang:'ru' },
-        { name:'Turkmenportal', url:'https://turkmenportal.com/rss/ru', lang:'ru' },
-        { name:'Asia-Plus', url:'https://asiaplustj.info/ru/rss.xml', lang:'ru' },
-        { name:'Sputnik Таджикистан', url:'https://sputnik-tj.com/rss', lang:'ru' },
-        { name:'Tengrinews', url:'https://tengrinews.kz/rss/all.xml', lang:'ru' },
-        { name:'Gazeta.uz', url:'https://www.gazeta.uz/rss/ru', lang:'ru' },
-        { name:'Kaktus.media', url:'https://kaktus.media/rss', lang:'ru' }
+        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
+        { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
+        { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
+        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
+        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' },
+        { name: 'Kaktus.media', url: 'https://kaktus.media/rss', lang: 'ru' },
+        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
+        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
+        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
+        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
+        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en' },
+        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
+        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
+        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
+        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
+        { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
     ];
+
     let allNewsArchive = [];
     let currentFilter = 'all';
     let currentDate = null;
     const STORAGE_KEY = 'news_archive_7days';
+
     function dateKey(d) { return d.toISOString().split('T')[0]; }
     function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function ago(str) {
-        try { const d=new Date(str), m=Math.floor((new Date()-d)/60000); if(m<1) return 'только что'; if(m<60) return `${m} мин назад`; if(m<1440) return `${Math.floor(m/60)} ч назад`; return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'}); } catch { return 'недавно'; }
+        try {
+            const d = new Date(str), m = Math.floor((new Date() - d) / 60000);
+            if (m < 1) return 'только что';
+            if (m < 60) return `${m} мин назад`;
+            if (m < 1440) return `${Math.floor(m/60)} ч назад`;
+            return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+        } catch { return 'недавно'; }
     }
+
     function detectTopic(title, desc) {
-        const t=(title+' '+desc).toLowerCase();
-        const kw={politics:['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'], war:['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'], cyber:['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'], security:['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'], economy:['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']};
-        for(let [topic,kws] of Object.entries(kw)) for(let kw of kws) if(t.includes(kw)) return topic;
+        const t = (title + ' ' + desc).toLowerCase();
+        const kw = {
+            politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
+            war: ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
+            cyber: ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
+            security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
+            economy: ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
+        };
+        for (let [topic, keywords] of Object.entries(kw)) {
+            for (let k of keywords) if (t.includes(k)) return topic;
+        }
         return 'politics';
     }
+
     async function translate(text) {
-        if(!text) return text;
-        try { const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ru`); const d=await r.json(); return d.responseData?.translatedText||text; } catch { return text; }
+        if (!text) return text;
+        try {
+            const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ru`);
+            const d = await r.json();
+            return d.responseData?.translatedText || text;
+        } catch { return text; }
     }
+
     async function fetchSource(src) {
         const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
         try {
@@ -557,77 +647,172 @@
             const timeout = setTimeout(() => controller.abort(), 10000);
             const res = await fetch(workerUrl, { signal: controller.signal });
             clearTimeout(timeout);
-            if(!res.ok) return [];
+            if (!res.ok) return [];
             const data = await res.json();
-            if(data.status !== 'ok' || !data.items) return [];
+            if (data.status !== 'ok' || !data.items) return [];
             const news = [];
-            for(let item of data.items.slice(0,8)) {
+            for (let item of data.items.slice(0, 8)) {
                 let title = item.title || '';
-                let desc = (item.description || '').substring(0,400);
+                let desc = (item.description || '').substring(0, 400);
                 let origTitle = null;
-                if(src.lang === 'en') {
+                if (src.lang === 'en') {
                     origTitle = title;
                     try { title = await translate(title); } catch {}
-                    try { if(desc.length>10) desc = await translate(desc); } catch {}
+                    try { if (desc.length > 10) desc = await translate(desc); } catch {}
                 }
-                news.push({ id:`${src.name}-${Date.now()}`, title:title.substring(0,150), origTitle, desc, url:item.link, source:src.name, publishedAt:item.pubDate, date:dateKey(new Date(item.pubDate)), topic:detectTopic((origTitle||title)+' '+desc) });
+                news.push({
+                    id: `${src.name}-${Date.now()}`,
+                    title: title.substring(0, 150),
+                    origTitle,
+                    desc,
+                    url: item.link,
+                    source: src.name,
+                    publishedAt: item.pubDate,
+                    date: dateKey(new Date(item.pubDate)),
+                    topic: detectTopic((origTitle || title) + ' ' + desc)
+                });
             }
             console.log(`✅ ${src.name}: ${news.length} новостей`);
             return news;
-        } catch(e) { console.warn(`❌ ${src.name}:`, e.message); return []; }
+        } catch (e) {
+            console.warn(`❌ ${src.name}:`, e.message);
+            return [];
+        }
     }
+
     async function loadAll() {
         const container = document.getElementById('newsContainer');
         container.innerHTML = `<div class="state-card"><div class="state-spinner"></div><div class="state-title">Сбор новостей</div><div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div></div>`;
         let allFresh = [];
-        for(let i=0;i<SOURCES.length;i++) {
+        for (let i = 0; i < SOURCES.length; i++) {
             const items = await fetchSource(SOURCES[i]);
             allFresh.push(...items);
             document.getElementById('loadingStatus').innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
         }
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const seen = new Set(stored.map(n=>n.url));
-        allNewsArchive = [...allFresh.filter(n=>!seen.has(n.url)), ...stored];
-        const cutoff = dateKey(new Date(Date.now()-7*864e5));
-        allNewsArchive = allNewsArchive.filter(n=>n.date>=cutoff).sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
+        const seen = new Set(stored.map(n => n.url));
+        allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
+        const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
+        allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
-        render(); tick();
+        render();
+        tick();
     }
+
     function getFiltered() {
-        let list = currentDate === 'week' ? allNewsArchive : currentDate ? allNewsArchive.filter(n=>n.date===currentDate) : allNewsArchive.filter(n=>n.date===dateKey(new Date()));
-        if(currentFilter !== 'all') list = list.filter(n=>n.topic === currentFilter);
+        let list = currentDate === 'week' ? allNewsArchive : currentDate ? allNewsArchive.filter(n => n.date === currentDate) : allNewsArchive.filter(n => n.date === dateKey(new Date()));
+        if (currentFilter !== 'all') list = list.filter(n => n.topic === currentFilter);
         return list;
     }
+
     function render() {
         const list = getFiltered();
         document.getElementById('newsCount').textContent = `${list.length} материалов`;
         document.getElementById('statTotal').textContent = allNewsArchive.length;
-        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate==='week'?'За 7 дней':currentDate?currentDate:'Сегодня'}</strong> · В архиве: ${allNewsArchive.length}`;
+        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate === 'week' ? 'За 7 дней' : currentDate ? currentDate : 'Сегодня'}</strong> · В архиве: ${allNewsArchive.length}`;
         const container = document.getElementById('newsContainer');
-        if(!list.length) { container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить</div></div>`; return; }
-        container.innerHTML = list.map(n => `<article class="card" data-topic="${n.topic}"><div class="card-meta"><span class="tag tag-${n.topic}">${n.topic==='politics'?'🏛':n.topic==='war'?'⚔️':n.topic==='cyber'?'🛡':n.topic==='security'?'⚠️':'💰'} ${n.topic==='politics'?'Политика':n.topic==='war'?'Война':n.topic==='cyber'?'Кибербезопасность':n.topic==='security'?'Происшествия':'Экономика'}</span><span class="card-time">${ago(n.publishedAt)}</span></div><div class="card-title"><a href="${n.url}" target="_blank">${esc(n.title)}</a></div>${n.desc?`<div class="card-desc">${esc(n.desc)}</div>`:''}${n.origTitle?`<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0,110))}…</div>`:''}<div class="card-footer"><div class="card-source"><div class="source-ico">📰</div>${esc(n.source)}</div><a href="${n.url}" target="_blank" class="card-read">Читать →</a></div></article>`).join('');
+        if (!list.length) {
+            container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div></div>`;
+            return;
+        }
+        const topicNames = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
+        const topicIcons = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
+        container.innerHTML = list.map(n => `
+            <div class="card" data-topic="${n.topic}">
+                <div class="card-meta">
+                    <span class="tag tag-${n.topic}">${topicIcons[n.topic] || '📰'} ${topicNames[n.topic] || 'Новости'}</span>
+                    <span class="card-time">${ago(n.publishedAt)}</span>
+                </div>
+                <div class="card-title"><a href="${n.url}" target="_blank">${esc(n.title)}</a></div>
+                ${n.desc ? `<div class="card-desc">${esc(n.desc)}</div>` : ''}
+                ${n.origTitle ? `<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0,110))}…</div>` : ''}
+                <div class="card-footer">
+                    <div class="card-source">📰 ${esc(n.source)}</div>
+                    <a href="${n.url}" target="_blank" class="card-read">Читать →</a>
+                </div>
+            </div>
+        `).join('');
     }
-    function tick() { const n=new Date(); document.getElementById('lastUpdate').textContent=`Обновлено: ${n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; document.getElementById('topDate').textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+
+    function tick() {
+        const n = new Date();
+        document.getElementById('lastUpdate').textContent = `Обновлено: ${n.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
+        document.getElementById('topDate').textContent = n.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+    }
+
     function digest() {
         const today = dateKey(new Date());
-        const list = allNewsArchive.filter(n=>n.date===today);
-        if(!list.length) { alert('Нет новостей за сегодня'); return; }
+        const list = allNewsArchive.filter(n => n.date === today);
+        if (!list.length) { alert('Нет новостей за сегодня'); return; }
         let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title><style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6}</style></head><body><h1>ВЕКТОР — Дайджест ${new Date().toLocaleDateString('ru-RU')}</h1><p>Новостей: ${list.length}</p>`;
-        list.forEach(n=>{ html+=`<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.desc)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`; });
-        html+='</body></html>';
-        const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([html],{type:'application/msword'})); a.download=`Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.doc`; a.click(); URL.revokeObjectURL(a.href);
+        list.forEach(n => {
+            html += `<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.desc)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`;
+        });
+        html += '</body></html>';
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([html], {type:'application/msword'}));
+        a.download = `Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.doc`;
+        a.click();
+        URL.revokeObjectURL(a.href);
     }
-    function scheduleDigest() { const n=new Date(), t=new Date(); t.setHours(21,0,0,0); if(t<=n) t.setDate(t.getDate()+1); setTimeout(()=>{ digest(); scheduleDigest(); }, t-n); }
+
+    function scheduleDigest() {
+        const now = new Date(), t = new Date();
+        t.setHours(21, 0, 0, 0);
+        if (t <= now) t.setDate(t.getDate() + 1);
+        setTimeout(() => { digest(); scheduleDigest(); }, t - now);
+    }
+
     function init() {
-        try { allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); if(allNewsArchive.length) render(); } catch {}
-        tick(); setInterval(tick,60000);
-        document.querySelectorAll('.cat-btn').forEach(b=>{ b.addEventListener('click',()=>{ document.querySelectorAll('.cat-btn').forEach(c=>c.classList.remove('active')); b.classList.add('active'); currentFilter=b.dataset.filter; render(); }); });
-        document.querySelectorAll('.tl-btn').forEach(b=>{ b.addEventListener('click',()=>{ document.querySelectorAll('.tl-btn').forEach(c=>c.classList.remove('active')); b.classList.add('active'); const d=parseInt(b.dataset.days); if(d===0) currentDate=null; else if(d===7) currentDate='week'; else { const dt=new Date(); dt.setDate(dt.getDate()-d); currentDate=dateKey(dt); } render(); }); });
-        document.getElementById('customDateBtn').addEventListener('click',()=>{ const v=document.getElementById('customDateInput').value; if(v){ currentDate=v; document.querySelectorAll('.tl-btn').forEach(c=>c.classList.remove('active')); render(); } });
-        document.getElementById('refreshBtn').addEventListener('click',loadAll);
-        document.getElementById('dailyDigestBtn').addEventListener('click',digest);
-        document.getElementById('clearArchiveBtn').addEventListener('click',()=>{ if(confirm('Очистить весь архив?')){ localStorage.removeItem(STORAGE_KEY); allNewsArchive=[]; render(); } });
-        loadAll(); setInterval(loadAll,30*60000); scheduleDigest();
+        try {
+            allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            if (allNewsArchive.length) render();
+        } catch(e) {}
+        tick();
+        setInterval(tick, 60000);
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                render();
+            });
+        });
+        document.querySelectorAll('.tl-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const d = parseInt(btn.dataset.days);
+                if (d === 0) currentDate = null;
+                else if (d === 7) currentDate = 'week';
+                else {
+                    const dt = new Date();
+                    dt.setDate(dt.getDate() - d);
+                    currentDate = dateKey(dt);
+                }
+                render();
+            });
+        });
+        document.getElementById('customDateBtn').addEventListener('click', () => {
+            const v = document.getElementById('customDateInput').value;
+            if (v) {
+                currentDate = v;
+                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
+                render();
+            }
+        });
+        document.getElementById('refreshBtn').addEventListener('click', loadAll);
+        document.getElementById('dailyDigestBtn').addEventListener('click', digest);
+        document.getElementById('clearArchiveBtn').addEventListener('click', () => {
+            if (confirm('Очистить весь архив?')) {
+                localStorage.removeItem(STORAGE_KEY);
+                allNewsArchive = [];
+                render();
+            }
+        });
+        loadAll();
+        setInterval(loadAll, 30 * 60000);
+        scheduleDigest();
     }
     init();
 </script>
