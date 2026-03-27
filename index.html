@@ -4,264 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ВЕКТОР — Мировые новости</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #080810;
             color: #e8e8f4;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        :root {
-            --c-surface: #0f0f1a;
-            --c-border: rgba(255,255,255,0.07);
-            --c-accent: #5b5bd6;
-            --c-live: #ff3366;
-            --c-politics: #3b82f6;
-            --c-war: #f43f5e;
-            --c-cyber: #a855f7;
-            --c-security: #f59e0b;
-            --c-economy: #10b981;
-        }
-        #progress {
-            position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
-            background: linear-gradient(90deg, #5b5bd6, #a78bfa, #ff3366);
-            width: 0; opacity: 0;
-            transition: width .25s ease;
-        }
-        .topbar {
-            height: 36px;
-            background: #0f0f1a;
-            border-bottom: 1px solid var(--c-border);
-            display: flex;
-            align-items: center;
-        }
-        .topbar-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 16px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .live-pill {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 9px;
-            font-weight: 700;
-            color: var(--c-live);
-            text-transform: uppercase;
-        }
-        .live-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--c-live);
-            animation: blink 1.4s ease infinite;
-        }
-        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
-        .topbar-date, .topbar-right {
-            font-size: 9px;
-            color: #44445a;
-        }
-        .topbar-right { display: flex; gap: 12px; }
-        .masthead {
             padding: 16px;
-            border-bottom: 1px solid var(--c-border);
         }
-        .masthead-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
+        .header {
+            margin-bottom: 24px;
         }
-        .wordmark {
-            font-family: 'Unbounded', sans-serif;
-            font-weight: 900;
-            font-size: 26px;
-            letter-spacing: -1.5px;
-            background: linear-gradient(135deg, #fff 30%, #5b5bd6 100%);
+        h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #fff, #5b5bd6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }
-        .wordmark-sub {
-            font-size: 8px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            color: #44445a;
-            text-transform: uppercase;
+        .sub {
+            color: #666;
+            font-size: 13px;
         }
-        .masthead-stats {
-            display: flex;
-            border: 1px solid var(--c-border);
-            border-radius: 12px;
-            overflow-x: auto;
-        }
-        .stat-cell {
-            padding: 6px 10px;
-            background: #0f0f1a;
-            text-align: center;
-            white-space: nowrap;
-        }
-        .stat-cell + .stat-cell { border-left: 1px solid var(--c-border); }
-        .stat-num { font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; }
-        .stat-lbl { font-size: 7px; color: #44445a; text-transform: uppercase; }
-        .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 200;
-            background: rgba(8,8,16,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--c-border);
-        }
-        .navbar-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-height: 48px;
-            gap: 8px;
-        }
-        .nav-cats {
-            display: flex;
-            gap: 4px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            flex: 1;
-        }
-        .nav-cats::-webkit-scrollbar { display: none; }
-        .cat-btn {
-            padding: 6px 12px;
-            border-radius: 20px;
-            background: none;
-            border: none;
+        .stats {
             font-size: 12px;
-            font-weight: 500;
-            color: #8888aa;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .cat-btn.active {
-            background: rgba(91,91,214,0.2);
-            color: #a5a5ff;
-        }
-        .nav-tools { display: flex; gap: 6px; flex-shrink: 0; }
-        .tool-btn {
-            height: 34px;
-            padding: 0 10px;
-            border-radius: 20px;
-            border: 1px solid var(--c-border);
-            background: none;
-            font-size: 11px;
-            font-weight: 500;
-            color: #8888aa;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .tool-btn.primary {
-            background: #5b5bd6;
-            border-color: #5b5bd6;
-            color: #fff;
-        }
-        .timeline-bar {
-            background: #0f0f1a;
-            border-bottom: 1px solid var(--c-border);
-        }
-        .timeline-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .timeline-inner::-webkit-scrollbar { display: none; }
-        .tl-label {
-            font-size: 10px;
-            font-weight: 600;
-            color: #44445a;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
-        .tl-btn {
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: none;
-            border: none;
-            font-size: 11px;
-            font-weight: 500;
-            color: #8888aa;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        .tl-btn.active {
-            background: rgba(91,91,214,0.2);
-            border: 1px solid #5b5bd6;
-            color: #a5a5ff;
-        }
-        .tl-datepick { display: flex; gap: 4px; white-space: nowrap; }
-        .tl-datepick input {
-            padding: 4px 8px;
-            border-radius: 20px;
-            border: 1px solid var(--c-border);
-            background: transparent;
-            color: #e8e8f4;
-            font-size: 10px;
-        }
-        .tl-datepick button {
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid #5b5bd6;
-            background: rgba(91,91,214,0.2);
-            color: #a5a5ff;
-            font-size: 10px;
-            cursor: pointer;
-        }
-        .archive-count {
-            margin-left: auto;
-            font-size: 10px;
-            color: #44445a;
-            white-space: nowrap;
-        }
-        .content-wrap {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 20px 16px 60px;
-        }
-        .feed-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .feed-heading h2 {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #8888aa;
-        }
-        .feed-badge {
-            font-size: 10px;
-            background: #161625;
-            border: 1px solid var(--c-border);
-            padding: 2px 8px;
-            border-radius: 20px;
+            color: #5b5bd6;
+            margin-top: 8px;
         }
         .news-grid {
             display: grid;
@@ -273,74 +41,49 @@
         }
         @media (min-width: 1024px) {
             .news-grid { grid-template-columns: repeat(3, 1fr); }
-            .content-wrap { padding: 32px 40px 80px; }
         }
         .card {
             background: #0f0f1a;
-            border: 1px solid var(--c-border);
-            border-radius: 20px;
-            padding: 18px 16px;
-            transition: all .2s;
+            border: 1px solid #2a2a3a;
+            border-radius: 16px;
+            padding: 16px;
+            transition: all 0.2s;
             cursor: pointer;
         }
-        .card:active { transform: scale(0.98); }
-        .card-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-            gap: 8px;
+        .card:hover {
+            border-color: #5b5bd6;
+            transform: translateY(-2px);
         }
-        .tag {
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 9px;
-            font-weight: 700;
+        .source {
+            font-size: 11px;
+            color: #5b5bd6;
+            margin-bottom: 8px;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .tag-politics { background: rgba(59,130,246,0.12); color: #7db9ff; }
-        .tag-war { background: rgba(244,63,94,0.12); color: #ff8099; }
-        .tag-cyber { background: rgba(168,85,247,0.12); color: #d09fff; }
-        .tag-security { background: rgba(245,158,11,0.12); color: #ffc84a; }
-        .tag-economy { background: rgba(16,185,129,0.12); color: #5eebb8; }
-        .card-time { font-size: 10px; color: #44445a; }
-        .card-title {
-            font-size: 15px;
+        .title {
+            font-size: 18px;
             font-weight: 700;
-            line-height: 1.45;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            line-height: 1.4;
         }
-        .card-desc {
-            font-size: 12px;
-            color: #8888aa;
-            line-height: 1.55;
+        .desc {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.5;
             margin-bottom: 12px;
             display: -webkit-box;
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 12px;
-            border-top: 1px solid var(--c-border);
+        .time {
             font-size: 11px;
-            gap: 8px;
+            color: #666;
+            margin-top: 8px;
         }
-        .card-source {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #8888aa;
-        }
-        .card-read {
-            color: #a5a5ff;
-            font-weight: 600;
-            white-space: nowrap;
-        }
+        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -352,7 +95,10 @@
             z-index: 10000;
             overflow-y: auto;
         }
-        .modal.active { display: flex; flex-direction: column; }
+        .modal.active {
+            display: flex;
+            flex-direction: column;
+        }
         .modal-header {
             position: sticky;
             top: 0;
@@ -361,16 +107,20 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--c-border);
+            border-bottom: 1px solid #2a2a3a;
+        }
+        .modal-header h3 {
+            font-size: 14px;
+            color: #5b5bd6;
         }
         .close-modal {
             background: none;
             border: none;
             color: #fff;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -383,7 +133,7 @@
             width: 100%;
         }
         .modal-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
             line-height: 1.4;
             margin-bottom: 16px;
@@ -392,7 +142,7 @@
             display: flex;
             gap: 16px;
             font-size: 12px;
-            color: #44445a;
+            color: #666;
             margin-bottom: 24px;
             flex-wrap: wrap;
         }
@@ -401,536 +151,253 @@
             line-height: 1.6;
             color: #c0c0e0;
             margin-bottom: 32px;
+            white-space: pre-wrap;
         }
         .modal-source {
             padding-top: 24px;
-            border-top: 1px solid var(--c-border);
+            border-top: 1px solid #2a2a3a;
             font-size: 12px;
-            color: #44445a;
+            color: #666;
         }
         .modal-source a {
-            color: #a5a5ff;
+            color: #5b5bd6;
             text-decoration: none;
         }
-        .state-card {
-            grid-column: 1 / -1;
-            background: #0f0f1a;
-            border: 1px solid var(--c-border);
-            border-radius: 20px;
-            padding: 40px 20px;
+        .loading {
             text-align: center;
+            padding: 40px;
+            color: #888;
         }
-        .state-spinner {
-            width: 36px;
-            height: 36px;
-            border: 3px solid #161625;
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2a2a3a;
             border-top-color: #5b5bd6;
             border-radius: 50%;
-            animation: spin .75s linear infinite;
+            animation: spin 0.8s linear infinite;
             margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .state-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-        .state-sub { font-size: 12px; color: #44445a; }
-        .site-footer {
-            background: #0f0f1a;
-            border-top: 1px solid var(--c-border);
-            padding: 32px 20px 24px;
-        }
-        .footer-inner { max-width: 1440px; margin: 0 auto; }
-        .footer-wordmark {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 20px;
-            font-weight: 900;
-            margin-bottom: 6px;
-        }
-        .footer-tagline {
-            font-size: 11px;
-            color: #44445a;
-            margin-bottom: 20px;
-        }
-        .footer-cols {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-        @media (min-width: 640px) {
-            .footer-cols { flex-direction: row; justify-content: space-between; }
-        }
-        .sources-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            max-width: 400px;
-        }
-        .source-chip {
-            font-size: 9px;
-            color: #44445a;
-            background: #161625;
-            border: 1px solid var(--c-border);
-            padding: 3px 8px;
-            border-radius: 20px;
-        }
-        .footer-info {
-            font-size: 11px;
-            color: #44445a;
-            line-height: 1.8;
-        }
-        .footer-copy {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--c-border);
-            font-size: 10px;
-            color: #44445a;
+        .error {
+            color: #ff8099;
             text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
 <body>
-<div id="progress"></div>
-<div class="topbar">
-    <div class="topbar-inner">
-        <div class="topbar-left">
-            <div class="live-pill"><div class="live-dot"></div>LIVE</div>
-            <div class="topbar-date" id="topDate"></div>
-        </div>
-        <div class="topbar-right">
-            <span>16 ист.</span>
-            <span>·</span>
-            <span id="lastUpdate">Загрузка...</span>
+    <div class="header">
+        <h1>ВЕКТОР</h1>
+        <div class="sub">Мировые новости · 16 источников</div>
+        <div class="stats" id="stats">Загрузка новостей...</div>
+    </div>
+    <div id="newsContainer" class="news-grid">
+        <div class="loading">
+            <div class="spinner"></div>
+            Загрузка новостей...
         </div>
     </div>
-</div>
-<header class="masthead">
-    <div class="masthead-inner">
-        <div>
-            <div class="wordmark">ВЕКТОР</div>
-            <div class="wordmark-sub">МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</div>
+
+    <!-- Модальное окно -->
+    <div id="newsModal" class="modal">
+        <div class="modal-header">
+            <h3>📰 ВЕКТОР · Полная новость</h3>
+            <button class="close-modal" id="closeModalBtn">✕</button>
         </div>
-        <div class="masthead-stats">
-            <div class="stat-cell"><div class="stat-num">16</div><div class="stat-lbl">ИСТ</div></div>
-            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">АРХ</div></div>
-            <div class="stat-cell"><div class="stat-num" id="statTotal">—</div><div class="stat-lbl">НОВ</div></div>
-            <div class="stat-cell"><div class="stat-num">30</div><div class="stat-lbl">МИН</div></div>
-        </div>
-    </div>
-</header>
-<nav class="navbar">
-    <div class="navbar-inner">
-        <div class="nav-cats">
-            <button class="cat-btn active" data-filter="all">Все</button>
-            <button class="cat-btn" data-filter="politics">🏛 Политика</button>
-            <button class="cat-btn" data-filter="war">⚔️ Война</button>
-            <button class="cat-btn" data-filter="cyber">🛡 Кибер</button>
-            <button class="cat-btn" data-filter="security">⚠️ ЧП</button>
-            <button class="cat-btn" data-filter="economy">💰 Эконом</button>
-        </div>
-        <div class="nav-tools">
-            <button class="tool-btn primary" id="refreshBtn">↻</button>
-            <button class="tool-btn" id="dailyDigestBtn">📄</button>
-            <button class="tool-btn" id="clearArchiveBtn">🗑</button>
-        </div>
-    </div>
-</nav>
-<div class="timeline-bar">
-    <div class="timeline-inner">
-        <span class="tl-label">АРХИВ</span>
-        <button class="tl-btn active" data-days="0">Сегодня</button>
-        <button class="tl-btn" data-days="1">Вчера</button>
-        <button class="tl-btn" data-days="2">2 дня</button>
-        <button class="tl-btn" data-days="3">3 дня</button>
-        <button class="tl-btn" data-days="7">Неделя</button>
-        <div class="tl-datepick">
-            <input type="date" id="customDateInput">
-            <button id="customDateBtn">→</button>
-        </div>
-        <span class="archive-count" id="archiveInfo"></span>
-    </div>
-</div>
-<main class="content-wrap">
-    <div class="feed-header">
-        <div class="feed-heading">
-            <h2>ПОСЛЕДНИЕ НОВОСТИ</h2>
-            <span class="feed-badge" id="newsCount">—</span>
-        </div>
-    </div>
-    <div class="news-grid" id="newsContainer">
-        <div class="state-card">
-            <div class="state-spinner"></div>
-            <div class="state-title">Сбор новостей</div>
-            <div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div>
-        </div>
-    </div>
-</main>
-<footer class="site-footer">
-    <div class="footer-inner">
-        <div class="footer-wordmark">ВЕКТОР</div>
-        <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней</div>
-        <div class="footer-cols">
-            <div>
-                <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">ИСТОЧНИКИ</div>
-                <div class="sources-wrap">
-                    <span class="source-chip">CNN</span><span class="source-chip">BBC</span><span class="source-chip">Reuters</span>
-                    <span class="source-chip">Guardian</span><span class="source-chip">Bloomberg</span><span class="source-chip">TechCrunch</span>
-                    <span class="source-chip">РИА</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
-                    <span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span><span class="source-chip">Kaktus</span>
-                    <span class="source-chip">Asia-Plus</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Хроники ТМ</span>
-                    <span class="source-chip">Sputnik TJ</span>
-                </div>
+        <div class="modal-content">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-meta">
+                <span id="modalSource"></span>
+                <span id="modalDate"></span>
             </div>
-            <div>
-                <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">О СИСТЕМЕ</div>
-                <div class="footer-info">
-                    Обновление: 30 мин<br>
-                    Архив: 7 дней<br>
-                    Дайджест: по темам
-                </div>
-            </div>
+            <div class="modal-text" id="modalText"></div>
+            <div class="modal-source" id="modalOriginalLink"></div>
         </div>
-        <div class="footer-copy">© 2025 ВЕКТОР · Новости из открытых источников · Все права принадлежат авторам</div>
     </div>
-</footer>
 
-<div id="newsModal" class="modal">
-    <div class="modal-header">
-        <h3>📰 ВЕКТОР · Чтение</h3>
-        <button class="close-modal" id="closeModalBtn">✕</button>
-    </div>
-    <div class="modal-content">
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-meta">
-            <span id="modalSource"></span>
-            <span id="modalDate"></span>
-        </div>
-        <div class="modal-text" id="modalText"></div>
-        <div class="modal-source" id="modalOriginalLink"></div>
-    </div>
-</div>
+    <script>
+        const SOURCES = [
+            { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+            { name: 'Meduza', url: 'https://meduza.io/rss/all' },
+            { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
+            { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+            { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+            { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
+            { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
+            { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
+            { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
+            { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' },
+            { name: 'Kaktus.media', url: 'https://kaktus.media/rss' },
+            { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
+            { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss' },
+            { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+            { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed' },
+            { name: 'TechCrunch', url: 'https://techcrunch.com/feed' }
+        ];
 
-<script>
-    const SOURCES = [
-        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
-        { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
-        { name: 'Meduza', url: 'https://meduza.io/rss/all' },
-        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
-        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' },
-        { name: 'Kaktus.media', url: 'https://kaktus.media/rss' },
-        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
-        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
-        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
-        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
-        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
-        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
-        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed' },
-        { name: 'TechCrunch', url: 'https://techcrunch.com/feed' }
-    ];
+        let allNews = [];
+        const STORAGE_KEY = 'vector_news_cache';
+        const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
 
-    let allNewsArchive = [];
-    let currentFilter = 'all';
-    let currentDate = null;
-    const STORAGE_KEY = 'news_archive_7days';
-
-    function dateKey(d) { return d.toISOString().split('T')[0]; }
-    function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-    function ago(str) {
-        try {
-            const d = new Date(str);
-            if (isNaN(d.getTime())) return 'недавно';
-            const m = Math.floor((new Date() - d) / 60000);
-            if (m < 1) return 'только что';
-            if (m < 60) return `${m} мин назад`;
-            if (m < 1440) return `${Math.floor(m/60)} ч назад`;
-            return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-        } catch { return 'недавно'; }
-    }
-
-    function detectTopic(title, desc) {
-        const t = (title + ' ' + desc).toLowerCase();
-        const kw = {
-            politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
-            war: ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
-            cyber: ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
-            security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
-            economy: ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
-        };
-        for (let [topic, keywords] of Object.entries(kw)) {
-            for (let k of keywords) if (t.includes(k)) return topic;
+        function formatDate(dateStr) {
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return 'недавно';
+                const now = new Date();
+                const diff = Math.floor((now - d) / 60000);
+                if (diff < 1) return 'только что';
+                if (diff < 60) return `${diff} мин назад`;
+                if (diff < 1440) return `${Math.floor(diff/60)} ч назад`;
+                return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+            } catch { return 'недавно'; }
         }
-        return 'politics';
-    }
 
-    async function fetchSource(src) {
-        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 15000); // увеличил до 15 секунд
-            const res = await fetch(workerUrl, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) return [];
-            const data = await res.json();
-            if (data.status !== 'ok' || !data.items) return [];
-            
-            const news = [];
-            for (let i = 0; i < Math.min(data.items.length, 8); i++) {
-                const item = data.items[i];
-                let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
-                
-                if (!title) {
-                    if (desc) {
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+
+        async function fetchSource(source) {
+            const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000);
+                const response = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeout);
+                if (!response.ok) return [];
+                const data = await response.json();
+                if (data.status !== 'ok' || !data.items) return [];
+
+                const items = [];
+                for (let i = 0; i < Math.min(data.items.length, 8); i++) {
+                    const item = data.items[i];
+                    let title = item.title || '';
+                    let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 800);
+                    
+                    // Если заголовок пустой, берём из описания
+                    if (!title && desc) {
                         title = desc.substring(0, 100);
-                    } else {
-                        const urlParts = item.link.split('/');
-                        title = urlParts[urlParts.length - 1] || 'Новость';
-                        title = title.replace(/-/g, ' ').substring(0, 100);
                     }
+                    if (!title) {
+                        const urlParts = item.link.split('/');
+                        title = (urlParts[urlParts.length - 1] || 'Новость').replace(/-/g, ' ');
+                    }
+                    
+                    items.push({
+                        id: `${source.name}-${i}-${Date.now()}`,
+                        title: title.substring(0, 200),
+                        description: desc || 'Нет описания',
+                        fullText: desc || 'Нет описания',
+                        url: item.link,
+                        source: source.name,
+                        publishedAt: item.pubDate,
+                        topic: 'news'
+                    });
                 }
-                
-                news.push({
-                    id: `${src.name}-${i}-${Date.now()}`,
-                    title: title.substring(0, 200),
-                    description: desc || 'Нет описания',
-                    url: item.link,
-                    source: src.name,
-                    publishedAt: item.pubDate,
-                    date: dateKey(new Date(item.pubDate)),
-                    topic: detectTopic(title + ' ' + desc)
-                });
-            }
-            console.log(`✅ ${src.name}: ${news.length} новостей`);
-            return news;
-        } catch (e) {
-            console.warn(`❌ ${src.name}:`, e.message);
-            return [];
-        }
-    }
-
-    async function loadAll() {
-        const container = document.getElementById('newsContainer');
-        container.innerHTML = `<div class="state-card"><div class="state-spinner"></div><div class="state-title">Сбор новостей</div><div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div></div>`;
-        let allFresh = [];
-        for (let i = 0; i < SOURCES.length; i++) {
-            const items = await fetchSource(SOURCES[i]);
-            allFresh.push(...items);
-            const statusEl = document.getElementById('loadingStatus');
-            if (statusEl) {
-                statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+                console.log(`✅ ${source.name}: ${items.length} новостей`);
+                return items;
+            } catch (e) {
+                console.warn(`❌ ${source.name}:`, e.message);
+                return [];
             }
         }
-        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const seen = new Set(stored.map(n => n.url));
-        allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
-        const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
-        allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff).sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
-        render();
-        tick();
-    }
 
-    function getFiltered() {
-        let list = currentDate === 'week' ? allNewsArchive : currentDate ? allNewsArchive.filter(n => n.date === currentDate) : allNewsArchive.filter(n => n.date === dateKey(new Date()));
-        if (currentFilter !== 'all') list = list.filter(n => n.topic === currentFilter);
-        return list;
-    }
-
-    function openNewsModal(news) {
-        document.getElementById('modalTitle').innerHTML = esc(news.title);
-        document.getElementById('modalSource').innerHTML = `📰 ${esc(news.source)}`;
-        document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)}`;
-        document.getElementById('modalText').innerHTML = esc(news.description) || 'Полный текст новости доступен по ссылке на источник.';
-        document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${esc(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
-        document.getElementById('newsModal').classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('newsModal').classList.remove('active');
-        document.body.style.overflow = '';
-    }
-
-    function render() {
-        const list = getFiltered();
-        document.getElementById('newsCount').textContent = `${list.length} материалов`;
-        document.getElementById('statTotal').textContent = allNewsArchive.length;
-        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate === 'week' ? 'За 7 дней' : currentDate ? currentDate : 'Сегодня'}</strong> · ${allNewsArchive.length}`;
-        const container = document.getElementById('newsContainer');
-        if (!list.length) {
-            container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить страницу</div></div>`;
-            return;
+        async function loadAllNews() {
+            const container = document.getElementById('newsContainer');
+            const statsEl = document.getElementById('stats');
+            container.innerHTML = `<div class="loading"><div class="spinner"></div>Загрузка новостей...</div>`;
+            
+            let allFresh = [];
+            for (let i = 0; i < SOURCES.length; i++) {
+                const items = await fetchSource(SOURCES[i]);
+                allFresh.push(...items);
+                statsEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников · Найдено новостей: ${allFresh.length}`;
+            }
+            
+            // Сохраняем в кэш
+            const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const seen = new Set(cached.map(n => n.url));
+            allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
+            
+            // Сортируем по дате
+            allNews.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+            
+            // Ограничиваем 100 последними новостями
+            if (allNews.length > 100) allNews = allNews.slice(0, 100);
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(allNews));
+            
+            renderNews();
+            statsEl.innerHTML = `📰 Всего новостей: ${allNews.length} · Обновлено: ${new Date().toLocaleTimeString()}`;
         }
-        const topicNames = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
-        const topicIcons = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
-        container.innerHTML = list.map(n => `
-            <div class="card" data-news-id="${n.id}">
-                <div class="card-meta">
-                    <span class="tag tag-${n.topic}">${topicIcons[n.topic] || '📰'} ${topicNames[n.topic] || 'Новости'}</span>
-                    <span class="card-time">${ago(n.publishedAt)}</span>
+
+        function openNewsModal(news) {
+            document.getElementById('modalTitle').innerHTML = escapeHtml(news.title);
+            document.getElementById('modalSource').innerHTML = `📰 ${escapeHtml(news.source)}`;
+            document.getElementById('modalDate').innerHTML = `🕒 ${formatDate(news.publishedAt)}`;
+            document.getElementById('modalText').innerHTML = escapeHtml(news.fullText || news.description || 'Полный текст новости доступен по ссылке на источник.');
+            document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
+            document.getElementById('newsModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('newsModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function renderNews() {
+            const container = document.getElementById('newsContainer');
+            if (!allNews.length) {
+                container.innerHTML = `<div class="loading">😕 Новостей пока нет. Попробуйте обновить страницу.</div>`;
+                return;
+            }
+            
+            container.innerHTML = allNews.map(news => `
+                <div class="card" data-news-id="${news.id}">
+                    <div class="source">📰 ${escapeHtml(news.source)}</div>
+                    <div class="title">${escapeHtml(news.title)}</div>
+                    <div class="desc">${escapeHtml(news.description.substring(0, 200))}${news.description.length > 200 ? '...' : ''}</div>
+                    <div class="time">🕒 ${formatDate(news.publishedAt)}</div>
                 </div>
-                <div class="card-title">${esc(n.title)}</div>
-                <div class="card-desc">${esc(n.description.substring(0, 150))}${n.description.length > 150 ? '...' : ''}</div>
-                <div class="card-footer">
-                    <div class="card-source">📰 ${esc(n.source)}</div>
-                    <div class="card-read" data-news-id="${n.id}">Читать →</div>
-                </div>
-            </div>
-        `).join('');
-        
-        document.querySelectorAll('.card, .card-read').forEach(el => {
-            el.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const card = el.closest('.card');
-                if (card) {
+            `).join('');
+            
+            // Добавляем обработчики кликов
+            document.querySelectorAll('.card').forEach(card => {
+                card.addEventListener('click', () => {
                     const newsId = card.dataset.newsId;
-                    const news = list.find(n => n.id === newsId);
+                    const news = allNews.find(n => n.id === newsId);
                     if (news) openNewsModal(news);
-                }
+                });
             });
-        });
-    }
+        }
 
-    function digestByTopics() {
-        const today = dateKey(new Date());
-        const todayNews = allNewsArchive.filter(n => n.date === today);
-        if (!todayNews.length) { alert('Нет новостей за сегодня'); return; }
-        
-        const topics = {
-            politics: { name: 'Политика', icon: '🏛', news: [] },
-            war: { name: 'Война и конфликты', icon: '⚔️', news: [] },
-            cyber: { name: 'Кибербезопасность', icon: '🛡', news: [] },
-            security: { name: 'Происшествия', icon: '⚠️', news: [] },
-            economy: { name: 'Экономика', icon: '💰', news: [] }
-        };
-        
-        todayNews.forEach(n => {
-            if (topics[n.topic]) {
-                topics[n.topic].news.push(n);
-            } else {
-                topics.politics.news.push(n);
-            }
-        });
-        
-        let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title>
-        <style>
-            body { font-family: 'Inter', sans-serif; margin: 40px; background: #080810; color: #e8e8f4; }
-            h1 { border-bottom: 3px solid #5b5bd6; padding-bottom: 10px; margin-bottom: 30px; }
-            h2 { margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #5b5bd6; }
-            .topic-section { margin-bottom: 40px; }
-            .news-item { margin: 16px 0; padding: 16px; background: #0f0f1a; border-radius: 12px; border-left: 3px solid #5b5bd6; }
-            .news-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-            .news-desc { font-size: 14px; color: #8888aa; line-height: 1.5; margin-bottom: 8px; }
-            .news-meta { font-size: 12px; color: #44445a; display: flex; gap: 16px; }
-            .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #44445a; font-size: 11px; color: #44445a; text-align: center; }
-        </style>
-        </head><body>
-        <h1>📰 ВЕКТОР — Дайджест новостей за ${new Date().toLocaleDateString('ru-RU')}</h1>
-        <p style="margin-bottom: 20px; color: #8888aa;">Всего новостей: ${todayNews.length}</p>`;
-        
-        for (const [key, topic] of Object.entries(topics)) {
-            if (topic.news.length === 0) continue;
-            html += `<div class="topic-section">
-                <h2>${topic.icon} ${topic.name}</h2>`;
-            topic.news.forEach(n => {
-                html += `<div class="news-item">
-                    <div class="news-title">${esc(n.title)}</div>
-                    <div class="news-desc">${esc(n.description.substring(0, 300))}${n.description.length > 300 ? '...' : ''}</div>
-                    <div class="news-meta">
-                        <span>📰 ${esc(n.source)}</span>
-                        <span>🕒 ${ago(n.publishedAt)}</span>
-                    </div>
-                </div>`;
-            });
-            html += `</div>`;
+        // Инициализация
+        async function init() {
+            // Восстанавливаем из кэша
+            try {
+                const cached = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+                if (cached.length) {
+                    allNews = cached;
+                    renderNews();
+                    document.getElementById('stats').innerHTML = `📰 Всего новостей: ${allNews.length} (из кэша) · Обновление...`;
+                }
+            } catch(e) {}
+            
+            // Загружаем свежие новости
+            await loadAllNews();
+            
+            // Обновляем каждые 30 минут
+            setInterval(loadAllNews, 30 * 60 * 1000);
         }
         
-        html += `<div class="footer">
-            © ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам<br>
-            Дайджест сформирован ${new Date().toLocaleString('ru-RU')}
-        </div></body></html>`;
-        
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([html], {type:'text/html'}));
-        a.download = `Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.html`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-    }
-
-    function tick() {
-        const n = new Date();
-        document.getElementById('lastUpdate').textContent = `Обн: ${n.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
-        document.getElementById('topDate').textContent = n.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    }
-
-    function scheduleDigest() {
-        const now = new Date(), t = new Date();
-        t.setHours(21, 0, 0, 0);
-        if (t <= now) t.setDate(t.getDate() + 1);
-        setTimeout(() => { digestByTopics(); scheduleDigest(); }, t - now);
-    }
-
-    function init() {
-        try {
-            allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            if (allNewsArchive.length) render();
-        } catch(e) {}
-        tick();
-        setInterval(tick, 60000);
-        
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                render();
-            });
-        });
-        
-        document.querySelectorAll('.tl-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const d = parseInt(btn.dataset.days);
-                if (d === 0) currentDate = null;
-                else if (d === 7) currentDate = 'week';
-                else {
-                    const dt = new Date();
-                    dt.setDate(dt.getDate() - d);
-                    currentDate = dateKey(dt);
-                }
-                render();
-            });
-        });
-        
-        document.getElementById('customDateBtn').addEventListener('click', () => {
-            const v = document.getElementById('customDateInput').value;
-            if (v) {
-                currentDate = v;
-                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-                render();
-            }
-        });
-        
-        document.getElementById('refreshBtn').addEventListener('click', loadAll);
-        document.getElementById('dailyDigestBtn').addEventListener('click', digestByTopics);
-        document.getElementById('clearArchiveBtn').addEventListener('click', () => {
-            if (confirm('Очистить весь архив?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                allNewsArchive = [];
-                render();
-            }
-        });
-        
+        // Закрытие модального окна
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('newsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('newsModal')) closeModal();
         });
         
-        loadAll();
-        setInterval(loadAll, 30 * 60000);
-        scheduleDigest();
-    }
-    init();
-</script>
+        init();
+    </script>
 </body>
 </html>
