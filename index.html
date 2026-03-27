@@ -411,7 +411,7 @@
 </div>
 <div class="masthead">
     <div class="masthead-inner">
-        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · ПЕРЕВОД EN→RU</p></div>
+        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p></div>
         <div>
             <div class="stats">
                 <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
@@ -466,9 +466,9 @@
                     <span class="source-tag">РИА Новости</span><span class="source-tag">РБК</span><span class="source-tag">Meduza</span>
                     <span class="source-tag">Tengrinews</span><span class="source-tag">Gazeta.uz</span><span class="source-tag">Kaktus.media</span>
                     <span class="source-tag">Asia-Plus</span><span class="source-tag">Turkmenportal</span><span class="source-tag">Хроники Туркменистана</span>
-                    <span class="source-tag">Sputnik Таджикистан</span><span class="source-tag">CNN</span><span class="source-tag">BBC News</span>
-                    <span class="source-tag">Reuters</span><span class="source-tag">The Guardian</span><span class="source-tag">Bloomberg</span>
-                    <span class="source-tag">TechCrunch</span>
+                    <span class="source-tag">Sputnik Таджикистан</span><span class="source-tag">RT</span><span class="source-tag">Euronews</span>
+                    <span class="source-tag">Deutsche Welle</span><span class="source-tag">Al Jazeera</span><span class="source-tag">France 24</span>
+                    <span class="source-tag">CBC News</span>
                 </div>
             </div>
             <div>
@@ -496,10 +496,9 @@
 </div>
 
 <script>
-    const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
-    const UPDATE_TIMES = [7, 13, 19];
-    
+    // ============ НОВЫЙ СПИСОК ИСТОЧНИКОВ (ВСЕ РАБОЧИЕ) ============
     const SOURCES = [
+        // Российские и центральноазиатские источники
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
         { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
@@ -510,12 +509,14 @@
         { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
         { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
         { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
-        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
-        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
-        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
-        { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
+        
+        // Международные источники (работают в РФ)
+        { name: 'RT на русском', url: 'https://russian.rt.com/rss.xml', lang: 'ru' },
+        { name: 'Euronews', url: 'https://www.euronews.com/rss?lang=ru', lang: 'ru' },
+        { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml', lang: 'ru' },
+        { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml', lang: 'en' },
+        { name: 'France 24', url: 'https://www.france24.com/en/rss', lang: 'en' },
+        { name: 'CBC News', url: 'https://www.cbc.ca/cmlink/rss-topstories', lang: 'en' }
     ];
 
     let allNews = [];
@@ -524,6 +525,9 @@
     let customDate = null;
     let isUpdating = false;
     let translationCache = new Map();
+
+    const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
+    const UPDATE_TIMES = [7, 13, 19];
 
     function formatDate(date) {
         return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -576,10 +580,7 @@
 
     async function translateText(text) {
         if (!text || text.length < 5) return text;
-        
-        if (translationCache.has(text)) {
-            return translationCache.get(text);
-        }
+        if (translationCache.has(text)) return translationCache.get(text);
         
         try {
             const url = `${WORKER_URL}?action=translate&text=${encodeURIComponent(text.substring(0, 500))}`;
@@ -589,7 +590,6 @@
             translationCache.set(text, translated);
             return translated;
         } catch (e) {
-            console.warn('Translation error:', e);
             return text;
         }
     }
@@ -615,6 +615,7 @@
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
                 
+                // Переводим только английские новости (Al Jazeera, France 24, CBC)
                 if (source.lang === 'en' && title) {
                     originalTitle = title;
                     try {
@@ -659,7 +660,6 @@
             const data = await res.json();
             return data.fullText || null;
         } catch (e) {
-            console.warn('Failed to load full news:', e);
             return null;
         }
     }
@@ -791,11 +791,10 @@
     function scheduleUpdate() {
         const now = new Date();
         const currentHour = now.getHours();
-        const currentMinutes = now.getMinutes();
         
         let nextUpdateHour = null;
         for (const hour of UPDATE_TIMES) {
-            if (hour > currentHour || (hour === currentHour && currentMinutes >= 0)) {
+            if (hour > currentHour) {
                 nextUpdateHour = hour;
                 break;
             }
@@ -880,7 +879,6 @@
         const refreshBtn = document.createElement('button');
         refreshBtn.textContent = '↻ Обновить';
         refreshBtn.className = 'refresh-btn';
-        refreshBtn.title = 'Обновить новости вручную';
         refreshBtn.onclick = () => updateNews();
         document.querySelector('.masthead-inner .stats').after(refreshBtn);
     }
