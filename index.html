@@ -8,31 +8,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ============ TOKENS ============ */
         :root {
-            --c-bg:        #080810;
-            --c-surface:   #0f0f1a;
-            --c-elevated:  #161625;
-            --c-border:    rgba(255,255,255,0.07);
+            --c-bg: #080810;
+            --c-surface: #0f0f1a;
+            --c-elevated: #161625;
+            --c-border: rgba(255,255,255,0.07);
             --c-border-hi: rgba(255,255,255,0.14);
-            --c-text:      #e8e8f4;
-            --c-sub:       #8888aa;
-            --c-muted:     #44445a;
-            --c-accent:    #5b5bd6;
+            --c-text: #e8e8f4;
+            --c-sub: #8888aa;
+            --c-muted: #44445a;
+            --c-accent: #5b5bd6;
             --c-accent-lo: rgba(91,91,214,0.14);
-            --c-politics:  #3b82f6;
-            --c-war:       #f43f5e;
-            --c-cyber:     #a855f7;
-            --c-security:  #f59e0b;
-            --c-economy:   #10b981;
-            --c-live:      #ff3366;
-            --radius-sm:   8px;
-            --radius-md:   14px;
-            --radius-lg:   20px;
+            --c-politics: #3b82f6;
+            --c-war: #f43f5e;
+            --c-cyber: #a855f7;
+            --c-security: #f59e0b;
+            --c-economy: #10b981;
+            --c-live: #ff3366;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
             --shadow-card: 0 4px 24px rgba(0,0,0,0.45);
         }
-
-        /* ============ RESET ============ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body {
@@ -44,16 +41,12 @@
         }
         a { color: inherit; text-decoration: none; }
         button { cursor: pointer; font-family: inherit; }
-
-        /* ============ PROGRESS ============ */
         #progress {
             position: fixed; top: 0; left: 0; height: 2px; z-index: 999;
             background: linear-gradient(90deg, var(--c-accent), #a78bfa, var(--c-live));
             width: 0; opacity: 0;
             transition: width .25s ease, opacity .3s;
         }
-
-        /* ============ TOP BAR ============ */
         .topbar {
             height: 36px;
             background: var(--c-surface);
@@ -89,8 +82,6 @@
             display: flex; align-items: center; gap: 16px;
         }
         #lastUpdate { font-size: 11px; color: var(--c-muted); }
-
-        /* ============ MASTHEAD ============ */
         .masthead {
             background: var(--c-bg);
             border-bottom: 1px solid var(--c-border);
@@ -136,13 +127,10 @@
             font-size: 10px; font-weight: 500; color: var(--c-muted);
             text-transform: uppercase; letter-spacing: 0.8px;
         }
-
-        /* ============ NAV ============ */
         .navbar {
             position: sticky; top: 0; z-index: 200;
             background: rgba(8,8,16,0.88);
             backdrop-filter: blur(24px) saturate(1.5);
-            -webkit-backdrop-filter: blur(24px) saturate(1.5);
             border-bottom: 1px solid var(--c-border);
         }
         .navbar-inner {
@@ -170,9 +158,7 @@
         .cat-btn.active[data-filter="cyber"]    { background: rgba(168,85,247,.14); color: #d09fff; }
         .cat-btn.active[data-filter="security"] { background: rgba(245,158,11,.14); color: #ffc84a; }
         .cat-btn.active[data-filter="economy"]  { background: rgba(16,185,129,.14); color: #5eebb8; }
-
         .cat-sep { width: 1px; height: 18px; background: var(--c-border); flex-shrink: 0; margin: 0 4px; }
-
         .nav-tools {
             display: flex; align-items: center; gap: 6px; flex-shrink: 0;
         }
@@ -190,8 +176,6 @@
         .tool-btn.primary:hover { background: #4a4aba; }
         .tool-btn.danger { border-color: rgba(244,63,94,.25); color: var(--c-war); }
         .tool-btn.danger:hover { background: rgba(244,63,94,.1); }
-
-        /* ============ TIMELINE / ARCHIVE ============ */
         .timeline-bar {
             background: var(--c-surface);
             border-bottom: 1px solid var(--c-border);
@@ -237,8 +221,6 @@
             font-size: 11px; color: var(--c-muted);
         }
         .archive-count strong { color: var(--c-sub); }
-
-        /* ============ MAIN CONTENT ============ */
         .content-wrap {
             max-width: 1440px; margin: 0 auto;
             padding: 36px 40px 80px;
@@ -263,15 +245,11 @@
             color: var(--c-sub);
             padding: 2px 10px; border-radius: 20px;
         }
-
-        /* ============ NEWS GRID ============ */
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(370px, 1fr));
             gap: 18px;
         }
-
-        /* ============ NEWS CARD ============ */
         .card {
             background: var(--c-surface);
             border: 1px solid var(--c-border);
@@ -283,7 +261,6 @@
             position: relative;
             overflow: hidden;
         }
-        /* accent stripe */
         .card::after {
             content: '';
             position: absolute; inset: 0 auto 0 0;
@@ -297,15 +274,12 @@
         .card[data-topic="cyber"]::after    { background: var(--c-cyber); }
         .card[data-topic="security"]::after { background: var(--c-security); }
         .card[data-topic="economy"]::after  { background: var(--c-economy); }
-
         .card:hover {
             border-color: var(--c-border-hi);
             box-shadow: var(--shadow-card);
             transform: translateY(-2px);
         }
         .card:hover::after { opacity: 1; }
-
-        /* card row 1 */
         .card-meta {
             display: flex; align-items: center; justify-content: space-between;
             gap: 8px;
@@ -321,21 +295,15 @@
         .tag-cyber    { background: rgba(168,85,247,.12);  color: #d09fff; border: 1px solid rgba(168,85,247,.2); }
         .tag-security { background: rgba(245,158,11,.12);  color: #ffc84a; border: 1px solid rgba(245,158,11,.2); }
         .tag-economy  { background: rgba(16,185,129,.12);  color: #5eebb8; border: 1px solid rgba(16,185,129,.2); }
-
         .card-time {
             font-size: 11px; font-weight: 500; color: var(--c-muted);
             white-space: nowrap;
         }
-
-        /* card row 2: title */
         .card-title {
             font-size: 15.5px; font-weight: 700; line-height: 1.48;
             color: var(--c-text);
         }
         .card-title a:hover { color: #a5a5ff; }
-        .card-title a { transition: color .15s; }
-
-        /* card row 3: desc */
         .card-desc {
             font-size: 13px; color: var(--c-sub);
             line-height: 1.65;
@@ -344,8 +312,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
-        /* card row 4: orig */
         .card-orig {
             font-size: 11.5px; color: var(--c-muted);
             font-style: italic; line-height: 1.5;
@@ -356,8 +322,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
-        /* card row 5: footer */
         .card-footer {
             display: flex; align-items: center; justify-content: space-between;
             padding-top: 12px;
@@ -381,8 +345,6 @@
             transition: gap .15s, color .15s;
         }
         .card-read:hover { color: #7b7bff; gap: 7px; }
-
-        /* ============ LOADING / EMPTY ============ */
         .state-card {
             grid-column: 1 / -1;
             background: var(--c-surface);
@@ -402,8 +364,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .state-title { font-size: 16px; font-weight: 700; color: var(--c-text); }
         .state-sub { font-size: 13px; color: var(--c-muted); }
-
-        /* ============ FOOTER ============ */
         .site-footer {
             background: var(--c-surface);
             border-top: 1px solid var(--c-border);
@@ -438,11 +398,8 @@
             border-top: 1px solid var(--c-border);
             font-size: 11px; color: var(--c-muted);
         }
-
-        /* ============ RESPONSIVE ============ */
         @media (max-width: 960px) {
-            .masthead, .topbar-inner, .navbar-inner,
-            .timeline-inner, .content-wrap, .footer-inner {
+            .masthead, .topbar-inner, .navbar-inner, .timeline-inner, .content-wrap, .footer-inner {
                 padding-left: 20px; padding-right: 20px;
             }
             .masthead-stats { display: none; }
@@ -458,11 +415,7 @@
     </style>
 </head>
 <body>
-
-<!-- PROGRESS BAR -->
 <div id="progress"></div>
-
-<!-- TOP BAR -->
 <div class="topbar">
     <div class="topbar-inner">
         <div class="topbar-left">
@@ -476,8 +429,6 @@
         </div>
     </div>
 </div>
-
-<!-- MASTHEAD -->
 <header class="masthead">
     <div class="masthead-inner">
         <div>
@@ -485,27 +436,13 @@
             <div class="wordmark-sub">Мировые новости · Аналитика</div>
         </div>
         <div class="masthead-stats">
-            <div class="stat-cell">
-                <div class="stat-num">16</div>
-                <div class="stat-lbl">Источников</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-num">7</div>
-                <div class="stat-lbl">Дней архива</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-num" id="statTotal">—</div>
-                <div class="stat-lbl">Новостей</div>
-            </div>
-            <div class="stat-cell">
-                <div class="stat-num">30<span style="font-size:12px;font-family:Inter;font-weight:400">мин</span></div>
-                <div class="stat-lbl">Обновление</div>
-            </div>
+            <div class="stat-cell"><div class="stat-num">16</div><div class="stat-lbl">Источников</div></div>
+            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">Дней архива</div></div>
+            <div class="stat-cell"><div class="stat-num" id="statTotal">—</div><div class="stat-lbl">Новостей</div></div>
+            <div class="stat-cell"><div class="stat-num">30<span style="font-size:12px;">мин</span></div><div class="stat-lbl">Обновление</div></div>
         </div>
     </div>
 </header>
-
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="navbar-inner">
         <div class="nav-cats">
@@ -524,8 +461,6 @@
         </div>
     </div>
 </nav>
-
-<!-- TIMELINE / ARCHIVE BAR -->
 <div class="timeline-bar">
     <div class="timeline-inner">
         <span class="tl-label">Архив</span>
@@ -542,8 +477,6 @@
         <span class="archive-count" id="archiveInfo"></span>
     </div>
 </div>
-
-<!-- MAIN -->
 <main class="content-wrap">
     <div class="feed-header">
         <div class="feed-heading">
@@ -559,363 +492,144 @@
         </div>
     </div>
 </main>
-
-<!-- FOOTER -->
 <footer class="site-footer">
     <div class="footer-inner">
         <div class="footer-wordmark">ВЕКТОР</div>
         <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней</div>
         <div class="footer-cols">
-            <div>
-                <div class="footer-section-title">Источники</div>
-                <div class="sources-wrap">
-                    <span class="source-chip">CNN</span>
-                    <span class="source-chip">TechCrunch</span>
-                    <span class="source-chip">Bloomberg</span>
-                    <span class="source-chip">BBC News</span>
-                    <span class="source-chip">Reuters</span>
-                    <span class="source-chip">The Guardian</span>
-                    <span class="source-chip">РИА Новости</span>
-                    <span class="source-chip">РБК</span>
-                    <span class="source-chip">Meduza</span>
-                    <span class="source-chip">Хроники Туркменистана</span>
-                    <span class="source-chip">Turkmenportal</span>
-                    <span class="source-chip">Asia-Plus</span>
-                    <span class="source-chip">Sputnik Таджикистан</span>
-                    <span class="source-chip">Tengrinews</span>
-                    <span class="source-chip">Gazeta.uz</span>
-                    <span class="source-chip">Kaktus.media</span>
-                </div>
-            </div>
-            <div>
-                <div class="footer-section-title">О системе</div>
-                <div class="footer-info">
-                    Автообновление каждые 30 минут<br>
-                    Перевод статей: MyMemory API<br>
-                    Архив хранится 7 дней<br>
-                    Дайджест формируется в 21:00 МСК
-                </div>
-            </div>
+            <div><div class="footer-section-title">Источники</div><div class="sources-wrap">
+                <span class="source-chip">CNN</span><span class="source-chip">TechCrunch</span><span class="source-chip">Bloomberg</span>
+                <span class="source-chip">BBC News</span><span class="source-chip">Reuters</span><span class="source-chip">The Guardian</span>
+                <span class="source-chip">РИА Новости</span><span class="source-chip">РБК</span><span class="source-chip">Meduza</span>
+                <span class="source-chip">Хроники Туркменистана</span><span class="source-chip">Turkmenportal</span><span class="source-chip">Asia-Plus</span>
+                <span class="source-chip">Sputnik Таджикистан</span><span class="source-chip">Tengrinews</span><span class="source-chip">Gazeta.uz</span>
+                <span class="source-chip">Kaktus.media</span>
+            </div></div>
+            <div><div class="footer-section-title">О системе</div><div class="footer-info">
+                Автообновление каждые 30 минут<br>Перевод статей: MyMemory API<br>Архив хранится 7 дней<br>Дайджест формируется в 21:00 МСК
+            </div></div>
         </div>
         <div class="footer-copy">© 2025 ВЕКТОР · Новости из открытых источников</div>
     </div>
 </footer>
-
-/* --- CONFIG --- */
-let currentFilter = 'all';
-let currentDate   = null;
-let allNewsArchive = [];
-let updateInterval = null;
-const STORAGE_KEY   = 'news_archive_7days';
-const DIGEST_HOUR   = 21;
-const UPDATE_MIN    = 30;
-
-const SOURCES = [
-    { name:'CNN',                  url:'http://rss.cnn.com/rss/edition.rss',         lang:'en' },
-    { name:'TechCrunch',           url:'https://techcrunch.com/feed',                lang:'en' },
-    { name:'Bloomberg',            url:'https://www.bloomberg.com/feed',             lang:'en' },
-    { name:'BBC News',             url:'http://feeds.bbci.co.uk/news/rss.xml',       lang:'en' },
-    { name:'Reuters',              url:'https://www.reuters.com/rss/topNews',        lang:'en' },
-    { name:'The Guardian',         url:'https://www.theguardian.com/world/rss',      lang:'en' },
-    { name:'РИА Новости',          url:'https://ria.ru/export/rss2/index.xml',       lang:'ru' },
-    { name:'РБК',                  url:'https://www.rbc.ru/rss/',                    lang:'ru' },
-    { name:'Meduza',               url:'https://meduza.io/rss/all',                  lang:'ru' },
-    { name:'Хроники Туркменистана',url:'https://www.hronikatm.com/feed/',            lang:'ru' },
-    { name:'Turkmenportal',        url:'https://turkmenportal.com/rss/ru',           lang:'ru' },
-    { name:'Asia-Plus',            url:'https://asiaplustj.info/ru/rss.xml',         lang:'ru' },
-    { name:'Sputnik Таджикистан',  url:'https://sputnik-tj.com/rss',                lang:'ru' },
-    { name:'Tengrinews',           url:'https://tengrinews.kz/rss/all.xml',          lang:'ru' },
-    { name:'Gazeta.uz',            url:'https://www.gazeta.uz/rss/ru',               lang:'ru' },
-    { name:'Kaktus.media',         url:'https://kaktus.media/rss',                   lang:'ru' }
-];
-
-const TOPIC_KW = {
-    politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
-    war:      ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
-    cyber:    ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
-    security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
-    economy:  ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
-};
-
-const TOPIC_ICON = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
-const TOPIC_NAME = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
-
-/* --- UTIL --- */
-function dateKey(d) { return d.toISOString().split('T')[0]; }
-function esc(s) {
-    if (!s) return '';
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function ago(str) {
-    try {
-        const d = new Date(str), now = new Date();
-        const m = Math.floor((now - d) / 60000);
-        if (m < 1)    return 'только что';
-        if (m < 60)   return `${m} мин назад`;
-        if (m < 1440) return `${Math.floor(m/60)} ч назад`;
-        return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-    } catch { return 'недавно'; }
-}
-function setProgress(pct) {
-    const el = document.getElementById('progress');
-    el.style.width   = pct + '%';
-    el.style.opacity = pct > 0 ? '1' : '0';
-}
-
-function detectTopic(title, desc) {
-    const t = (title + ' ' + desc).toLowerCase();
-    for (const [topic, kws] of Object.entries(TOPIC_KW))
-        for (const kw of kws) if (t.includes(kw)) return topic;
-    return 'politics';
-}
-
-async function translate(text) {
-    if (!text) return text;
-    text = text.substring(0, 500);
-    try {
-        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru`);
-        const d = await r.json();
-        return d.responseData?.translatedText || text;
-    } catch { return text; }
-}
-
-/* ========== ЗАГРУЗКА ЧЕРЕЗ ВАШ CLOUDFLARE WORKER ========== */
-async function fetchSource(src) {
-    const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
-    
-    try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 12000);
-        const response = await fetch(workerUrl, { signal: controller.signal });
-        clearTimeout(timeout);
-        
-        if (!response.ok) return [];
-        
-        const data = await response.json();
-        if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
-        
-        const news = [];
-        for (let i = 0; i < data.items.length; i++) {
-            const item = data.items[i];
-            let title = item.title || '';
-            let desc = (item.description || '').substring(0, 400);
-            const link = item.link || '#';
-            const pubDate = item.pubDate || new Date().toISOString();
-            let origTitle = null;
-            
-            if (src.lang === 'en') {
-                origTitle = title;
-                try { title = await translate(title); } catch {}
-                try { if (desc.length > 10) desc = await translate(desc); } catch {}
+<script>
+    const SOURCES = [
+        { name:'CNN', url:'http://rss.cnn.com/rss/edition.rss', lang:'en' },
+        { name:'TechCrunch', url:'https://techcrunch.com/feed', lang:'en' },
+        { name:'Bloomberg', url:'https://www.bloomberg.com/feed', lang:'en' },
+        { name:'BBC News', url:'http://feeds.bbci.co.uk/news/rss.xml', lang:'en' },
+        { name:'Reuters', url:'https://www.reuters.com/rss/topNews', lang:'en' },
+        { name:'The Guardian', url:'https://www.theguardian.com/world/rss', lang:'en' },
+        { name:'РИА Новости', url:'https://ria.ru/export/rss2/index.xml', lang:'ru' },
+        { name:'РБК', url:'https://www.rbc.ru/rss/', lang:'ru' },
+        { name:'Meduza', url:'https://meduza.io/rss/all', lang:'ru' },
+        { name:'Хроники Туркменистана', url:'https://www.hronikatm.com/feed/', lang:'ru' },
+        { name:'Turkmenportal', url:'https://turkmenportal.com/rss/ru', lang:'ru' },
+        { name:'Asia-Plus', url:'https://asiaplustj.info/ru/rss.xml', lang:'ru' },
+        { name:'Sputnik Таджикистан', url:'https://sputnik-tj.com/rss', lang:'ru' },
+        { name:'Tengrinews', url:'https://tengrinews.kz/rss/all.xml', lang:'ru' },
+        { name:'Gazeta.uz', url:'https://www.gazeta.uz/rss/ru', lang:'ru' },
+        { name:'Kaktus.media', url:'https://kaktus.media/rss', lang:'ru' }
+    ];
+    let allNewsArchive = [];
+    let currentFilter = 'all';
+    let currentDate = null;
+    const STORAGE_KEY = 'news_archive_7days';
+    function dateKey(d) { return d.toISOString().split('T')[0]; }
+    function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function ago(str) {
+        try { const d=new Date(str), m=Math.floor((new Date()-d)/60000); if(m<1) return 'только что'; if(m<60) return `${m} мин назад`; if(m<1440) return `${Math.floor(m/60)} ч назад`; return d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'}); } catch { return 'недавно'; }
+    }
+    function detectTopic(title, desc) {
+        const t=(title+' '+desc).toLowerCase();
+        const kw={politics:['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'], war:['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'], cyber:['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'], security:['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'], economy:['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']};
+        for(let [topic,kws] of Object.entries(kw)) for(let kw of kws) if(t.includes(kw)) return topic;
+        return 'politics';
+    }
+    async function translate(text) {
+        if(!text) return text;
+        try { const r=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0,500))}&langpair=en|ru`); const d=await r.json(); return d.responseData?.translatedText||text; } catch { return text; }
+    }
+    async function fetchSource(src) {
+        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            const res = await fetch(workerUrl, { signal: controller.signal });
+            clearTimeout(timeout);
+            if(!res.ok) return [];
+            const data = await res.json();
+            if(data.status !== 'ok' || !data.items) return [];
+            const news = [];
+            for(let item of data.items.slice(0,8)) {
+                let title = item.title || '';
+                let desc = (item.description || '').substring(0,400);
+                let origTitle = null;
+                if(src.lang === 'en') {
+                    origTitle = title;
+                    try { title = await translate(title); } catch {}
+                    try { if(desc.length>10) desc = await translate(desc); } catch {}
+                }
+                news.push({ id:`${src.name}-${Date.now()}`, title:title.substring(0,150), origTitle, desc, url:item.link, source:src.name, publishedAt:item.pubDate, date:dateKey(new Date(item.pubDate)), topic:detectTopic((origTitle||title)+' '+desc) });
             }
-            
-            news.push({
-                id: `${src.name}-${i}-${Date.now()}`,
-                title: title.substring(0, 150),
-                origTitle,
-                desc,
-                url: link,
-                source: src.name,
-                publishedAt: pubDate,
-                date: dateKey(new Date(pubDate)),
-                topic: detectTopic((origTitle || title) + ' ' + desc)
-            });
-        }
-        
-        console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
-        return news;
-        
-    } catch (e) {
-        console.warn(`❌ ${src.name}: ошибка загрузки:`, e.message);
-        return [];
+            console.log(`✅ ${src.name}: ${news.length} новостей`);
+            return news;
+        } catch(e) { console.warn(`❌ ${src.name}:`, e.message); return []; }
     }
-}
-
-async function loadAll() {
-    const container = document.getElementById('newsContainer');
-    setProgress(3);
-    container.innerHTML = `<div class="state-card">
-        <div class="state-spinner"></div>
-        <div class="state-title">Сбор новостей</div>
-        <div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div>
-    </div>`;
-
-    let allFresh = [];
-    let successCount = 0;
-    for (let i = 0; i < SOURCES.length; i++) {
-        const src = SOURCES[i];
-        const items = await fetchSource(src);
-        if (items.length > 0) successCount++;
-        allFresh.push(...items);
-        const statusEl = document.getElementById('loadingStatus');
-        if (statusEl) {
-            statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+    async function loadAll() {
+        const container = document.getElementById('newsContainer');
+        container.innerHTML = `<div class="state-card"><div class="state-spinner"></div><div class="state-title">Сбор новостей</div><div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div></div>`;
+        let allFresh = [];
+        for(let i=0;i<SOURCES.length;i++) {
+            const items = await fetchSource(SOURCES[i]);
+            allFresh.push(...items);
+            document.getElementById('loadingStatus').innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
         }
-        setProgress(5 + Math.round((i+1) / SOURCES.length * 85));
+        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const seen = new Set(stored.map(n=>n.url));
+        allNewsArchive = [...allFresh.filter(n=>!seen.has(n.url)), ...stored];
+        const cutoff = dateKey(new Date(Date.now()-7*864e5));
+        allNewsArchive = allNewsArchive.filter(n=>n.date>=cutoff).sort((a,b)=>new Date(b.publishedAt)-new Date(a.publishedAt));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
+        render(); tick();
     }
-    console.log(`📊 Итого: ${successCount} из ${SOURCES.length} источников дали новости, всего ${allFresh.length} записей`);
-
-    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    const seen = new Set(stored.map(n => n.url));
-    allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
-
-    const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
-    allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff);
-    allNewsArchive.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
-
-    setProgress(100);
-    setTimeout(() => setProgress(0), 700);
-    render();
-    tick();
-}
-
-function getFiltered() {
-    let list = currentDate === 'week'
-        ? allNewsArchive
-        : currentDate
-            ? allNewsArchive.filter(n => n.date === currentDate)
-            : allNewsArchive.filter(n => n.date === dateKey(new Date()));
-    if (currentFilter !== 'all') list = list.filter(n => n.topic === currentFilter);
-    return list;
-}
-
-function render() {
-    const container = document.getElementById('newsContainer');
-    const list = getFiltered();
-
-    document.getElementById('newsCount').textContent = `${list.length} материалов`;
-    document.getElementById('statTotal').textContent = allNewsArchive.length;
-
-    const dateLabel = currentDate === 'week' ? 'За 7 дней' : currentDate ? `${currentDate}` : 'Сегодня';
-    document.getElementById('archiveInfo').innerHTML = `<strong>${dateLabel}</strong> &nbsp;·&nbsp; В архиве: ${allNewsArchive.length}`;
-
-    if (!list.length) {
-        container.innerHTML = `<div class="state-card">
-            <div style="font-size:40px">😕</div>
-            <div class="state-title">Нет новостей</div>
-            <div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div>
-        </div>`;
-        return;
+    function getFiltered() {
+        let list = currentDate === 'week' ? allNewsArchive : currentDate ? allNewsArchive.filter(n=>n.date===currentDate) : allNewsArchive.filter(n=>n.date===dateKey(new Date()));
+        if(currentFilter !== 'all') list = list.filter(n=>n.topic === currentFilter);
+        return list;
     }
-
-    container.innerHTML = list.map(n => `
-        <article class="card" data-topic="${n.topic}">
-            <div class="card-meta">
-                <span class="tag tag-${n.topic}">${TOPIC_ICON[n.topic] || '📰'} ${TOPIC_NAME[n.topic] || 'Новости'}</span>
-                <span class="card-time">${ago(n.publishedAt)}</span>
-            </div>
-            <div class="card-title"><a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a></div>
-            ${n.desc ? `<div class="card-desc">${esc(n.desc)}</div>` : ''}
-            ${n.origTitle ? `<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0, 110))}…</div>` : ''}
-            <div class="card-footer">
-                <div class="card-source">
-                    <div class="source-ico">📰</div>
-                    ${esc(n.source)}
-                </div>
-                <a href="${n.url}" target="_blank" rel="noopener" class="card-read">Читать →</a>
-            </div>
-        </article>
-    `).join('');
-}
-
-function tick() {
-    const now = new Date();
-    document.getElementById('lastUpdate').textContent =
-        `Обновлено: ${now.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
-    document.getElementById('topDate').textContent =
-        now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-}
-
-function digest() {
-    const today = dateKey(new Date());
-    const list = allNewsArchive.filter(n => n.date === today);
-    if (!list.length) { alert('Нет новостей за сегодня'); return; }
-    const now = new Date();
-    let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title>
-    <style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6;padding-bottom:10px}
-    .item{margin:16px 0;padding:14px;border-left:4px solid #5b5bd6;background:#f7f7fb}
-    .t{font-size:17px;font-weight:bold}.d{color:#555;margin:6px 0}.m{font-size:11px;color:#888}.s{font-size:11px;color:#27ae60;margin-top:4px}
-    </style></head><body>
-    <h1>ВЕКТОР — Дайджест ${now.toLocaleDateString('ru-RU')}</h1>
-    <p>Новостей: ${list.length}</p>`;
-    list.forEach(n => {
-        html += `<div class="item"><div class="t"><a href="${n.url}">${esc(n.title)}</a></div>
-        <div class="d">${esc(n.desc)}</div><div class="m">${ago(n.publishedAt)}</div>
-        <div class="s">${n.source}</div>${n.origTitle ? `<div class="s">Ориг.: ${esc(n.origTitle)}</div>` : ''}</div>`;
-    });
-    html += '</body></html>';
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([html], {type:'application/msword'}));
-    a.download = `Дайджест_ВЕКТОР_${now.toLocaleDateString('ru-RU')}.doc`;
-    a.click(); URL.revokeObjectURL(a.href);
-}
-
-function scheduleDigest() {
-    const now = new Date(), t = new Date();
-    t.setHours(DIGEST_HOUR, 0, 0, 0);
-    if (t <= now) t.setDate(t.getDate() + 1);
-    setTimeout(() => { digest(); scheduleDigest(); }, t - now);
-}
-
-function init() {
-    try {
-        allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        if (allNewsArchive.length) render();
-    } catch {}
-
-    tick();
-    setInterval(tick, 60000);
-
-    document.querySelectorAll('.cat-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentFilter = btn.dataset.filter;
-            render();
-        });
-    });
-
-    document.querySelectorAll('.tl-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const d = parseInt(btn.dataset.days);
-            if (d === 0) currentDate = null;
-            else if (d === 7) currentDate = 'week';
-            else {
-                const dt = new Date(); dt.setDate(dt.getDate() - d);
-                currentDate = dateKey(dt);
-            }
-            render();
-        });
-    });
-
-    document.getElementById('customDateBtn').addEventListener('click', () => {
-        const v = document.getElementById('customDateInput').value;
-        if (v) {
-            currentDate = v;
-            document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-            render();
-        }
-    });
-
-    document.getElementById('refreshBtn').addEventListener('click', loadAll);
-    document.getElementById('dailyDigestBtn').addEventListener('click', digest);
-    document.getElementById('clearArchiveBtn').addEventListener('click', () => {
-        if (confirm('Очистить весь архив?')) {
-            localStorage.removeItem(STORAGE_KEY);
-            allNewsArchive = [];
-            render();
-        }
-    });
-
-    loadAll();
-    updateInterval = setInterval(loadAll, UPDATE_MIN * 60000);
-    scheduleDigest();
-}
-
-init();
+    function render() {
+        const list = getFiltered();
+        document.getElementById('newsCount').textContent = `${list.length} материалов`;
+        document.getElementById('statTotal').textContent = allNewsArchive.length;
+        document.getElementById('archiveInfo').innerHTML = `<strong>${currentDate==='week'?'За 7 дней':currentDate?currentDate:'Сегодня'}</strong> · В архиве: ${allNewsArchive.length}`;
+        const container = document.getElementById('newsContainer');
+        if(!list.length) { container.innerHTML = `<div class="state-card"><div style="font-size:40px">😕</div><div class="state-title">Нет новостей</div><div class="state-sub">Попробуйте обновить</div></div>`; return; }
+        container.innerHTML = list.map(n => `<article class="card" data-topic="${n.topic}"><div class="card-meta"><span class="tag tag-${n.topic}">${n.topic==='politics'?'🏛':n.topic==='war'?'⚔️':n.topic==='cyber'?'🛡':n.topic==='security'?'⚠️':'💰'} ${n.topic==='politics'?'Политика':n.topic==='war'?'Война':n.topic==='cyber'?'Кибербезопасность':n.topic==='security'?'Происшествия':'Экономика'}</span><span class="card-time">${ago(n.publishedAt)}</span></div><div class="card-title"><a href="${n.url}" target="_blank">${esc(n.title)}</a></div>${n.desc?`<div class="card-desc">${esc(n.desc)}</div>`:''}${n.origTitle?`<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0,110))}…</div>`:''}<div class="card-footer"><div class="card-source"><div class="source-ico">📰</div>${esc(n.source)}</div><a href="${n.url}" target="_blank" class="card-read">Читать →</a></div></article>`).join('');
+    }
+    function tick() { const n=new Date(); document.getElementById('lastUpdate').textContent=`Обновлено: ${n.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})}`; document.getElementById('topDate').textContent=n.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long',year:'numeric'}); }
+    function digest() {
+        const today = dateKey(new Date());
+        const list = allNewsArchive.filter(n=>n.date===today);
+        if(!list.length) { alert('Нет новостей за сегодня'); return; }
+        let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title><style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6}</style></head><body><h1>ВЕКТОР — Дайджест ${new Date().toLocaleDateString('ru-RU')}</h1><p>Новостей: ${list.length}</p>`;
+        list.forEach(n=>{ html+=`<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.desc)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`; });
+        html+='</body></html>';
+        const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([html],{type:'application/msword'})); a.download=`Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.doc`; a.click(); URL.revokeObjectURL(a.href);
+    }
+    function scheduleDigest() { const n=new Date(), t=new Date(); t.setHours(21,0,0,0); if(t<=n) t.setDate(t.getDate()+1); setTimeout(()=>{ digest(); scheduleDigest(); }, t-n); }
+    function init() {
+        try { allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]'); if(allNewsArchive.length) render(); } catch {}
+        tick(); setInterval(tick,60000);
+        document.querySelectorAll('.cat-btn').forEach(b=>{ b.addEventListener('click',()=>{ document.querySelectorAll('.cat-btn').forEach(c=>c.classList.remove('active')); b.classList.add('active'); currentFilter=b.dataset.filter; render(); }); });
+        document.querySelectorAll('.tl-btn').forEach(b=>{ b.addEventListener('click',()=>{ document.querySelectorAll('.tl-btn').forEach(c=>c.classList.remove('active')); b.classList.add('active'); const d=parseInt(b.dataset.days); if(d===0) currentDate=null; else if(d===7) currentDate='week'; else { const dt=new Date(); dt.setDate(dt.getDate()-d); currentDate=dateKey(dt); } render(); }); });
+        document.getElementById('customDateBtn').addEventListener('click',()=>{ const v=document.getElementById('customDateInput').value; if(v){ currentDate=v; document.querySelectorAll('.tl-btn').forEach(c=>c.classList.remove('active')); render(); } });
+        document.getElementById('refreshBtn').addEventListener('click',loadAll);
+        document.getElementById('dailyDigestBtn').addEventListener('click',digest);
+        document.getElementById('clearArchiveBtn').addEventListener('click',()=>{ if(confirm('Очистить весь архив?')){ localStorage.removeItem(STORAGE_KEY); allNewsArchive=[]; render(); } });
+        loadAll(); setInterval(loadAll,30*60000); scheduleDigest();
+    }
+    init();
 </script>
 </body>
 </html>
