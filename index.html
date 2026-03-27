@@ -680,30 +680,36 @@
         } catch { return text; }
     }
 
-    /* ========== РАБОЧАЯ ВЕРСИЯ ЧЕРЕЗ RSS2JSON ========== */
+    /* ========== ЗАГРУЗКА НОВОСТЕЙ ЧЕРЕЗ CLOUDFLARE WORKER ========== */
     async function fetchSource(src) {
-        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`;
+        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+        
         try {
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 12000);
-            const response = await fetch(proxyUrl, { signal: controller.signal });
+            const response = await fetch(workerUrl, { signal: controller.signal });
             clearTimeout(timeout);
+            
             if (!response.ok) return [];
+            
             const data = await response.json();
             if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
+            
             const news = [];
-            for (let i = 0; i < Math.min(data.items.length, 8); i++) {
+            for (let i = 0; i < data.items.length; i++) {
                 const item = data.items[i];
                 let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 400);
+                let desc = (item.description || '').substring(0, 400);
                 const link = item.link || '#';
                 const pubDate = item.pubDate || new Date().toISOString();
                 let origTitle = null;
+                
                 if (src.lang === 'en') {
                     origTitle = title;
                     try { title = await translate(title); } catch {}
                     try { if (desc.length > 10) desc = await translate(desc); } catch {}
                 }
+                
                 news.push({
                     id: `${src.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 150),
@@ -716,10 +722,12 @@
                     topic: detectTopic((origTitle || title) + ' ' + desc)
                 });
             }
+            
             console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
             return news;
+            
         } catch (e) {
-            console.warn(`⚠️ ${src.name}: ошибка загрузки:`, e.message);
+            console.warn(`❌ ${src.name}: ошибка загрузки:`, e.message);
             return [];
         }
     }
