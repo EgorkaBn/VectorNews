@@ -8,7 +8,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ============ АДАПТИВНЫЙ СТИЛЬ ============ */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Inter', sans-serif;
@@ -666,7 +665,7 @@
         const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
+            const timeout = setTimeout(() => controller.abort(), 15000); // увеличил до 15 секунд
             const res = await fetch(workerUrl, { signal: controller.signal });
             clearTimeout(timeout);
             if (!res.ok) return [];
@@ -679,12 +678,10 @@
                 let title = item.title || '';
                 let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
                 
-                // Если заголовок пустой, берем его из описания или ссылки
                 if (!title) {
                     if (desc) {
                         title = desc.substring(0, 100);
                     } else {
-                        // Извлекаем из ссылки последнюю часть
                         const urlParts = item.link.split('/');
                         title = urlParts[urlParts.length - 1] || 'Новость';
                         title = title.replace(/-/g, ' ').substring(0, 100);
@@ -694,7 +691,7 @@
                 news.push({
                     id: `${src.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 200),
-                    description: desc,
+                    description: desc || 'Нет описания',
                     url: item.link,
                     source: src.name,
                     publishedAt: item.pubDate,
