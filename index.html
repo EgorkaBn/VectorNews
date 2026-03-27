@@ -683,64 +683,107 @@
         } catch { return text; }
     }
 
-    /* --- FETCH ONE SOURCE --- */
+    /* ========== НОВАЯ ВЕРСИЯ FETCH С ПОДДЕРЖКОЙ МНОГИХ ПРОКСИ ========== */
     async function fetchSource(src) {
-        try {
-            const r = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`);
-            const d = await r.json();
-            const xml = new DOMParser().parseFromString(d.contents, 'text/xml');
-            const items = [...xml.querySelectorAll('item')].slice(0, 8);
-            const news = [];
-            for (let i = 0; i < items.length; i++) {
-                const el = items[i];
-                let title = (el.querySelector('title')?.textContent || '').substring(0, 150);
-                let desc  = (el.querySelector('description')?.textContent || '').replace(/<[^>]*>/g,'').substring(0, 400);
-                const link    = el.querySelector('link')?.textContent || '#';
-                const pubDate = el.querySelector('pubDate')?.textContent || new Date().toISOString();
-                let origTitle = null;
-                if (src.lang === 'en') {
-                    origTitle = title;
-                    try { title = await translate(title); } catch {}
-                    try { if (desc.length > 10) desc = await translate(desc); } catch {}
+        // Список прокси для обхода CORS
+        const proxies = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(src.url)}`,
+            `https://corsproxy.io/?${encodeURIComponent(src.url)}`
+        ];
+
+        for (const proxy of proxies) {
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                const r = await fetch(proxy, { signal: controller.signal });
+                clearTimeout(timeout);
+                
+                if (!r.ok) continue;
+                
+                const data = await r.json();
+                let contents = data.contents;
+                
+                // Для некоторых прокси ответ может быть в другом формате
+                if (!contents && data.data) contents = data.data;
+                if (!contents && typeof data === 'string') contents = data;
+                if (!contents) continue;
+                
+                const xml = new DOMParser().parseFromString(contents, 'text/xml');
+                const items = [...xml.querySelectorAll('item')].slice(0, 8);
+                
+                if (items.length === 0) continue;
+                
+                const news = [];
+                for (let i = 0; i < items.length; i++) {
+                    const el = items[i];
+                    let title = (el.querySelector('title')?.textContent || '').substring(0, 150);
+                    let desc = (el.querySelector('description')?.textContent || '').replace(/<[^>]*>/g, '').substring(0, 400);
+                    const link = el.querySelector('link')?.textContent || '#';
+                    const pubDate = el.querySelector('pubDate')?.textContent || new Date().toISOString();
+                    let origTitle = null;
+                    
+                    if (src.lang === 'en') {
+                        origTitle = title;
+                        try { title = await translate(title); } catch {}
+                        try { if (desc.length > 10) desc = await translate(desc); } catch {}
+                    }
+                    
+                    news.push({
+                        id: `${src.name}-${i}-${Date.now()}`,
+                        title, origTitle, desc,
+                        url: link, source: src.name,
+                        publishedAt: pubDate,
+                        date: dateKey(new Date(pubDate)),
+                        topic: detectTopic((origTitle || title) + ' ' + desc)
+                    });
                 }
-                news.push({
-                    id: `${src.name}-${i}-${Date.now()}`,
-                    title, origTitle, desc,
-                    url: link, source: src.name,
-                    publishedAt: pubDate,
-                    date: dateKey(new Date(pubDate)),
-                    topic: detectTopic((origTitle || title) + ' ' + desc)
-                });
+                
+                if (news.length) {
+                    console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
+                    return news;
+                }
+            } catch (e) {
+                console.warn(`⚠️ Прокси не сработал для ${src.name}:`, e.message);
+                continue;
             }
-            return news;
-        } catch { return []; }
+        }
+        console.warn(`❌ ${src.name}: не удалось загрузить ни через один прокси`);
+        return [];
     }
 
     /* --- LOAD ALL --- */
-    let loaded = 0;
     async function loadAll() {
         const container = document.getElementById('newsContainer');
-        loaded = 0; setProgress(3);
+        setProgress(3);
         container.innerHTML = `<div class="state-card">
             <div class="state-spinner"></div>
             <div class="state-title">Сбор новостей</div>
             <div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div>
         </div>`;
 
-        const promises = SOURCES.map(s => fetchSource(s).then(items => {
-            loaded++;
-            setProgress(3 + Math.round(loaded / SOURCES.length * 87));
-            const el = document.getElementById('loadingStatus');
-            if (el) el.textContent = `Загружено: ${loaded} / ${SOURCES.length}`;
-            return items;
-        }));
+        let allFresh = [];
+        let successCount = 0;
+        
+        for (let i = 0; i < SOURCES.length; i++) {
+            const src = SOURCES[i];
+            const items = await fetchSource(src);
+            if (items.length > 0) successCount++;
+            allFresh.push(...items);
+            
+            const statusEl = document.getElementById('loadingStatus');
+            if (statusEl) {
+                statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+            }
+            setProgress(5 + Math.round((i+1) / SOURCES.length * 85));
+        }
+        
+        console.log(`📊 Итого: ${successCount} из ${SOURCES.length} источников дали новости, всего ${allFresh.length} записей`);
 
-        const fresh = (await Promise.all(promises)).flat();
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
         const seen = new Set(stored.map(n => n.url));
-        allNewsArchive = [...fresh.filter(n => !seen.has(n.url)), ...stored];
+        allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
 
-        // prune 7 days
         const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
         allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff);
         allNewsArchive.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
@@ -748,7 +791,8 @@
 
         setProgress(100);
         setTimeout(() => setProgress(0), 700);
-        render(); tick();
+        render();
+        tick();
     }
 
     /* --- RENDER --- */
@@ -776,7 +820,7 @@
             container.innerHTML = `<div class="state-card">
                 <div style="font-size:40px">😕</div>
                 <div class="state-title">Нет новостей</div>
-                <div class="state-sub">Попробуйте другую дату или нажмите «Обновить»</div>
+                <div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div>
             </div>`;
             return;
         }
@@ -845,7 +889,6 @@
 
     /* --- INIT --- */
     function init() {
-        // restore archive
         try {
             allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
             if (allNewsArchive.length) render();
@@ -854,7 +897,6 @@
         tick();
         setInterval(tick, 60000);
 
-        // category filters
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -864,7 +906,6 @@
             });
         });
 
-        // date filters
         document.querySelectorAll('.tl-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
