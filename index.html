@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ============ АДАПТИВНЫЙ СТИЛЬ ============ */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Inter', sans-serif;
@@ -678,12 +679,16 @@
                 let title = item.title || '';
                 let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
                 
-                // Специальная обработка для CNN и BBC
-                if (!title && src.name === 'CNN') {
-                    title = item.description?.substring(0, 100) || 'CNN News';
-                }
-                if (!title && src.name === 'BBC News') {
-                    title = item.description?.substring(0, 100) || 'BBC News';
+                // Если заголовок пустой, берем его из описания или ссылки
+                if (!title) {
+                    if (desc) {
+                        title = desc.substring(0, 100);
+                    } else {
+                        // Извлекаем из ссылки последнюю часть
+                        const urlParts = item.link.split('/');
+                        title = urlParts[urlParts.length - 1] || 'Новость';
+                        title = title.replace(/-/g, ' ').substring(0, 100);
+                    }
                 }
                 
                 news.push({
