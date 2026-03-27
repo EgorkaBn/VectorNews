@@ -641,44 +641,57 @@
     }
 
     async function fetchSource(src) {
-        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
-            const res = await fetch(workerUrl, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) return [];
-            const data = await res.json();
-            if (data.status !== 'ok' || !data.items) return [];
-            const news = [];
-            for (let item of data.items.slice(0, 8)) {
-                let title = item.title || '';
-                let desc = (item.description || '').substring(0, 400);
-                let origTitle = null;
-                if (src.lang === 'en') {
-                    origTitle = title;
-                    try { title = await translate(title); } catch {}
-                    try { if (desc.length > 10) desc = await translate(desc); } catch {}
+    const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 10000);
+        const res = await fetch(workerUrl, { signal: controller.signal });
+        clearTimeout(timeout);
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (data.status !== 'ok' || !data.items) return [];
+        
+        const news = [];
+        for (let i = 0; i < Math.min(data.items.length, 8); i++) {
+            const item = data.items[i];
+            let title = item.title || '';
+            let desc = (item.description || '').substring(0, 400);
+            let origTitle = null;
+            
+            if (src.lang === 'en') {
+                origTitle = title;
+                try {
+                    // Задержка 1 секунда между переводами, чтобы не перегружать API
+                    if (i > 0) await new Promise(r => setTimeout(r, 1000));
+                    title = await translate(title);
+                    // Задержка перед переводом описания
+                    await new Promise(r => setTimeout(r, 500));
+                    if (desc.length > 10) desc = await translate(desc);
+                } catch (e) {
+                    console.warn(`⚠️ Ошибка перевода для ${src.name}:`, e.message);
                 }
-                news.push({
-                    id: `${src.name}-${Date.now()}`,
-                    title: title.substring(0, 150),
-                    origTitle,
-                    desc,
-                    url: item.link,
-                    source: src.name,
-                    publishedAt: item.pubDate,
-                    date: dateKey(new Date(item.pubDate)),
-                    topic: detectTopic((origTitle || title) + ' ' + desc)
-                });
             }
-            console.log(`✅ ${src.name}: ${news.length} новостей`);
-            return news;
-        } catch (e) {
-            console.warn(`❌ ${src.name}:`, e.message);
-            return [];
+            
+            news.push({
+                id: `${src.name}-${i}-${Date.now()}`,
+                title: title.substring(0, 150),
+                origTitle,
+                desc,
+                url: item.link,
+                source: src.name,
+                publishedAt: item.pubDate,
+                date: dateKey(new Date(item.pubDate)),
+                topic: detectTopic((origTitle || title) + ' ' + desc)
+            });
         }
+        
+        console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
+        return news;
+    } catch (e) {
+        console.warn(`❌ ${src.name}:`, e.message);
+        return [];
     }
+}
 
     async function loadAll() {
         const container = document.getElementById('newsContainer');
