@@ -1103,5 +1103,530 @@
 
     init();
 </script>
+<!-- AI-помощник ВЕК (навигатор новостей) -->
+<style>
+    .ai-chatbot {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .chat-button {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
+        border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 4px 20px rgba(91,91,214,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255,255,255,0.2);
+        position: relative;
+    }
+    
+    .chat-button::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(91,91,214,0.4) 0%, transparent 70%);
+        animation: pulse-ring 2s ease-out infinite;
+    }
+    
+    @keyframes pulse-ring {
+        0% { transform: scale(0.8); opacity: 0.8; }
+        100% { transform: scale(1.5); opacity: 0; }
+    }
+    
+    .chat-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(91,91,214,0.7);
+    }
+    
+    .chat-button .compass-icon {
+        font-size: 32px;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        z-index: 1;
+    }
+    
+    .chat-window {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 380px;
+        height: 550px;
+        background: #0f0f1a;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        z-index: 1001;
+    }
+    
+    .chat-window.active {
+        display: flex;
+    }
+    
+    .chat-header {
+        background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
+        padding: 15px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chat-header-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .chat-avatar {
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+    }
+    
+    .chat-header-text h3 {
+        font-size: 16px;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    .chat-header-text p {
+        font-size: 10px;
+        margin: 2px 0 0;
+        opacity: 0.8;
+    }
+    
+    .close-chat {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: background 0.2s;
+    }
+    
+    .close-chat:hover {
+        background: rgba(255,255,255,0.2);
+    }
+    
+    .chat-messages {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .message {
+        max-width: 85%;
+        padding: 10px 14px;
+        border-radius: 18px;
+        font-size: 13px;
+        line-height: 1.5;
+        word-wrap: break-word;
+    }
+    
+    .message.user {
+        background: #5b5bd6;
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+    }
+    
+    .message.bot {
+        background: #1e1e2e;
+        color: #e8e8f4;
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .message.bot .message-name {
+        font-size: 10px;
+        color: #5b5bd6;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    
+    .news-suggestion {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px dashed rgba(255,255,255,0.1);
+    }
+    
+    .news-suggestion a {
+        color: #5b5bd6;
+        text-decoration: none;
+        display: block;
+        margin-top: 5px;
+        font-size: 11px;
+    }
+    
+    .chat-input-area {
+        padding: 15px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        gap: 10px;
+    }
+    
+    .chat-input {
+        flex: 1;
+        background: #1e1e2e;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 25px;
+        padding: 10px 15px;
+        color: white;
+        font-family: inherit;
+        font-size: 13px;
+        outline: none;
+    }
+    
+    .chat-input:focus {
+        border-color: #5b5bd6;
+    }
+    
+    .chat-send {
+        background: #5b5bd6;
+        border: none;
+        border-radius: 25px;
+        padding: 8px 18px;
+        color: white;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+    
+    .chat-send:hover {
+        background: #4a4aba;
+    }
+    
+    .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 10px 14px;
+        background: #1e1e2e;
+        border-radius: 18px;
+        align-self: flex-start;
+        border: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .typing-indicator span {
+        width: 6px;
+        height: 6px;
+        background: #8888aa;
+        border-radius: 50%;
+        animation: typing 1.4s infinite;
+    }
+    
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    
+    @keyframes typing {
+        0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+        30% { transform: translateY(-6px); opacity: 1; }
+    }
+    
+    @media (max-width: 600px) {
+        .chat-window {
+            width: calc(100% - 40px);
+            right: 20px;
+            left: 20px;
+            height: 60vh;
+        }
+    }
+</style>
+
+<div class="ai-chatbot">
+    <div class="chat-button" id="chatButton">
+        <div class="compass-icon">🧭</div>
+    </div>
+    
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="chat-avatar">🧭</div>
+                <div class="chat-header-text">
+                    <h3>Век</h3>
+                    <p>Навигатор новостей · AI-помощник</p>
+                </div>
+            </div>
+            <button class="close-chat" id="closeChat">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="message-name">🧭 Век</div>
+                👋 Привет! Я Век — твой навигатор по новостям.<br><br>
+                Я могу:<br>
+                📰 Показать последние новости по теме<br>
+                🔍 Найти информацию на сайте и в интернете<br>
+                📊 Структурировать события по категориям<br>
+                💡 Дать рекомендации и ответить на вопросы<br><br>
+                Спроси меня о чём угодно!
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Напишите вопрос...">
+            <button class="chat-send" id="chatSend">→</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // AI-помощник ВЕК
+    const chatButton = document.getElementById('chatButton');
+    const chatWindow = document.getElementById('chatWindow');
+    const closeChat = document.getElementById('closeChat');
+    const chatSend = document.getElementById('chatSend');
+    const chatInput = document.getElementById('chatInput');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    let isTyping = false;
+    
+    // Открыть/закрыть чат
+    chatButton.onclick = () => {
+        chatWindow.classList.toggle('active');
+        if (chatWindow.classList.contains('active')) {
+            chatInput.focus();
+        }
+    };
+    
+    closeChat.onclick = () => {
+        chatWindow.classList.remove('active');
+    };
+    
+    // Показать индикатор печати
+    function showTyping() {
+        if (isTyping) return;
+        isTyping = true;
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = '<span></span><span></span><span></span>';
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function hideTyping() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+        isTyping = false;
+    }
+    
+    // Добавить сообщение
+    function addMessage(text, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+        if (!isUser) {
+            messageDiv.innerHTML = `<div class="message-name">🧭 Век</div>${text}`;
+        } else {
+            messageDiv.textContent = text;
+        }
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    // Поиск новостей на сайте
+    function searchNewsInSite(query) {
+        if (!allNews || allNews.length === 0) return null;
+        
+        const keywords = query.toLowerCase().split(' ');
+        const relevant = allNews.filter(news => {
+            const text = (news.title + ' ' + news.description).toLowerCase();
+            return keywords.some(kw => text.includes(kw));
+        });
+        
+        return relevant.slice(0, 5);
+    }
+    
+    // Поиск в интернете через Worker
+    async function searchInternet(query) {
+        try {
+            // Используем RSS-поиск через Worker (ищем новости по ключевым словам)
+            const searchUrl = `${WORKER_URL}?action=search&q=${encodeURIComponent(query)}`;
+            const response = await fetch(searchUrl);
+            const data = await response.json();
+            return data.items || [];
+        } catch (e) {
+            console.warn('Internet search failed:', e);
+            return [];
+        }
+    }
+    
+    // Генерация ответа
+    async function getAIResponse(message) {
+        const msg = message.toLowerCase().trim();
+        
+        // 1. Приветствия
+        if (msg.match(/привет|здравствуй|добрый день|хай|hi|hello|век/)) {
+            return "Привет! Я Век — твой навигатор по новостям. Чем могу помочь? Могу показать последние новости по теме, найти информацию в интернете или ответить на вопросы о сайте.";
+        }
+        
+        // 2. Обновление новостей
+        if (msg.match(/обновление|когда обновляется|как часто|свежие|актуальные/)) {
+            return "📅 Новости обновляются 3 раза в день: в 07:00, 13:00 и 19:00 по московскому времени. При первом открытии вы видите последнюю загруженную версию. Нажмите кнопку «↻ Обновить», чтобы загрузить свежие новости вручную.";
+        }
+        
+        // 3. Источники
+        if (msg.match(/источник|откуда|из каких|где берутся|rss/)) {
+            return "📰 Мы собираем новости из 16 проверенных источников:\n\n🇷🇺 Российские: ТАСС, РБК, Meduza, RT, Euronews, Deutsche Welle\n🌏 Центральная Азия: Tengrinews, Gazeta.uz, Kaktus.media, Asia-Plus, Turkmenportal, Хроники Туркменистана, Sputnik Таджикистан\n🌍 Международные: BBC News, The Guardian, Al Jazeera\n\nАнглийские новости автоматически переводятся на русский язык.";
+        }
+        
+        // 4. Категории
+        if (msg.match(/категория|тема|раздел|фильтр|политика|война|экономика|кибер|происшествие/)) {
+            return "🏷️ На сайте есть 5 категорий новостей:\n• 🏛 Политика\n• ⚔️ Война и конфликты\n• 🛡 Кибербезопасность\n• ⚠️ Происшествия\n• 💰 Экономика\n\nВыберите категорию в верхнем меню — и новости отфильтруются по вашим интересам!";
+        }
+        
+        // 5. Архив
+        if (msg.match(/архив|старые|прошлые|дата|вчера|неделя/)) {
+            return "📆 Вы можете смотреть новости за предыдущие дни. Используйте панель «АРХИВ» вверху страницы:\n• Сегодня\n• Вчера\n• 2/3 дня назад\n• За неделю\n• Или выберите любую дату в календаре.";
+        }
+        
+        // 6. Радио
+        if (msg.match(/радио|плеер|вести|маяк|эфир|онлайн|известия/)) {
+            return "🎙️ На сайте доступно онлайн-радио от ВГТРК. Вы можете слушать:\n• Вести FM — новости, аналитика\n• Маяк — интеллектуальное радио\n• Радио России — классика, новости, культура\n\nПросто выберите станцию в блоке радио!";
+        }
+        
+        // 7. Поиск новостей на сайте
+        if (msg.match(/найти|покажи|расскажи|что там|новости о|события|происходит/)) {
+            const relevant = searchNewsInSite(message);
+            if (relevant && relevant.length > 0) {
+                let response = `🔍 По вашему запросу "${message}" нашёл ${relevant.length} новостей на сайте:\n\n`;
+                relevant.forEach((news, idx) => {
+                    const date = new Date(news.publishedAt).toLocaleDateString('ru-RU');
+                    response += `${idx + 1}. **${news.title}**\n   📰 ${news.source} · ${date}\n\n`;
+                });
+                response += `Нажмите на любую новость на главной странице, чтобы прочитать полностью.`;
+                return response;
+            }
+            // Если на сайте не нашлось, ищем в интернете
+            return await searchInternetAndFormat(message);
+        }
+        
+        // 8. О помощнике
+        if (msg.match(/кто ты|что ты|расскажи о себе|твои возможности/)) {
+            return "🧭 Я Век — AI-помощник и навигатор по новостям. Мои возможности:\n\n📰 **Поиск новостей** — могу найти новости на сайте по теме\n🌐 **Интернет-поиск** — ищу информацию в сети, если её нет на сайте\n📊 **Структурирование** — группирую новости по темам\n💡 **Советы** — помогаю разобраться в категориях и фильтрах\n\nЧем могу помочь?";
+        }
+        
+        // 9. О сайте
+        if (msg.match(/что это|о сайте|вектор|агрегатор|зачем|как работает/)) {
+            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 16 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника Века.";
+        }
+        
+        // 10. Если не понял
+        return "🔍 Я пока не нашёл ответ на этот вопрос в новостях. Попробуйте переформулировать или спросите о:\n• последних новостях по теме\n• категориях новостей\n• источниках информации\n• обновлении ленты\n\nЯ также могу поискать информацию в интернете — просто спросите!";
+    }
+    
+    // Поиск в интернете через Worker (нужно добавить в Worker функцию поиска)
+    async function searchInternetAndFormat(query) {
+        try {
+            const searchUrl = `${WORKER_URL}?action=search&q=${encodeURIComponent(query)}`;
+            const response = await fetch(searchUrl);
+            const data = await response.json();
+            
+            if (data.items && data.items.length > 0) {
+                let response = `🌐 Нашёл в интернете информацию по запросу "${query}":\n\n`;
+                data.items.slice(0, 3).forEach((item, idx) => {
+                    response += `${idx + 1}. **${item.title}**\n   📌 ${item.link}\n\n`;
+                });
+                response += `ℹ️ Это результаты из открытых источников. Для получения точной информации перейдите по ссылкам.`;
+                return response;
+            } else {
+                return `🔍 Не удалось найти информацию по запросу "${query}" в интернете. Попробуйте другие ключевые слова или задайте вопрос иначе.`;
+            }
+        } catch (e) {
+            return `🔍 Не удалось выполнить поиск в интернете. Попробуйте спросить о чём-то другом, например, о категориях новостей или обновлении ленты.`;
+        }
+    }
+    
+    // Отправка сообщения
+    async function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        addMessage(message, true);
+        chatInput.value = '';
+        showTyping();
+        
+        // Получаем ответ
+        const response = await getAIResponse(message);
+        
+        hideTyping();
+        addMessage(response, false);
+    }
+    
+    chatSend.onclick = sendMessage;
+    chatInput.onkeypress = (e) => {
+        if (e.key === 'Enter') sendMessage();
+    };
+</script>
+Что нужно добавить в Worker для интернет-поиска
+Чтобы помощник мог искать в интернете, добавьте в ваш Cloudflare Worker функцию search:
+
+javascript
+// В функцию handleRequest добавьте:
+if (action === 'search') {
+  const query = url.searchParams.get('q');
+  if (!query) {
+    return errorResponse('Missing search query');
+  }
+  return await searchInternet(query);
+}
+
+// Добавьте функцию:
+async function searchInternet(query) {
+  // Используем RSS-поиск через новостные API
+  const searchUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ru&gl=RU&ceid=RU:ru`;
+  
+  try {
+    const response = await fetch(searchUrl);
+    const text = await response.text();
+    
+    const items = [];
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+    let itemMatch;
+    
+    while ((itemMatch = itemRegex.exec(text)) !== null) {
+      const itemXml = itemMatch[1];
+      const title = (itemXml.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '';
+      const link = (itemXml.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || '';
+      
+      items.push({ title: title.replace(/<[^>]*>/g, ''), link: link });
+    }
+    
+    return new Response(JSON.stringify({ status: 'ok', items: items.slice(0, 5) }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ status: 'ok', items: [] }), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+    });
+  }
+}
 </body>
 </html>
