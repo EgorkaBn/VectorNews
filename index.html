@@ -88,7 +88,7 @@
         }
         .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
         
-        /* ============ РАДИО-БЛОК ВГТРК ============ */
+        /* ============ РАДИО-БЛОК ВГТРК с HTML5-плеером ============ */
         .radio-block {
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
             border-radius: 20px;
@@ -178,11 +178,46 @@
             padding: 2px;
             margin: 8px 0;
         }
-        .radio-player {
+        .radio-audio {
             width: 100%;
-            height: 100px;
-            border: none;
-            border-radius: 10px;
+            height: 48px;
+            border-radius: 24px;
+            background: #1e1e2e;
+        }
+        .radio-audio::-webkit-media-controls-panel {
+            background: #1e1e2e;
+        }
+        .radio-audio::-webkit-media-controls-current-time-display,
+        .radio-audio::-webkit-media-controls-time-remaining-display {
+            color: white;
+        }
+        .radio-control-btn {
+            background: rgba(91,91,214,0.2);
+            border: 1px solid rgba(91,91,214,0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--accent);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0 2px;
+        }
+        .radio-control-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+        .radio-control-btn.stop {
+            border-color: rgba(255,51,102,0.3);
+            color: #ff3366;
+        }
+        .radio-control-btn.stop:hover {
+            background: #ff3366;
+            color: white;
+        }
+        #radioStatus {
+            font-size: 10px;
+            font-weight: 500;
         }
         .radio-footer {
             display: flex;
@@ -535,9 +570,214 @@
         }
         @media (max-width: 960px) {
             .radio-block { min-width: auto; width: 100%; }
-            .radio-player { height: 90px; }
             .masthead-inner { flex-direction: column; align-items: stretch; }
             .stats { justify-content: center; }
+        }
+        
+        /* ============ AI-ПОМОЩНИК ДЕДУС ============ */
+        .ai-chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(91,91,214,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+        .chat-button::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(91,91,214,0.4) 0%, transparent 70%);
+            animation: pulse-ring 2s ease-out infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        .chat-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(91,91,214,0.7);
+        }
+        .chat-button .compass-icon {
+            font-size: 32px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 380px;
+            height: 550px;
+            background: #0f0f1a;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+        .chat-window.active { display: flex; }
+        .chat-header {
+            background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+        .chat-header-text h3 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: 700;
+        }
+        .chat-header-text p {
+            font-size: 10px;
+            margin: 2px 0 0;
+            opacity: 0.8;
+        }
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .close-chat:hover { background: rgba(255,255,255,0.2); }
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 13px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+        .message.user {
+            background: #5b5bd6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .message.bot {
+            background: #1e1e2e;
+            color: #e8e8f4;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .message.bot .message-name {
+            font-size: 10px;
+            color: #5b5bd6;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            background: #1e1e2e;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 10px 15px;
+            color: white;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+        }
+        .chat-input:focus { border-color: #5b5bd6; }
+        .chat-send {
+            background: #5b5bd6;
+            border: none;
+            border-radius: 25px;
+            padding: 8px 18px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .chat-send:hover { background: #4a4aba; }
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 14px;
+            background: #1e1e2e;
+            border-radius: 18px;
+            align-self: flex-start;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+            background: #8888aa;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+        @media (max-width: 600px) {
+            .chat-window {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+                height: 60vh;
+            }
         }
     </style>
 </head>
@@ -555,7 +795,7 @@
             <p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p>
         </div>
         
-        <!-- РАДИО БЛОК ВГТРК (3 станции) -->
+        <!-- РАДИО БЛОК ВГТРК с HTML5-плеером -->
         <div class="radio-block">
             <div class="radio-header">
                 <div class="radio-brand">
@@ -568,24 +808,24 @@
                 <div class="radio-badge">🔴 LIVE 24/7</div>
             </div>
             <div class="radio-selector">
-                <button class="radio-btn active" data-radio="vesti" data-name="Вести FM" data-desc="Новости, аналитика, интервью — 24/7" data-icon="В" data-color="vesti" data-url="https://radiovesti.ru/player_widget/">📻 Вести FM</button>
-                <button class="radio-btn" data-radio="mayak" data-name="Маяк" data-desc="Интеллектуальное радио, музыка, разговоры" data-icon="М" data-color="mayak" data-url="https://radiorus.ru/player/mayak_widget">🎙 Маяк</button>
-                <button class="radio-btn" data-radio="radiorus" data-name="Радио России" data-desc="Классика, новости, культура" data-icon="Р" data-color="radiorus" data-url="https://radiorus.ru/player/radiorus_widget">📡 Радио России</button>
+                <button class="radio-btn active" data-radio="vesti" data-name="Вести FM" data-desc="Новости, аналитика, интервью — 24/7" data-icon="В" data-color="vesti" data-stream="https://icecast.vgtrk.cdnvideo.ru/vestifm_mp3_128kbps">📻 Вести FM</button>
+                <button class="radio-btn" data-radio="mayak" data-name="Маяк" data-desc="Интеллектуальное радио, музыка, разговоры" data-icon="М" data-color="mayak" data-stream="https://icecast.vgtrk.cdnvideo.ru/mayak_mp3_128kbps">🎙 Маяк</button>
+                <button class="radio-btn" data-radio="radiorus" data-name="Радио России" data-desc="Классика, новости, культура" data-icon="Р" data-color="radiorus" data-stream="https://icecast.vgtrk.cdnvideo.ru/rrzon_mp3_128kbps">📡 Радио России</button>
             </div>
             <div class="player-container">
-                <iframe 
-                    id="radioPlayer"
-                    class="radio-player"
-                    src="https://radiovesti.ru/player_widget/" 
-                    frameborder="0" 
-                    scrolling="no" 
-                    allow="autoplay">
-                </iframe>
+                <audio id="radioAudio" class="radio-audio" controls preload="none">
+                    <source src="https://icecast.vgtrk.cdnvideo.ru/vestifm_mp3_128kbps" type="audio/mpeg">
+                    Ваш браузер не поддерживает аудиоплеер.
+                </audio>
             </div>
             <div class="radio-footer">
                 <div class="now-playing">
                     <span class="live-dot-small"></span>
-                    <span>Эфир онлайн</span>
+                    <span id="radioStatus">Остановлено</span>
+                </div>
+                <div>
+                    <button id="playRadioBtn" class="radio-control-btn">▶ Включить</button>
+                    <button id="stopRadioBtn" class="radio-control-btn stop">⏹ Остановить</button>
                 </div>
                 <div>
                     <a href="https://radiovesti.ru" target="_blank" id="radioLink">Официальный сайт →</a>
@@ -680,43 +920,88 @@
 </div>
 
 <script>
-    // ============ РАДИО ПЕРЕКЛЮЧАТЕЛЬ ============
+    // ============ РАДИО ПЕРЕКЛЮЧАТЕЛЬ (HTML5) ============
     const radioButtons = document.querySelectorAll('.radio-btn');
-    const radioPlayer = document.getElementById('radioPlayer');
+    const radioAudio = document.getElementById('radioAudio');
     const radioName = document.getElementById('radioName');
     const radioDesc = document.getElementById('radioDesc');
     const radioIcon = document.getElementById('radioIcon');
     const radioLink = document.getElementById('radioLink');
+    const radioStatus = document.getElementById('radioStatus');
+    const playBtn = document.getElementById('playRadioBtn');
+    const stopBtn = document.getElementById('stopRadioBtn');
+    const audioSource = document.querySelector('#radioAudio source');
+    
+    let currentStream = 'https://icecast.vgtrk.cdnvideo.ru/vestifm_mp3_128kbps';
+    
+    function updateRadioStation(name, desc, icon, color, stream, siteUrl) {
+        radioName.textContent = name;
+        radioDesc.textContent = desc;
+        radioIcon.textContent = icon;
+        radioIcon.className = `radio-icon ${color}`;
+        radioLink.href = siteUrl;
+        
+        currentStream = stream;
+        audioSource.src = stream;
+        radioAudio.load();
+        
+        if (!radioAudio.paused) {
+            radioAudio.play().catch(e => console.warn('Play error:', e));
+            radioStatus.textContent = 'Играет';
+            radioStatus.style.color = '#4CAF50';
+        }
+    }
     
     radioButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Убираем активный класс у всех
             radioButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             
-            // Обновляем данные
-            const url = btn.dataset.url;
             const name = btn.dataset.name;
             const desc = btn.dataset.desc;
             const icon = btn.dataset.icon;
             const color = btn.dataset.color;
+            const stream = btn.dataset.stream;
             
-            // Меняем iframe
-            radioPlayer.src = url;
-            
-            // Обновляем текст и иконку
-            radioName.textContent = name;
-            radioDesc.textContent = desc;
-            radioIcon.textContent = icon;
-            radioIcon.className = `radio-icon ${color}`;
-            
-            // Обновляем ссылку
             let siteUrl = 'https://radiovesti.ru';
             if (name === 'Маяк') siteUrl = 'https://radiorus.ru/mayak';
             if (name === 'Радио России') siteUrl = 'https://radiorus.ru';
-            radioLink.href = siteUrl;
+            
+            updateRadioStation(name, desc, icon, color, stream, siteUrl);
         });
     });
+    
+    playBtn.onclick = () => {
+        radioAudio.play().then(() => {
+            radioStatus.textContent = 'Играет';
+            radioStatus.style.color = '#4CAF50';
+        }).catch(e => {
+            radioStatus.textContent = 'Ошибка потока';
+            radioStatus.style.color = '#ff3366';
+        });
+    };
+    
+    stopBtn.onclick = () => {
+        radioAudio.pause();
+        radioAudio.currentTime = 0;
+        radioStatus.textContent = 'Остановлено';
+        radioStatus.style.color = '#8888aa';
+    };
+    
+    radioAudio.onplaying = () => {
+        radioStatus.textContent = 'Играет';
+        radioStatus.style.color = '#4CAF50';
+    };
+    
+    radioAudio.onpause = () => {
+        radioStatus.textContent = 'Остановлено';
+        radioStatus.style.color = '#8888aa';
+    };
+    
+    radioAudio.onerror = () => {
+        radioStatus.textContent = 'Ошибка потока';
+        radioStatus.style.color = '#ff3366';
+    };
     
     // ============ ИСТОЧНИКИ (16 РАБОЧИХ) ============
     const SOURCES = [
@@ -1103,7 +1388,8 @@
 
     init();
 </script>
-<!-- AI-помощник ВЕК (навигатор новостей) -->
+
+<!-- AI-ПОМОЩНИК ДЕДУС -->
 <style>
     .ai-chatbot {
         position: fixed;
@@ -1112,7 +1398,6 @@
         z-index: 1000;
         font-family: 'Inter', sans-serif;
     }
-    
     .chat-button {
         width: 60px;
         height: 60px;
@@ -1127,7 +1412,6 @@
         border: 2px solid rgba(255,255,255,0.2);
         position: relative;
     }
-    
     .chat-button::after {
         content: '';
         position: absolute;
@@ -1137,23 +1421,19 @@
         background: radial-gradient(circle, rgba(91,91,214,0.4) 0%, transparent 70%);
         animation: pulse-ring 2s ease-out infinite;
     }
-    
     @keyframes pulse-ring {
         0% { transform: scale(0.8); opacity: 0.8; }
         100% { transform: scale(1.5); opacity: 0; }
     }
-    
     .chat-button:hover {
         transform: scale(1.05);
         box-shadow: 0 6px 25px rgba(91,91,214,0.7);
     }
-    
     .chat-button .compass-icon {
         font-size: 32px;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         z-index: 1;
     }
-    
     .chat-window {
         position: fixed;
         bottom: 90px;
@@ -1170,11 +1450,7 @@
         backdrop-filter: blur(10px);
         z-index: 1001;
     }
-    
-    .chat-window.active {
-        display: flex;
-    }
-    
+    .chat-window.active { display: flex; }
     .chat-header {
         background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
         padding: 15px;
@@ -1183,13 +1459,11 @@
         justify-content: space-between;
         align-items: center;
     }
-    
     .chat-header-info {
         display: flex;
         align-items: center;
         gap: 12px;
     }
-    
     .chat-avatar {
         width: 40px;
         height: 40px;
@@ -1200,19 +1474,16 @@
         justify-content: center;
         font-size: 22px;
     }
-    
     .chat-header-text h3 {
         font-size: 16px;
         margin: 0;
         font-weight: 700;
     }
-    
     .chat-header-text p {
         font-size: 10px;
         margin: 2px 0 0;
         opacity: 0.8;
     }
-    
     .close-chat {
         background: none;
         border: none;
@@ -1227,11 +1498,7 @@
         border-radius: 50%;
         transition: background 0.2s;
     }
-    
-    .close-chat:hover {
-        background: rgba(255,255,255,0.2);
-    }
-    
+    .close-chat:hover { background: rgba(255,255,255,0.2); }
     .chat-messages {
         flex: 1;
         padding: 15px;
@@ -1240,7 +1507,6 @@
         flex-direction: column;
         gap: 12px;
     }
-    
     .message {
         max-width: 85%;
         padding: 10px 14px;
@@ -1249,14 +1515,12 @@
         line-height: 1.5;
         word-wrap: break-word;
     }
-    
     .message.user {
         background: #5b5bd6;
         color: white;
         align-self: flex-end;
         border-bottom-right-radius: 5px;
     }
-    
     .message.bot {
         background: #1e1e2e;
         color: #e8e8f4;
@@ -1264,7 +1528,6 @@
         border-bottom-left-radius: 5px;
         border: 1px solid rgba(255,255,255,0.05);
     }
-    
     .message.bot .message-name {
         font-size: 10px;
         color: #5b5bd6;
@@ -1273,28 +1536,12 @@
         align-items: center;
         gap: 6px;
     }
-    
-    .news-suggestion {
-        margin-top: 8px;
-        padding-top: 8px;
-        border-top: 1px dashed rgba(255,255,255,0.1);
-    }
-    
-    .news-suggestion a {
-        color: #5b5bd6;
-        text-decoration: none;
-        display: block;
-        margin-top: 5px;
-        font-size: 11px;
-    }
-    
     .chat-input-area {
         padding: 15px;
         border-top: 1px solid rgba(255,255,255,0.1);
         display: flex;
         gap: 10px;
     }
-    
     .chat-input {
         flex: 1;
         background: #1e1e2e;
@@ -1306,11 +1553,7 @@
         font-size: 13px;
         outline: none;
     }
-    
-    .chat-input:focus {
-        border-color: #5b5bd6;
-    }
-    
+    .chat-input:focus { border-color: #5b5bd6; }
     .chat-send {
         background: #5b5bd6;
         border: none;
@@ -1321,11 +1564,7 @@
         font-weight: 600;
         transition: background 0.2s;
     }
-    
-    .chat-send:hover {
-        background: #4a4aba;
-    }
-    
+    .chat-send:hover { background: #4a4aba; }
     .typing-indicator {
         display: flex;
         gap: 4px;
@@ -1335,7 +1574,6 @@
         align-self: flex-start;
         border: 1px solid rgba(255,255,255,0.05);
     }
-    
     .typing-indicator span {
         width: 6px;
         height: 6px;
@@ -1343,15 +1581,12 @@
         border-radius: 50%;
         animation: typing 1.4s infinite;
     }
-    
     .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
     .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-    
     @keyframes typing {
         0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
         30% { transform: translateY(-6px); opacity: 1; }
     }
-    
     @media (max-width: 600px) {
         .chat-window {
             width: calc(100% - 40px);
@@ -1372,7 +1607,7 @@
             <div class="chat-header-info">
                 <div class="chat-avatar">🧭</div>
                 <div class="chat-header-text">
-                    <h3>Век</h3>
+                    <h3>ДЕДУС</h3>
                     <p>Навигатор новостей · AI-помощник</p>
                 </div>
             </div>
@@ -1380,11 +1615,11 @@
         </div>
         <div class="chat-messages" id="chatMessages">
             <div class="message bot">
-                <div class="message-name">🧭 Век</div>
-                👋 Привет! Я Век — твой навигатор по новостям.<br><br>
+                <div class="message-name">🧭 ДЕДУС</div>
+                👋 Привет! Я ДЕДУС — твой навигатор по новостям.<br><br>
                 Я могу:<br>
                 📰 Показать последние новости по теме<br>
-                🔍 Найти информацию на сайте и в интернете<br>
+                🔍 Найти информацию на сайте<br>
                 📊 Структурировать события по категориям<br>
                 💡 Дать рекомендации и ответить на вопросы<br><br>
                 Спроси меня о чём угодно!
@@ -1398,7 +1633,7 @@
 </div>
 
 <script>
-    // AI-помощник ВЕК
+    // AI-помощник ДЕДУС
     const chatButton = document.getElementById('chatButton');
     const chatWindow = document.getElementById('chatWindow');
     const closeChat = document.getElementById('closeChat');
@@ -1408,19 +1643,13 @@
     
     let isTyping = false;
     
-    // Открыть/закрыть чат
     chatButton.onclick = () => {
         chatWindow.classList.toggle('active');
-        if (chatWindow.classList.contains('active')) {
-            chatInput.focus();
-        }
+        if (chatWindow.classList.contains('active')) chatInput.focus();
     };
     
-    closeChat.onclick = () => {
-        chatWindow.classList.remove('active');
-    };
+    closeChat.onclick = () => chatWindow.classList.remove('active');
     
-    // Показать индикатор печати
     function showTyping() {
         if (isTyping) return;
         isTyping = true;
@@ -1438,12 +1667,11 @@
         isTyping = false;
     }
     
-    // Добавить сообщение
     function addMessage(text, isUser = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
         if (!isUser) {
-            messageDiv.innerHTML = `<div class="message-name">🧭 Век</div>${text}`;
+            messageDiv.innerHTML = `<div class="message-name">🧭 ДЕДУС</div>${text}`;
         } else {
             messageDiv.textContent = text;
         }
@@ -1451,68 +1679,43 @@
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
-    // Поиск новостей на сайте
     function searchNewsInSite(query) {
         if (!allNews || allNews.length === 0) return null;
-        
         const keywords = query.toLowerCase().split(' ');
         const relevant = allNews.filter(news => {
             const text = (news.title + ' ' + news.description).toLowerCase();
             return keywords.some(kw => text.includes(kw));
         });
-        
         return relevant.slice(0, 5);
     }
     
-    // Поиск в интернете через Worker
-    async function searchInternet(query) {
-        try {
-            // Используем RSS-поиск через Worker (ищем новости по ключевым словам)
-            const searchUrl = `${WORKER_URL}?action=search&q=${encodeURIComponent(query)}`;
-            const response = await fetch(searchUrl);
-            const data = await response.json();
-            return data.items || [];
-        } catch (e) {
-            console.warn('Internet search failed:', e);
-            return [];
-        }
-    }
-    
-    // Генерация ответа
     async function getAIResponse(message) {
         const msg = message.toLowerCase().trim();
         
-        // 1. Приветствия
-        if (msg.match(/привет|здравствуй|добрый день|хай|hi|hello|век/)) {
-            return "Привет! Я Век — твой навигатор по новостям. Чем могу помочь? Могу показать последние новости по теме, найти информацию в интернете или ответить на вопросы о сайте.";
+        if (msg.match(/привет|здравствуй|добрый день|хай|hi|hello|дедус/)) {
+            return "Привет! Я ДЕДУС — твой навигатор по новостям. Чем могу помочь? Могу показать последние новости по теме, найти информацию или ответить на вопросы о сайте.";
         }
         
-        // 2. Обновление новостей
         if (msg.match(/обновление|когда обновляется|как часто|свежие|актуальные/)) {
             return "📅 Новости обновляются 3 раза в день: в 07:00, 13:00 и 19:00 по московскому времени. При первом открытии вы видите последнюю загруженную версию. Нажмите кнопку «↻ Обновить», чтобы загрузить свежие новости вручную.";
         }
         
-        // 3. Источники
         if (msg.match(/источник|откуда|из каких|где берутся|rss/)) {
             return "📰 Мы собираем новости из 16 проверенных источников:\n\n🇷🇺 Российские: ТАСС, РБК, Meduza, RT, Euronews, Deutsche Welle\n🌏 Центральная Азия: Tengrinews, Gazeta.uz, Kaktus.media, Asia-Plus, Turkmenportal, Хроники Туркменистана, Sputnik Таджикистан\n🌍 Международные: BBC News, The Guardian, Al Jazeera\n\nАнглийские новости автоматически переводятся на русский язык.";
         }
         
-        // 4. Категории
         if (msg.match(/категория|тема|раздел|фильтр|политика|война|экономика|кибер|происшествие/)) {
             return "🏷️ На сайте есть 5 категорий новостей:\n• 🏛 Политика\n• ⚔️ Война и конфликты\n• 🛡 Кибербезопасность\n• ⚠️ Происшествия\n• 💰 Экономика\n\nВыберите категорию в верхнем меню — и новости отфильтруются по вашим интересам!";
         }
         
-        // 5. Архив
         if (msg.match(/архив|старые|прошлые|дата|вчера|неделя/)) {
             return "📆 Вы можете смотреть новости за предыдущие дни. Используйте панель «АРХИВ» вверху страницы:\n• Сегодня\n• Вчера\n• 2/3 дня назад\n• За неделю\n• Или выберите любую дату в календаре.";
         }
         
-        // 6. Радио
         if (msg.match(/радио|плеер|вести|маяк|эфир|онлайн|известия/)) {
-            return "🎙️ На сайте доступно онлайн-радио от ВГТРК. Вы можете слушать:\n• Вести FM — новости, аналитика\n• Маяк — интеллектуальное радио\n• Радио России — классика, новости, культура\n\nПросто выберите станцию в блоке радио!";
+            return "🎙️ На сайте доступно онлайн-радио от ВГТРК. Вы можете слушать:\n• Вести FM — новости, аналитика\n• Маяк — интеллектуальное радио\n• Радио России — классика, новости, культура\n\nПросто выберите станцию в блоке радио и нажмите «Включить»!";
         }
         
-        // 7. Поиск новостей на сайте
         if (msg.match(/найти|покажи|расскажи|что там|новости о|события|происходит/)) {
             const relevant = searchNewsInSite(message);
             if (relevant && relevant.length > 0) {
@@ -1524,47 +1727,20 @@
                 response += `Нажмите на любую новость на главной странице, чтобы прочитать полностью.`;
                 return response;
             }
-            // Если на сайте не нашлось, ищем в интернете
-            return await searchInternetAndFormat(message);
+            return `🔍 По запросу "${message}" ничего не найдено. Попробуйте другие ключевые слова или спросите о категориях новостей.`;
         }
         
-        // 8. О помощнике
         if (msg.match(/кто ты|что ты|расскажи о себе|твои возможности/)) {
-            return "🧭 Я Век — AI-помощник и навигатор по новостям. Мои возможности:\n\n📰 **Поиск новостей** — могу найти новости на сайте по теме\n🌐 **Интернет-поиск** — ищу информацию в сети, если её нет на сайте\n📊 **Структурирование** — группирую новости по темам\n💡 **Советы** — помогаю разобраться в категориях и фильтрах\n\nЧем могу помочь?";
+            return "🧭 Я ДЕДУС — AI-помощник и навигатор по новостям. Мои возможности:\n\n📰 **Поиск новостей** — могу найти новости на сайте по теме\n📊 **Структурирование** — группирую новости по темам\n💡 **Советы** — помогаю разобраться в категориях и фильтрах\n\nЧем могу помочь?";
         }
         
-        // 9. О сайте
         if (msg.match(/что это|о сайте|вектор|агрегатор|зачем|как работает/)) {
-            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 16 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника Века.";
+            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 16 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника ДЕДУС.";
         }
         
-        // 10. Если не понял
-        return "🔍 Я пока не нашёл ответ на этот вопрос в новостях. Попробуйте переформулировать или спросите о:\n• последних новостях по теме\n• категориях новостей\n• источниках информации\n• обновлении ленты\n\nЯ также могу поискать информацию в интернете — просто спросите!";
+        return "🔍 Я пока не нашёл ответ на этот вопрос. Попробуйте спросить о:\n• последних новостях по теме\n• категориях новостей\n• источниках информации\n• обновлении ленты\n• радио на сайте";
     }
     
-    // Поиск в интернете через Worker (нужно добавить в Worker функцию поиска)
-    async function searchInternetAndFormat(query) {
-        try {
-            const searchUrl = `${WORKER_URL}?action=search&q=${encodeURIComponent(query)}`;
-            const response = await fetch(searchUrl);
-            const data = await response.json();
-            
-            if (data.items && data.items.length > 0) {
-                let response = `🌐 Нашёл в интернете информацию по запросу "${query}":\n\n`;
-                data.items.slice(0, 3).forEach((item, idx) => {
-                    response += `${idx + 1}. **${item.title}**\n   📌 ${item.link}\n\n`;
-                });
-                response += `ℹ️ Это результаты из открытых источников. Для получения точной информации перейдите по ссылкам.`;
-                return response;
-            } else {
-                return `🔍 Не удалось найти информацию по запросу "${query}" в интернете. Попробуйте другие ключевые слова или задайте вопрос иначе.`;
-            }
-        } catch (e) {
-            return `🔍 Не удалось выполнить поиск в интернете. Попробуйте спросить о чём-то другом, например, о категориях новостей или обновлении ленты.`;
-        }
-    }
-    
-    // Отправка сообщения
     async function sendMessage() {
         const message = chatInput.value.trim();
         if (!message) return;
@@ -1573,7 +1749,6 @@
         chatInput.value = '';
         showTyping();
         
-        // Получаем ответ
         const response = await getAIResponse(message);
         
         hideTyping();
@@ -1585,48 +1760,6 @@
         if (e.key === 'Enter') sendMessage();
     };
 </script>
-Что нужно добавить в Worker для интернет-поиска
-Чтобы помощник мог искать в интернете, добавьте в ваш Cloudflare Worker функцию search:
 
-javascript
-// В функцию handleRequest добавьте:
-if (action === 'search') {
-  const query = url.searchParams.get('q');
-  if (!query) {
-    return errorResponse('Missing search query');
-  }
-  return await searchInternet(query);
-}
-
-// Добавьте функцию:
-async function searchInternet(query) {
-  // Используем RSS-поиск через новостные API
-  const searchUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=ru&gl=RU&ceid=RU:ru`;
-  
-  try {
-    const response = await fetch(searchUrl);
-    const text = await response.text();
-    
-    const items = [];
-    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
-    let itemMatch;
-    
-    while ((itemMatch = itemRegex.exec(text)) !== null) {
-      const itemXml = itemMatch[1];
-      const title = (itemXml.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || '';
-      const link = (itemXml.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || '';
-      
-      items.push({ title: title.replace(/<[^>]*>/g, ''), link: link });
-    }
-    
-    return new Response(JSON.stringify({ status: 'ok', items: items.slice(0, 5) }), {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
-  } catch (error) {
-    return new Response(JSON.stringify({ status: 'ok', items: [] }), {
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
-    });
-  }
-}
 </body>
 </html>
