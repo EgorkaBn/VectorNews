@@ -95,9 +95,9 @@
         .stat-value { font-size: 20px; font-weight: 700; }
         .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
         .update-info {
-            font-size: 11px;
+            font-size: 10px;
             color: var(--text-muted);
-            margin-top: 8px;
+            margin-top: 4px;
             text-align: right;
         }
         .nav {
@@ -347,10 +347,6 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
         .footer {
             background: var(--surface);
             border-top: 1px solid var(--border);
@@ -381,11 +377,28 @@
             padding: 40px;
             color: var(--text-secondary);
         }
-        .last-update {
-            font-size: 10px;
+        .original-text {
+            font-size: 13px;
             color: var(--text-muted);
-            margin-top: 4px;
-            text-align: right;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border);
+            font-style: italic;
+        }
+        .refresh-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 30px;
+            padding: 6px 12px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 12px;
+            transition: all 0.2s;
+        }
+        .refresh-btn:hover {
+            background: #4a4aba;
+            transform: scale(1.02);
         }
     </style>
 </head>
@@ -398,7 +411,7 @@
 </div>
 <div class="masthead">
     <div class="masthead-inner">
-        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</p></div>
+        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · ПЕРЕВОД EN→RU</p></div>
         <div>
             <div class="stats">
                 <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
@@ -406,7 +419,7 @@
                 <div class="stat"><div class="stat-value" id="totalNews">—</div><div class="stat-label">НОВОСТЕЙ</div></div>
                 <div class="stat"><div class="stat-value">3</div><div class="stat-label">ОБНОВЛЕНИЯ</div></div>
             </div>
-            <div class="last-update" id="lastUpdateInfo">Последнее обновление: загрузка...</div>
+            <div class="update-info" id="lastUpdateInfo">Последнее обновление: загрузка...</div>
         </div>
     </div>
 </div>
@@ -462,7 +475,8 @@
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">О СИСТЕМЕ</div>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
                     Обновление: 07:00, 13:00, 19:00 МСК<br>
-                    Полные тексты новостей загружаются через Cloudflare Worker<br>
+                    Перевод: Google Translate (EN → RU)<br>
+                    Полные тексты: через Cloudflare Worker<br>
                     Все права принадлежат авторам
                 </div>
             </div>
@@ -483,25 +497,25 @@
 
 <script>
     const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
-    const UPDATE_TIMES = [7, 13, 19]; // часы обновления по МСК
+    const UPDATE_TIMES = [7, 13, 19];
     
     const SOURCES = [
-        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
-        { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
-        { name: 'Meduza', url: 'https://meduza.io/rss/all' },
-        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
-        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' },
-        { name: 'Kaktus.media', url: 'https://kaktus.media/rss' },
-        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
-        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
-        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
-        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
-        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
-        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
-        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed' },
-        { name: 'TechCrunch', url: 'https://techcrunch.com/feed' }
+        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
+        { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
+        { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
+        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
+        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' },
+        { name: 'Kaktus.media', url: 'https://kaktus.media/rss', lang: 'ru' },
+        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
+        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
+        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
+        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
+        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en' },
+        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
+        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
+        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
+        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
+        { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
     ];
 
     let allNews = [];
@@ -509,6 +523,7 @@
     let currentDays = 0;
     let customDate = null;
     let isUpdating = false;
+    let translationCache = new Map();
 
     function formatDate(date) {
         return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -559,6 +574,26 @@
         return 'politics';
     }
 
+    async function translateText(text) {
+        if (!text || text.length < 5) return text;
+        
+        if (translationCache.has(text)) {
+            return translationCache.get(text);
+        }
+        
+        try {
+            const url = `${WORKER_URL}?action=translate&text=${encodeURIComponent(text.substring(0, 500))}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            const translated = data.translated || text;
+            translationCache.set(text, translated);
+            return translated;
+        } catch (e) {
+            console.warn('Translation error:', e);
+            return text;
+        }
+    }
+
     async function fetchRSS(source) {
         const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
         try {
@@ -575,13 +610,27 @@
                 const item = data.items[i];
                 let title = item.title || '';
                 let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 300);
+                let originalTitle = null;
                 
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
                 
+                if (source.lang === 'en' && title) {
+                    originalTitle = title;
+                    try {
+                        title = await translateText(title);
+                        if (desc.length > 20) {
+                            desc = await translateText(desc.substring(0, 300));
+                        }
+                    } catch (e) {
+                        console.warn(`Translation failed for ${source.name}`);
+                    }
+                }
+                
                 news.push({
                     id: `${source.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 150),
+                    originalTitle: originalTitle,
                     description: desc || 'Описание отсутствует',
                     fullText: null,
                     url: item.link,
@@ -630,15 +679,15 @@
 
         allFresh.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
         
-        // Сохраняем новые новости вместе с архивом
         const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
         const seen = new Set(cached.map(n => n.url));
         allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
         
-        // Ограничиваем 200 последними новостями
         if (allNews.length > 200) allNews = allNews.slice(0, 200);
         
         localStorage.setItem('vector_news', JSON.stringify(allNews));
+        localStorage.setItem('vector_news_last_update', new Date().toISOString());
+        
         document.getElementById('totalNews').textContent = allNews.length;
         
         const now = new Date();
@@ -720,10 +769,17 @@
         document.body.style.overflow = 'hidden';
         
         const fullText = await loadFullNews(news.url);
-        if (fullText && fullText.length > 50) {
+        
+        if (fullText && fullText.length > 100) {
             modalText.innerHTML = escapeHtml(fullText);
+            if (news.originalTitle) {
+                modalText.innerHTML += `<div class="original-text">📖 Оригинал: ${escapeHtml(news.originalTitle)}</div>`;
+            }
         } else {
-            modalText.innerHTML = `⚠️ Полный текст новости недоступен.<br><br>📌 Для прочтения перейдите по ссылке на сайт источника: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a>`;
+            let message = `⚠️ Полный текст новости недоступен для чтения на сайте источника.<br><br>`;
+            message += `📌 Вы можете прочитать новость по ссылке: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a><br><br>`;
+            message += `💡 Краткое содержание: ${escapeHtml(news.description)}`;
+            modalText.innerHTML = message;
         }
     }
 
@@ -737,7 +793,6 @@
         const currentHour = now.getHours();
         const currentMinutes = now.getMinutes();
         
-        // Находим следующий час обновления
         let nextUpdateHour = null;
         for (const hour of UPDATE_TIMES) {
             if (hour > currentHour || (hour === currentHour && currentMinutes >= 0)) {
@@ -761,7 +816,7 @@
         
         setTimeout(() => {
             updateNews();
-            scheduleUpdate(); // Планируем следующее
+            scheduleUpdate();
         }, delay);
     }
 
@@ -769,7 +824,6 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // Восстанавливаем новости из кэша
         try {
             const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
             if (cached.length) {
@@ -781,17 +835,14 @@
                     document.getElementById('lastUpdateInfo').innerHTML = `📰 Последнее обновление: ${new Date(lastUpdate).toLocaleString('ru-RU')}`;
                 }
             } else {
-                // Если кэша нет, загружаем сразу
                 updateNews();
             }
         } catch (e) {
             updateNews();
         }
         
-        // Планируем регулярные обновления
         scheduleUpdate();
 
-        // Категории
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -801,7 +852,6 @@
             });
         });
 
-        // Таймлайн
         document.querySelectorAll('.timeline-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
@@ -812,7 +862,6 @@
             });
         });
 
-        // Кастомная дата
         document.getElementById('applyDate').addEventListener('click', () => {
             const val = document.getElementById('customDate').value;
             if (val) {
@@ -823,16 +872,14 @@
             }
         });
 
-        // Модальное окно
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('newsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('newsModal')) closeModal();
         });
         
-        // Кнопка ручного обновления (можно добавить)
         const refreshBtn = document.createElement('button');
-        refreshBtn.textContent = '↻';
-        refreshBtn.style.cssText = 'background: var(--accent); border: none; border-radius: 30px; padding: 6px 12px; color: white; cursor: pointer; font-size: 14px; margin-left: 12px;';
+        refreshBtn.textContent = '↻ Обновить';
+        refreshBtn.className = 'refresh-btn';
         refreshBtn.title = 'Обновить новости вручную';
         refreshBtn.onclick = () => updateNews();
         document.querySelector('.masthead-inner .stats').after(refreshBtn);
