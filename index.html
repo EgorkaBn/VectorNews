@@ -5,13 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ВЕКТОР — Мировые новости</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #080810;
@@ -19,8 +13,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-
-        /* ============ ЦВЕТА ТЕМ ============ */
         :root {
             --bg: #080810;
             --surface: #0f0f1a;
@@ -30,23 +22,18 @@
             --text-secondary: #8888aa;
             --text-muted: #44445a;
             --accent: #5b5bd6;
-            --accent-hover: #4a4aba;
             --live: #ff3366;
-            
             --politics: #3b82f6;
             --war: #f43f5e;
             --cyber: #a855f7;
             --security: #f59e0b;
             --economy: #10b981;
         }
-
-        /* ============ ШАПКА ============ */
         .top-bar {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             padding: 12px 20px;
         }
-
         .top-bar-inner {
             max-width: 1400px;
             margin: 0 auto;
@@ -56,7 +43,6 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .live-badge {
             display: flex;
             align-items: center;
@@ -66,7 +52,6 @@
             color: var(--live);
             text-transform: uppercase;
         }
-
         .live-dot {
             width: 8px;
             height: 8px;
@@ -74,32 +59,10 @@
             border-radius: 50%;
             animation: pulse 1.5s ease infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.9); }
-        }
-
-        .datetime {
-            display: flex;
-            gap: 16px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--text-secondary);
-        }
-
-        .date, .time {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-
-        /* ============ МАСТХЕД ============ */
-        .masthead {
-            padding: 24px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(0.9);} }
+        .datetime { display: flex; gap: 16px; font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+        .date, .time { background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; }
+        .masthead { padding: 24px 20px; border-bottom: 1px solid var(--border); }
         .masthead-inner {
             max-width: 1400px;
             margin: 0 auto;
@@ -109,7 +72,6 @@
             flex-wrap: wrap;
             gap: 20px;
         }
-
         .logo h1 {
             font-size: 36px;
             font-weight: 900;
@@ -118,14 +80,7 @@
             -webkit-text-fill-color: transparent;
             letter-spacing: -1px;
         }
-
-        .logo p {
-            font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
+        .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
         .stats {
             display: flex;
             gap: 1px;
@@ -133,35 +88,18 @@
             border-radius: 12px;
             overflow: hidden;
         }
-
-        .stat {
-            background: var(--surface);
-            padding: 8px 16px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            font-size: 9px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        /* ============ НАВИГАЦИЯ ============ */
+        .stat { background: var(--surface); padding: 8px 16px; text-align: center; }
+        .stat-value { font-size: 20px; font-weight: 700; }
+        .stat-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; }
         .nav {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(8, 8, 16, 0.95);
+            background: rgba(8,8,16,0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             padding: 0 20px;
         }
-
         .nav-inner {
             max-width: 1400px;
             margin: 0 auto;
@@ -171,11 +109,7 @@
             scrollbar-width: none;
             padding: 12px 0;
         }
-
-        .nav-inner::-webkit-scrollbar {
-            display: none;
-        }
-
+        .nav-inner::-webkit-scrollbar { display: none; }
         .category-btn {
             padding: 8px 18px;
             border-radius: 30px;
@@ -188,24 +122,13 @@
             white-space: nowrap;
             transition: all 0.2s;
         }
-
-        .category-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-        }
-
-        .category-btn.active {
-            background: var(--accent);
-            color: white;
-        }
-
-        /* ============ ТАЙМЛАЙН ============ */
+        .category-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+        .category-btn.active { background: var(--accent); color: white; }
         .timeline {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
             padding: 12px 20px;
         }
-
         .timeline-inner {
             max-width: 1400px;
             margin: 0 auto;
@@ -214,11 +137,7 @@
             overflow-x: auto;
             scrollbar-width: none;
         }
-
-        .timeline-inner::-webkit-scrollbar {
-            display: none;
-        }
-
+        .timeline-inner::-webkit-scrollbar { display: none; }
         .timeline-btn {
             padding: 6px 14px;
             border-radius: 30px;
@@ -229,19 +148,8 @@
             cursor: pointer;
             white-space: nowrap;
         }
-
-        .timeline-btn.active {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: white;
-        }
-
-        .custom-date {
-            display: flex;
-            gap: 6px;
-            margin-left: auto;
-        }
-
+        .timeline-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+        .custom-date { display: flex; gap: 6px; margin-left: auto; }
         .custom-date input {
             background: transparent;
             border: 1px solid var(--border);
@@ -250,7 +158,6 @@
             color: white;
             font-size: 12px;
         }
-
         .custom-date button {
             background: var(--accent);
             border: none;
@@ -259,14 +166,11 @@
             color: white;
             cursor: pointer;
         }
-
-        /* ============ ОСНОВНОЙ КОНТЕНТ ============ */
         .main {
             max-width: 1400px;
             margin: 0 auto;
             padding: 32px 20px 60px;
         }
-
         .feed-header {
             display: flex;
             justify-content: space-between;
@@ -275,7 +179,6 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .feed-header h2 {
             font-size: 14px;
             font-weight: 700;
@@ -283,34 +186,14 @@
             letter-spacing: 1px;
             color: var(--text-secondary);
         }
-
-        .news-count {
-            background: var(--surface);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-
-        /* ============ СЕТКА НОВОСТЕЙ ============ */
+        .news-count { background: var(--surface); padding: 4px 12px; border-radius: 20px; font-size: 12px; }
         .news-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
         }
-
-        @media (min-width: 640px) {
-            .news-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .news-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        /* ============ КАРТОЧКА НОВОСТИ ============ */
+        @media (min-width: 640px) { .news-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .news-grid { grid-template-columns: repeat(3, 1fr); } }
         .news-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -321,7 +204,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .news-card::before {
             content: '';
             position: absolute;
@@ -332,22 +214,13 @@
             opacity: 0;
             transition: opacity 0.2s;
         }
-
         .news-card[data-topic="politics"]::before { background: var(--politics); }
         .news-card[data-topic="war"]::before { background: var(--war); }
         .news-card[data-topic="cyber"]::before { background: var(--cyber); }
         .news-card[data-topic="security"]::before { background: var(--security); }
         .news-card[data-topic="economy"]::before { background: var(--economy); }
-
-        .news-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-
-        .news-card:hover::before {
-            opacity: 1;
-        }
-
+        .news-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .news-card:hover::before { opacity: 1; }
         .card-topic {
             display: inline-block;
             padding: 4px 10px;
@@ -357,20 +230,12 @@
             text-transform: uppercase;
             margin-bottom: 12px;
         }
-
-        .topic-politics { background: rgba(59, 130, 246, 0.15); color: var(--politics); }
-        .topic-war { background: rgba(244, 63, 94, 0.15); color: var(--war); }
-        .topic-cyber { background: rgba(168, 85, 247, 0.15); color: var(--cyber); }
-        .topic-security { background: rgba(245, 158, 11, 0.15); color: var(--security); }
-        .topic-economy { background: rgba(16, 185, 129, 0.15); color: var(--economy); }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-
+        .topic-politics { background: rgba(59,130,246,0.15); color: var(--politics); }
+        .topic-war { background: rgba(244,63,94,0.15); color: var(--war); }
+        .topic-cyber { background: rgba(168,85,247,0.15); color: var(--cyber); }
+        .topic-security { background: rgba(245,158,11,0.15); color: var(--security); }
+        .topic-economy { background: rgba(16,185,129,0.15); color: var(--economy); }
+        .card-title { font-size: 18px; font-weight: 700; line-height: 1.4; margin-bottom: 12px; }
         .card-desc {
             font-size: 13px;
             color: var(--text-secondary);
@@ -381,7 +246,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
-
         .card-footer {
             display: flex;
             justify-content: space-between;
@@ -391,20 +255,8 @@
             font-size: 11px;
             color: var(--text-muted);
         }
-
-        .card-source {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .card-time {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* ============ МОДАЛЬНОЕ ОКНО ============ */
+        .card-source { display: flex; align-items: center; gap: 6px; }
+        .card-time { display: flex; align-items: center; gap: 4px; }
         .modal {
             display: none;
             position: fixed;
@@ -412,16 +264,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(8, 8, 16, 0.98);
+            background: rgba(8,8,16,0.98);
             z-index: 1000;
             overflow-y: auto;
         }
-
-        .modal.active {
-            display: flex;
-            flex-direction: column;
-        }
-
+        .modal.active { display: flex; flex-direction: column; }
         .modal-header {
             position: sticky;
             top: 0;
@@ -432,12 +279,7 @@
             align-items: center;
             border-bottom: 1px solid var(--border);
         }
-
-        .modal-header h3 {
-            color: var(--accent);
-            font-size: 14px;
-        }
-
+        .modal-header h3 { color: var(--accent); font-size: 14px; }
         .close-modal {
             background: none;
             border: none;
@@ -451,25 +293,14 @@
             justify-content: center;
             border-radius: 50%;
         }
-
-        .close-modal:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
+        .close-modal:hover { background: rgba(255,255,255,0.1); }
         .modal-content {
             max-width: 800px;
             margin: 0 auto;
             padding: 24px 20px 48px;
             width: 100%;
         }
-
-        .modal-title {
-            font-size: 28px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-
+        .modal-title { font-size: 28px; font-weight: 700; line-height: 1.4; margin-bottom: 20px; }
         .modal-meta {
             display: flex;
             gap: 20px;
@@ -478,33 +309,19 @@
             margin-bottom: 28px;
             flex-wrap: wrap;
         }
-
-        .modal-text {
-            font-size: 16px;
-            line-height: 1.65;
-            color: #c0c0e0;
-            margin-bottom: 32px;
-        }
-
+        .modal-text { font-size: 16px; line-height: 1.65; color: #c0c0e0; margin-bottom: 32px; }
         .modal-source {
             padding-top: 24px;
             border-top: 1px solid var(--border);
             font-size: 12px;
             color: var(--text-muted);
         }
-
-        .modal-source a {
-            color: var(--accent);
-            text-decoration: none;
-        }
-
-        /* ============ ЗАГРУЗЧИК ============ */
+        .modal-source a { color: var(--accent); text-decoration: none; }
         .loader {
             grid-column: 1 / -1;
             text-align: center;
             padding: 60px 20px;
         }
-
         .spinner {
             width: 48px;
             height: 48px;
@@ -514,23 +331,13 @@
             animation: spin 0.8s linear infinite;
             margin: 0 auto 16px;
         }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* ============ ПОДВАЛ ============ */
+        @keyframes spin { to { transform: rotate(360deg); } }
         .footer {
             background: var(--surface);
             border-top: 1px solid var(--border);
             padding: 40px 20px 32px;
         }
-
-        .footer-inner {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        .footer-inner { max-width: 1400px; margin: 0 auto; }
         .footer-logo {
             font-size: 24px;
             font-weight: 900;
@@ -539,93 +346,37 @@
             -webkit-text-fill-color: transparent;
             margin-bottom: 8px;
         }
-
-        .footer-tagline {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 24px;
-        }
-
+        .footer-tagline { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; }
         .footer-cols {
             display: flex;
             flex-direction: column;
             gap: 24px;
             margin-bottom: 32px;
         }
-
-        @media (min-width: 640px) {
-            .footer-cols {
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
-
-        .sources-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            max-width: 500px;
-        }
-
-        .source-tag {
-            background: var(--surface-hover);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .copyright {
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
-            padding-top: 24px;
-            border-top: 1px solid var(--border);
-        }
+        @media (min-width: 640px) { .footer-cols { flex-direction: row; justify-content: space-between; } }
+        .sources-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 500px; }
+        .source-tag { background: var(--surface-hover); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--text-secondary); }
+        .copyright { text-align: center; font-size: 11px; color: var(--text-muted); padding-top: 24px; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body>
-
 <div class="top-bar">
     <div class="top-bar-inner">
-        <div class="live-badge">
-            <div class="live-dot"></div>
-            <span>LIVE</span>
-        </div>
-        <div class="datetime">
-            <div class="date" id="currentDate"></div>
-            <div class="time" id="currentTime"></div>
-        </div>
+        <div class="live-badge"><div class="live-dot"></div><span>LIVE</span></div>
+        <div class="datetime"><div class="date" id="currentDate"></div><div class="time" id="currentTime"></div></div>
     </div>
 </div>
-
 <div class="masthead">
     <div class="masthead-inner">
-        <div class="logo">
-            <h1>ВЕКТОР</h1>
-            <p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</p>
-        </div>
+        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА</p></div>
         <div class="stats">
-            <div class="stat">
-                <div class="stat-value">16</div>
-                <div class="stat-label">ИСТОЧНИКОВ</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">7</div>
-                <div class="stat-label">ДНЕЙ АРХИВА</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="totalNews">—</div>
-                <div class="stat-label">НОВОСТЕЙ</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">30</div>
-                <div class="stat-label">МИН</div>
-            </div>
+            <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
+            <div class="stat"><div class="stat-value">7</div><div class="stat-label">ДНЕЙ АРХИВА</div></div>
+            <div class="stat"><div class="stat-value" id="totalNews">—</div><div class="stat-label">НОВОСТЕЙ</div></div>
+            <div class="stat"><div class="stat-value">30</div><div class="stat-label">МИН</div></div>
         </div>
     </div>
 </div>
-
 <div class="nav">
     <div class="nav-inner">
         <button class="category-btn active" data-category="all">🌍 Все новости</button>
@@ -636,7 +387,6 @@
         <button class="category-btn" data-category="economy">💰 Экономика</button>
     </div>
 </div>
-
 <div class="timeline">
     <div class="timeline-inner">
         <button class="timeline-btn active" data-days="0">Сегодня</button>
@@ -650,20 +400,15 @@
         </div>
     </div>
 </div>
-
 <main class="main">
     <div class="feed-header">
         <h2>ПОСЛЕДНИЕ НОВОСТИ</h2>
         <span class="news-count" id="newsCount">—</span>
     </div>
     <div class="news-grid" id="newsGrid">
-        <div class="loader">
-            <div class="spinner"></div>
-            <p>Загрузка новостей из 16 источников...</p>
-        </div>
+        <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 16 источников...</p></div>
     </div>
 </main>
-
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-logo">ВЕКТОР</div>
@@ -672,21 +417,11 @@
             <div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">ИСТОЧНИКИ</div>
                 <div class="sources-list">
-                    <span class="source-tag">РИА Новости</span>
-                    <span class="source-tag">РБК</span>
-                    <span class="source-tag">Meduza</span>
-                    <span class="source-tag">Tengrinews</span>
-                    <span class="source-tag">Gazeta.uz</span>
-                    <span class="source-tag">Kaktus.media</span>
-                    <span class="source-tag">Asia-Plus</span>
-                    <span class="source-tag">Turkmenportal</span>
-                    <span class="source-tag">Хроники Туркменистана</span>
-                    <span class="source-tag">Sputnik Таджикистан</span>
-                    <span class="source-tag">CNN</span>
-                    <span class="source-tag">BBC News</span>
-                    <span class="source-tag">Reuters</span>
-                    <span class="source-tag">The Guardian</span>
-                    <span class="source-tag">Bloomberg</span>
+                    <span class="source-tag">РИА Новости</span><span class="source-tag">РБК</span><span class="source-tag">Meduza</span>
+                    <span class="source-tag">Tengrinews</span><span class="source-tag">Gazeta.uz</span><span class="source-tag">Kaktus.media</span>
+                    <span class="source-tag">Asia-Plus</span><span class="source-tag">Turkmenportal</span><span class="source-tag">Хроники Туркменистана</span>
+                    <span class="source-tag">Sputnik Таджикистан</span><span class="source-tag">CNN</span><span class="source-tag">BBC News</span>
+                    <span class="source-tag">Reuters</span><span class="source-tag">The Guardian</span><span class="source-tag">Bloomberg</span>
                     <span class="source-tag">TechCrunch</span>
                 </div>
             </div>
@@ -694,29 +429,20 @@
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">О СИСТЕМЕ</div>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
                     Автообновление: каждые 30 минут<br>
-                    Перевод: LibreTranslate (EN → RU)<br>
                     Архив: 7 дней<br>
                     Все права принадлежат авторам
                 </div>
             </div>
         </div>
-        <div class="copyright">
-            © 2025 ВЕКТОР · Новости из открытых источников · Все права сохранены
-        </div>
+        <div class="copyright">© 2025 ВЕКТОР · Новости из открытых источников · Все права сохранены</div>
     </div>
 </footer>
 
 <div id="newsModal" class="modal">
-    <div class="modal-header">
-        <h3>📰 ВЕКТОР · Чтение новости</h3>
-        <button class="close-modal" id="closeModalBtn">✕</button>
-    </div>
+    <div class="modal-header"><h3>📰 ВЕКТОР · Чтение новости</h3><button class="close-modal" id="closeModalBtn">✕</button></div>
     <div class="modal-content">
         <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-meta">
-            <span id="modalSource"></span>
-            <span id="modalDate"></span>
-        </div>
+        <div class="modal-meta"><span id="modalSource"></span><span id="modalDate"></span></div>
         <div class="modal-text" id="modalText"></div>
         <div class="modal-source" id="modalOriginalLink"></div>
     </div>
@@ -724,32 +450,28 @@
 
 <script>
     const SOURCES = [
-        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
-        { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
-        { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
-        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
-        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' },
-        { name: 'Kaktus.media', url: 'https://kaktus.media/rss', lang: 'ru' },
-        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
-        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
-        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
-        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
-        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
-        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
-        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
-        { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
+        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+        { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
+        { name: 'Meduza', url: 'https://meduza.io/rss/all' },
+        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
+        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' },
+        { name: 'Kaktus.media', url: 'https://kaktus.media/rss' },
+        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
+        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
+        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
+        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
+        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss' },
+        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed' },
+        { name: 'TechCrunch', url: 'https://techcrunch.com/feed' }
     ];
 
     let allNews = [];
     let currentCategory = 'all';
     let currentDays = 0;
     let customDate = null;
-    let translateQueue = [];
-    let isTranslating = false;
-
-    const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
 
     function formatDate(date) {
         return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -775,9 +497,7 @@
             if (diff < 60) return `${diff} мин назад`;
             if (diff < 1440) return `${Math.floor(diff/60)} ч назад`;
             return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-        } catch {
-            return 'недавно';
-        }
+        } catch { return 'недавно'; }
     }
 
     function escapeHtml(text) {
@@ -802,98 +522,65 @@
         return 'politics';
     }
 
-    async function translateText(text) {
-        if (!text || text.length < 5) return text;
-        try {
-            const res = await fetch(`https://translate.argosopentech.com/translate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    q: text.substring(0, 800),
-                    source: 'en',
-                    target: 'ru',
-                    format: 'text'
-                })
-            });
-            const data = await res.json();
-            return data.translatedText || text;
-        } catch (e) {
-            console.warn('Translation error:', e);
-            return text;
-        }
-    }
-
-    async function processTranslateQueue() {
-        if (isTranslating || translateQueue.length === 0) return;
-        isTranslating = true;
-        while (translateQueue.length > 0) {
-            const { text, resolve } = translateQueue.shift();
+    async function fetchRSS(url) {
+        const proxyList = [
+            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+            `https://corsproxy.io/?${encodeURIComponent(url)}`
+        ];
+        
+        for (const proxy of proxyList) {
             try {
-                const translated = await translateText(text);
-                resolve(translated);
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                const response = await fetch(proxy, { signal: controller.signal });
+                clearTimeout(timeout);
+                if (!response.ok) continue;
+                const data = await response.json();
+                const contents = data.contents || (typeof data === 'string' ? data : null);
+                if (!contents) continue;
+                return contents;
             } catch (e) {
-                resolve(text);
+                console.warn(`Proxy failed:`, e.message);
+                continue;
             }
-            await new Promise(r => setTimeout(r, 1000));
         }
-        isTranslating = false;
-    }
-
-    function translateWithDelay(text) {
-        return new Promise((resolve) => {
-            translateQueue.push({ text, resolve });
-            processTranslateQueue();
-        });
+        throw new Error('All proxies failed');
     }
 
     async function fetchSource(source) {
-        const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
         try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
-            const res = await fetch(url, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) return [];
-            const data = await res.json();
-            if (data.status !== 'ok' || !data.items) return [];
-
-            const items = [];
-            for (let i = 0; i < Math.min(data.items.length, 6); i++) {
-                const item = data.items[i];
-                let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 500);
-                let originalTitle = null;
-
+            const xmlText = await fetchRSS(source.url);
+            const parser = new DOMParser();
+            const xml = parser.parseFromString(xmlText, 'text/xml');
+            const items = [...xml.querySelectorAll('item')];
+            
+            const news = [];
+            for (let i = 0; i < Math.min(items.length, 6); i++) {
+                const item = items[i];
+                let title = item.querySelector('title')?.textContent || '';
+                let desc = item.querySelector('description')?.textContent || '';
+                desc = desc.replace(/<[^>]*>/g, '').substring(0, 500);
+                const link = item.querySelector('link')?.textContent || '#';
+                const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString();
+                
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
-
-                if (source.lang === 'en' && title) {
-                    originalTitle = title;
-                    try {
-                        title = await translateWithDelay(title);
-                        if (desc.length > 20) {
-                            desc = await translateWithDelay(desc.substring(0, 400));
-                        }
-                    } catch (e) {
-                        console.warn(`Translation failed for ${source.name}`);
-                    }
-                }
-
-                items.push({
+                
+                news.push({
                     id: `${source.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 150),
-                    originalTitle: originalTitle,
                     description: desc || 'Описание отсутствует в RSS-ленте',
                     fullText: desc || 'Описание отсутствует в RSS-ленте',
-                    url: item.link,
+                    url: link,
                     source: source.name,
-                    publishedAt: item.pubDate,
-                    date: new Date(item.pubDate).toISOString().split('T')[0],
+                    publishedAt: pubDate,
+                    date: new Date(pubDate).toISOString().split('T')[0],
                     topic: detectTopic(title, desc)
                 });
             }
-            console.log(`✅ ${source.name}: ${items.length} новостей`);
-            return items;
+            console.log(`✅ ${source.name}: ${news.length} новостей`);
+            return news;
         } catch (e) {
             console.warn(`❌ ${source.name}:`, e.message);
             return [];
@@ -975,17 +662,13 @@
         });
     }
 
-    // ============ ИСПРАВЛЕННАЯ ФУНКЦИЯ OPENMODAL ============
     function openModal(news) {
         document.getElementById('modalTitle').innerHTML = escapeHtml(news.title);
         document.getElementById('modalSource').innerHTML = `📰 ${escapeHtml(news.source)}`;
         document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
         
-        // Если есть описание — показываем его, если нет — показываем ссылку на источник
         if (news.fullText && news.fullText !== 'Описание отсутствует в RSS-ленте' && news.fullText.length > 20) {
             document.getElementById('modalText').innerHTML = escapeHtml(news.fullText);
-        } else if (news.description && news.description !== 'Описание отсутствует в RSS-ленте' && news.description.length > 20) {
-            document.getElementById('modalText').innerHTML = escapeHtml(news.description);
         } else {
             document.getElementById('modalText').innerHTML = `⚠️ Полный текст новости недоступен в ленте RSS.<br><br>📌 Для прочтения перейдите по ссылке на сайт источника: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a>`;
         }
