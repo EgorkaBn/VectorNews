@@ -309,7 +309,13 @@
             margin-bottom: 28px;
             flex-wrap: wrap;
         }
-        .modal-text { font-size: 16px; line-height: 1.65; color: #c0c0e0; margin-bottom: 32px; }
+        .modal-text { 
+            font-size: 16px; 
+            line-height: 1.65; 
+            color: #c0c0e0; 
+            margin-bottom: 32px;
+            white-space: pre-wrap;
+        }
         .modal-source {
             padding-top: 24px;
             border-top: 1px solid var(--border);
@@ -332,6 +338,10 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
         .footer {
             background: var(--surface);
             border-top: 1px solid var(--border);
@@ -357,6 +367,11 @@
         .sources-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 500px; }
         .source-tag { background: var(--surface-hover); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--text-secondary); }
         .copyright { text-align: center; font-size: 11px; color: var(--text-muted); padding-top: 24px; border-top: 1px solid var(--border); }
+        .modal-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
     </style>
 </head>
 <body>
@@ -429,7 +444,7 @@
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">О СИСТЕМЕ</div>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
                     Автообновление: каждые 30 минут<br>
-                    Архив: 7 дней<br>
+                    Полные тексты новостей загружаются через Cloudflare Worker<br>
                     Все права принадлежат авторам
                 </div>
             </div>
@@ -443,12 +458,14 @@
     <div class="modal-content">
         <div class="modal-title" id="modalTitle"></div>
         <div class="modal-meta"><span id="modalSource"></span><span id="modalDate"></span></div>
-        <div class="modal-text" id="modalText"></div>
+        <div class="modal-text" id="modalText">Загрузка полного текста...</div>
         <div class="modal-source" id="modalOriginalLink"></div>
     </div>
 </div>
 
 <script>
+    const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
+    
     const SOURCES = [
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
         { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
@@ -522,47 +539,22 @@
         return 'politics';
     }
 
-    async function fetchRSS(url) {
-        const proxyList = [
-            `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
-            `https://corsproxy.io/?${encodeURIComponent(url)}`
-        ];
-        
-        for (const proxy of proxyList) {
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 10000);
-                const response = await fetch(proxy, { signal: controller.signal });
-                clearTimeout(timeout);
-                if (!response.ok) continue;
-                const data = await response.json();
-                const contents = data.contents || (typeof data === 'string' ? data : null);
-                if (!contents) continue;
-                return contents;
-            } catch (e) {
-                console.warn(`Proxy failed:`, e.message);
-                continue;
-            }
-        }
-        throw new Error('All proxies failed');
-    }
-
-    async function fetchSource(source) {
+    async function fetchRSS(source) {
+        const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
         try {
-            const xmlText = await fetchRSS(source.url);
-            const parser = new DOMParser();
-            const xml = parser.parseFromString(xmlText, 'text/xml');
-            const items = [...xml.querySelectorAll('item')];
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 12000);
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeout);
+            if (!res.ok) return [];
+            const data = await res.json();
+            if (data.status !== 'ok' || !data.items) return [];
             
             const news = [];
-            for (let i = 0; i < Math.min(items.length, 6); i++) {
-                const item = items[i];
-                let title = item.querySelector('title')?.textContent || '';
-                let desc = item.querySelector('description')?.textContent || '';
-                desc = desc.replace(/<[^>]*>/g, '').substring(0, 500);
-                const link = item.querySelector('link')?.textContent || '#';
-                const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString();
+            for (let i = 0; i < Math.min(data.items.length, 6); i++) {
+                const item = data.items[i];
+                let title = item.title || '';
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 300);
                 
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
@@ -570,12 +562,12 @@
                 news.push({
                     id: `${source.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 150),
-                    description: desc || 'Описание отсутствует в RSS-ленте',
-                    fullText: desc || 'Описание отсутствует в RSS-ленте',
-                    url: link,
+                    description: desc || 'Описание отсутствует',
+                    fullText: null,
+                    url: item.link,
                     source: source.name,
-                    publishedAt: pubDate,
-                    date: new Date(pubDate).toISOString().split('T')[0],
+                    publishedAt: item.pubDate,
+                    date: new Date(item.pubDate).toISOString().split('T')[0],
                     topic: detectTopic(title, desc)
                 });
             }
@@ -587,12 +579,28 @@
         }
     }
 
+    async function loadFullNews(newsUrl) {
+        const url = `${WORKER_URL}?action=getFullNews&url=${encodeURIComponent(newsUrl)}`;
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            const res = await fetch(url, { signal: controller.signal });
+            clearTimeout(timeout);
+            if (!res.ok) return null;
+            const data = await res.json();
+            return data.fullText || null;
+        } catch (e) {
+            console.warn('Failed to load full news:', e);
+            return null;
+        }
+    }
+
     async function loadAllNews() {
         const grid = document.getElementById('newsGrid');
         grid.innerHTML = `<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 16 источников...</p></div>`;
         let allFresh = [];
         for (let i = 0; i < SOURCES.length; i++) {
-            const items = await fetchSource(SOURCES[i]);
+            const items = await fetchRSS(SOURCES[i]);
             allFresh.push(...items);
         }
 
@@ -655,27 +663,36 @@
         `).join('');
 
         document.querySelectorAll('.news-card').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', async () => {
                 const news = allNews.find(n => n.id === card.dataset.id);
-                if (news) openModal(news);
+                if (news) await openModal(news);
             });
         });
     }
 
-    function openModal(news) {
-        document.getElementById('modalTitle').innerHTML = escapeHtml(news.title);
-        document.getElementById('modalSource').innerHTML = `📰 ${escapeHtml(news.source)}`;
-        document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
+    async function openModal(news) {
+        const modal = document.getElementById('newsModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalSource = document.getElementById('modalSource');
+        const modalDate = document.getElementById('modalDate');
+        const modalText = document.getElementById('modalText');
+        const modalOriginalLink = document.getElementById('modalOriginalLink');
         
-        if (news.fullText && news.fullText !== 'Описание отсутствует в RSS-ленте' && news.fullText.length > 20) {
-            document.getElementById('modalText').innerHTML = escapeHtml(news.fullText);
-        } else {
-            document.getElementById('modalText').innerHTML = `⚠️ Полный текст новости недоступен в ленте RSS.<br><br>📌 Для прочтения перейдите по ссылке на сайт источника: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a>`;
-        }
-        
-        document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
-        document.getElementById('newsModal').classList.add('active');
+        modalTitle.innerHTML = escapeHtml(news.title);
+        modalSource.innerHTML = `📰 ${escapeHtml(news.source)}`;
+        modalDate.innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
+        modalText.innerHTML = '<div class="modal-loading"><div class="spinner" style="width: 32px; height: 32px;"></div><p>Загрузка полного текста новости...</p></div>';
+        modalOriginalLink.innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
+        modal.classList.add('active');
         document.body.style.overflow = 'hidden';
+        
+        // Загружаем полный текст
+        const fullText = await loadFullNews(news.url);
+        if (fullText && fullText.length > 50) {
+            modalText.innerHTML = escapeHtml(fullText);
+        } else {
+            modalText.innerHTML = `⚠️ Полный текст новости недоступен.<br><br>📌 Для прочтения перейдите по ссылке на сайт источника: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a>`;
+        }
     }
 
     function closeModal() {
