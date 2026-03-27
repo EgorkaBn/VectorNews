@@ -723,7 +723,6 @@
 </div>
 
 <script>
-    // ============ ИСТОЧНИКИ ============
     const SOURCES = [
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
@@ -743,7 +742,6 @@
         { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
     ];
 
-    // ============ ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ============
     let allNews = [];
     let currentCategory = 'all';
     let currentDays = 0;
@@ -753,22 +751,12 @@
 
     const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
 
-    // ============ УТИЛИТЫ ============
     function formatDate(date) {
-        return date.toLocaleDateString('ru-RU', { 
-            weekday: 'long', 
-            day: 'numeric', 
-            month: 'long', 
-            year: 'numeric' 
-        });
+        return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     }
 
     function formatTime(date) {
-        return date.toLocaleTimeString('ru-RU', { 
-            hour: '2-digit', 
-            minute: '2-digit',
-            second: '2-digit'
-        });
+        return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
 
     function updateDateTime() {
@@ -814,7 +802,6 @@
         return 'politics';
     }
 
-    // ============ ПЕРЕВОДЧИК ============
     async function translateText(text) {
         if (!text || text.length < 5) return text;
         try {
@@ -859,7 +846,6 @@
         });
     }
 
-    // ============ ЗАГРУЗКА НОВОСТЕЙ ============
     async function fetchSource(source) {
         const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
         try {
@@ -897,8 +883,8 @@
                     id: `${source.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 150),
                     originalTitle: originalTitle,
-                    description: desc || 'Нет описания',
-                    fullText: desc || 'Нет описания',
+                    description: desc || 'Описание отсутствует в RSS-ленте',
+                    fullText: desc || 'Описание отсутствует в RSS-ленте',
                     url: item.link,
                     source: source.name,
                     publishedAt: item.pubDate,
@@ -917,35 +903,24 @@
     async function loadAllNews() {
         const grid = document.getElementById('newsGrid');
         grid.innerHTML = `<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 16 источников...</p></div>`;
-
         let allFresh = [];
         for (let i = 0; i < SOURCES.length; i++) {
             const items = await fetchSource(SOURCES[i]);
             allFresh.push(...items);
         }
 
-        // Сортировка по дате
         allFresh.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-
-        // Сохраняем в localStorage
         const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
         const seen = new Set(cached.map(n => n.url));
         allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
-        
-        // Ограничиваем 200 последними новостями
         if (allNews.length > 200) allNews = allNews.slice(0, 200);
-        
         localStorage.setItem('vector_news', JSON.stringify(allNews));
-        
         document.getElementById('totalNews').textContent = allNews.length;
         renderNews();
     }
 
-    // ============ ФИЛЬТРАЦИЯ ============
     function getFilteredNews() {
         let filtered = [...allNews];
-        
-        // Фильтр по дате
         if (customDate) {
             filtered = filtered.filter(n => n.date === customDate);
         } else if (currentDays === 7) {
@@ -960,16 +935,12 @@
             const today = new Date().toISOString().split('T')[0];
             filtered = filtered.filter(n => n.date === today);
         }
-        
-        // Фильтр по категории
         if (currentCategory !== 'all') {
             filtered = filtered.filter(n => n.topic === currentCategory);
         }
-        
         return filtered;
     }
 
-    // ============ ОТОБРАЖЕНИЕ ============
     function renderNews() {
         const filtered = getFilteredNews();
         const grid = document.getElementById('newsGrid');
@@ -981,21 +952,8 @@
             return;
         }
 
-        const topicNames = {
-            politics: 'Политика',
-            war: 'Война',
-            cyber: 'Кибербезопасность',
-            security: 'Происшествия',
-            economy: 'Экономика'
-        };
-
-        const topicIcons = {
-            politics: '🏛',
-            war: '⚔️',
-            cyber: '🛡',
-            security: '⚠️',
-            economy: '💰'
-        };
+        const topicNames = { politics: 'Политика', war: 'Война', cyber: 'Кибербезопасность', security: 'Происшествия', economy: 'Экономика' };
+        const topicIcons = { politics: '🏛', war: '⚔️', cyber: '🛡', security: '⚠️', economy: '💰' };
 
         grid.innerHTML = filtered.map(news => `
             <div class="news-card" data-id="${news.id}" data-topic="${news.topic}">
@@ -1009,7 +967,6 @@
             </div>
         `).join('');
 
-        // Добавляем обработчики кликов
         document.querySelectorAll('.news-card').forEach(card => {
             card.addEventListener('click', () => {
                 const news = allNews.find(n => n.id === card.dataset.id);
@@ -1018,12 +975,21 @@
         });
     }
 
-    // ============ МОДАЛЬНОЕ ОКНО ============
+    // ============ ИСПРАВЛЕННАЯ ФУНКЦИЯ OPENMODAL ============
     function openModal(news) {
         document.getElementById('modalTitle').innerHTML = escapeHtml(news.title);
         document.getElementById('modalSource').innerHTML = `📰 ${escapeHtml(news.source)}`;
         document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
-        document.getElementById('modalText').innerHTML = escapeHtml(news.fullText);
+        
+        // Если есть описание — показываем его, если нет — показываем ссылку на источник
+        if (news.fullText && news.fullText !== 'Описание отсутствует в RSS-ленте' && news.fullText.length > 20) {
+            document.getElementById('modalText').innerHTML = escapeHtml(news.fullText);
+        } else if (news.description && news.description !== 'Описание отсутствует в RSS-ленте' && news.description.length > 20) {
+            document.getElementById('modalText').innerHTML = escapeHtml(news.description);
+        } else {
+            document.getElementById('modalText').innerHTML = `⚠️ Полный текст новости недоступен в ленте RSS.<br><br>📌 Для прочтения перейдите по ссылке на сайт источника: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a>`;
+        }
+        
         document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
         document.getElementById('newsModal').classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -1034,12 +1000,10 @@
         document.body.style.overflow = '';
     }
 
-    // ============ ИНИЦИАЛИЗАЦИЯ ============
     function init() {
         updateDateTime();
         setInterval(updateDateTime, 1000);
 
-        // Восстанавливаем из кэша
         try {
             const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
             if (cached.length) {
@@ -1049,11 +1013,9 @@
             }
         } catch (e) {}
 
-        // Загружаем свежие новости
         loadAllNews();
         setInterval(loadAllNews, 30 * 60 * 1000);
 
-        // Категории
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -1063,7 +1025,6 @@
             });
         });
 
-        // Таймлайн
         document.querySelectorAll('.timeline-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
@@ -1074,7 +1035,6 @@
             });
         });
 
-        // Кастомная дата
         document.getElementById('applyDate').addEventListener('click', () => {
             const val = document.getElementById('customDate').value;
             if (val) {
@@ -1085,7 +1045,6 @@
             }
         });
 
-        // Закрытие модалки
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('newsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('newsModal')) closeModal();
