@@ -23,7 +23,9 @@
             --text-muted: #44445a;
             --accent: #5b5bd6;
             --live: #ff3366;
-            --radio-red: #D42E2E;
+            --radio-red: #c52a2a;
+            --radio-blue: #2a6fc5;
+            --radio-green: #2a9c5e;
             --politics: #3b82f6;
             --war: #f43f5e;
             --cyber: #a855f7;
@@ -86,7 +88,7 @@
         }
         .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
         
-        /* ============ РАДИО-БЛОК ИЗВЕСТИЯ FM ============ */
+        /* ============ РАДИО-БЛОК ВГТРК ============ */
         .radio-block {
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
             border-radius: 20px;
@@ -103,7 +105,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             flex-wrap: wrap;
             gap: 8px;
         }
@@ -115,7 +117,6 @@
         .radio-icon {
             width: 36px;
             height: 36px;
-            background: var(--radio-red);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -124,6 +125,9 @@
             font-weight: bold;
             color: white;
         }
+        .radio-icon.vesti { background: var(--radio-red); }
+        .radio-icon.mayak { background: var(--radio-blue); }
+        .radio-icon.radiorus { background: var(--radio-green); }
         .radio-brand h3 {
             font-size: 14px;
             font-weight: 700;
@@ -136,18 +140,43 @@
             margin: 2px 0 0;
         }
         .radio-badge {
-            background: rgba(212,46,46,0.2);
+            background: rgba(197,42,42,0.2);
             padding: 4px 10px;
             border-radius: 20px;
             font-size: 10px;
             color: var(--radio-red);
-            border: 1px solid rgba(212,46,46,0.3);
+            border: 1px solid rgba(197,42,42,0.3);
         }
+        .radio-selector {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+        .radio-btn {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .radio-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .radio-btn[data-radio="vesti"]:hover { border-color: var(--radio-red); }
+        .radio-btn[data-radio="mayak"]:hover { border-color: var(--radio-blue); }
+        .radio-btn[data-radio="radiorus"]:hover { border-color: var(--radio-green); }
         .player-container {
             background: #0f0f1a;
             border-radius: 12px;
             padding: 2px;
-            margin: 10px 0;
+            margin: 8px 0;
         }
         .radio-player {
             width: 100%;
@@ -526,22 +555,28 @@
             <p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p>
         </div>
         
-        <!-- РАДИО БЛОК ИЗВЕСТИЯ FM -->
+        <!-- РАДИО БЛОК ВГТРК (3 станции) -->
         <div class="radio-block">
             <div class="radio-header">
                 <div class="radio-brand">
-                    <div class="radio-icon">И</div>
+                    <div class="radio-icon vesti" id="radioIcon">В</div>
                     <div>
-                        <h3>Известия FM</h3>
-                        <p>Новости России и мира • Аналитика</p>
+                        <h3 id="radioName">Вести FM</h3>
+                        <p id="radioDesc">Новости, аналитика, интервью — 24/7</p>
                     </div>
                 </div>
                 <div class="radio-badge">🔴 LIVE 24/7</div>
             </div>
+            <div class="radio-selector">
+                <button class="radio-btn active" data-radio="vesti" data-name="Вести FM" data-desc="Новости, аналитика, интервью — 24/7" data-icon="В" data-color="vesti" data-url="https://radiovesti.ru/player_widget/">📻 Вести FM</button>
+                <button class="radio-btn" data-radio="mayak" data-name="Маяк" data-desc="Интеллектуальное радио, музыка, разговоры" data-icon="М" data-color="mayak" data-url="https://radiorus.ru/player/mayak_widget">🎙 Маяк</button>
+                <button class="radio-btn" data-radio="radiorus" data-name="Радио России" data-desc="Классика, новости, культура" data-icon="Р" data-color="radiorus" data-url="https://radiorus.ru/player/radiorus_widget">📡 Радио России</button>
+            </div>
             <div class="player-container">
                 <iframe 
+                    id="radioPlayer"
                     class="radio-player"
-                    src="https://radio.iz.ru/embed/player" 
+                    src="https://radiovesti.ru/player_widget/" 
                     frameborder="0" 
                     scrolling="no" 
                     allow="autoplay">
@@ -553,10 +588,10 @@
                     <span>Эфир онлайн</span>
                 </div>
                 <div>
-                    <a href="https://radio.iz.ru" target="_blank">Официальный сайт →</a>
+                    <a href="https://radiovesti.ru" target="_blank" id="radioLink">Официальный сайт →</a>
                 </div>
                 <div>
-                    © ИД «Известия»
+                    © ВГТРК
                 </div>
             </div>
         </div>
@@ -645,6 +680,44 @@
 </div>
 
 <script>
+    // ============ РАДИО ПЕРЕКЛЮЧАТЕЛЬ ============
+    const radioButtons = document.querySelectorAll('.radio-btn');
+    const radioPlayer = document.getElementById('radioPlayer');
+    const radioName = document.getElementById('radioName');
+    const radioDesc = document.getElementById('radioDesc');
+    const radioIcon = document.getElementById('radioIcon');
+    const radioLink = document.getElementById('radioLink');
+    
+    radioButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Убираем активный класс у всех
+            radioButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Обновляем данные
+            const url = btn.dataset.url;
+            const name = btn.dataset.name;
+            const desc = btn.dataset.desc;
+            const icon = btn.dataset.icon;
+            const color = btn.dataset.color;
+            
+            // Меняем iframe
+            radioPlayer.src = url;
+            
+            // Обновляем текст и иконку
+            radioName.textContent = name;
+            radioDesc.textContent = desc;
+            radioIcon.textContent = icon;
+            radioIcon.className = `radio-icon ${color}`;
+            
+            // Обновляем ссылку
+            let siteUrl = 'https://radiovesti.ru';
+            if (name === 'Маяк') siteUrl = 'https://radiorus.ru/mayak';
+            if (name === 'Радио России') siteUrl = 'https://radiorus.ru';
+            radioLink.href = siteUrl;
+        });
+    });
+    
     // ============ ИСТОЧНИКИ (16 РАБОЧИХ) ============
     const SOURCES = [
         { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml', lang: 'ru' },
