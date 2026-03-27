@@ -601,7 +601,6 @@
     </div>
 </footer>
 
-<!-- ============ SCRIPT ============ -->
 <script>
     /* --- CONFIG --- */
     let currentFilter = 'all';
@@ -664,7 +663,6 @@
         el.style.opacity = pct > 0 ? '1' : '0';
     }
 
-    /* --- DETECT TOPIC --- */
     function detectTopic(title, desc) {
         const t = (title + ' ' + desc).toLowerCase();
         for (const [topic, kws] of Object.entries(TOPIC_KW))
@@ -672,7 +670,6 @@
         return 'politics';
     }
 
-    /* --- TRANSLATE --- */
     async function translate(text) {
         if (!text) return text;
         text = text.substring(0, 500);
@@ -683,76 +680,50 @@
         } catch { return text; }
     }
 
-    /* ========== НОВАЯ ВЕРСИЯ FETCH С ПОДДЕРЖКОЙ МНОГИХ ПРОКСИ ========== */
+    /* ========== РАБОЧАЯ ВЕРСИЯ ЧЕРЕЗ RSS2JSON ========== */
     async function fetchSource(src) {
-        // Список прокси для обхода CORS
-        const proxies = [
-            `https://api.allorigins.win/get?url=${encodeURIComponent(src.url)}`,
-            `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(src.url)}`,
-            `https://corsproxy.io/?${encodeURIComponent(src.url)}`
-        ];
-
-        for (const proxy of proxies) {
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 10000);
-                const r = await fetch(proxy, { signal: controller.signal });
-                clearTimeout(timeout);
-                
-                if (!r.ok) continue;
-                
-                const data = await r.json();
-                let contents = data.contents;
-                
-                // Для некоторых прокси ответ может быть в другом формате
-                if (!contents && data.data) contents = data.data;
-                if (!contents && typeof data === 'string') contents = data;
-                if (!contents) continue;
-                
-                const xml = new DOMParser().parseFromString(contents, 'text/xml');
-                const items = [...xml.querySelectorAll('item')].slice(0, 8);
-                
-                if (items.length === 0) continue;
-                
-                const news = [];
-                for (let i = 0; i < items.length; i++) {
-                    const el = items[i];
-                    let title = (el.querySelector('title')?.textContent || '').substring(0, 150);
-                    let desc = (el.querySelector('description')?.textContent || '').replace(/<[^>]*>/g, '').substring(0, 400);
-                    const link = el.querySelector('link')?.textContent || '#';
-                    const pubDate = el.querySelector('pubDate')?.textContent || new Date().toISOString();
-                    let origTitle = null;
-                    
-                    if (src.lang === 'en') {
-                        origTitle = title;
-                        try { title = await translate(title); } catch {}
-                        try { if (desc.length > 10) desc = await translate(desc); } catch {}
-                    }
-                    
-                    news.push({
-                        id: `${src.name}-${i}-${Date.now()}`,
-                        title, origTitle, desc,
-                        url: link, source: src.name,
-                        publishedAt: pubDate,
-                        date: dateKey(new Date(pubDate)),
-                        topic: detectTopic((origTitle || title) + ' ' + desc)
-                    });
+        const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(src.url)}`;
+        try {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 12000);
+            const response = await fetch(proxyUrl, { signal: controller.signal });
+            clearTimeout(timeout);
+            if (!response.ok) return [];
+            const data = await response.json();
+            if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
+            const news = [];
+            for (let i = 0; i < Math.min(data.items.length, 8); i++) {
+                const item = data.items[i];
+                let title = item.title || '';
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 400);
+                const link = item.link || '#';
+                const pubDate = item.pubDate || new Date().toISOString();
+                let origTitle = null;
+                if (src.lang === 'en') {
+                    origTitle = title;
+                    try { title = await translate(title); } catch {}
+                    try { if (desc.length > 10) desc = await translate(desc); } catch {}
                 }
-                
-                if (news.length) {
-                    console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
-                    return news;
-                }
-            } catch (e) {
-                console.warn(`⚠️ Прокси не сработал для ${src.name}:`, e.message);
-                continue;
+                news.push({
+                    id: `${src.name}-${i}-${Date.now()}`,
+                    title: title.substring(0, 150),
+                    origTitle,
+                    desc,
+                    url: link,
+                    source: src.name,
+                    publishedAt: pubDate,
+                    date: dateKey(new Date(pubDate)),
+                    topic: detectTopic((origTitle || title) + ' ' + desc)
+                });
             }
+            console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
+            return news;
+        } catch (e) {
+            console.warn(`⚠️ ${src.name}: ошибка загрузки:`, e.message);
+            return [];
         }
-        console.warn(`❌ ${src.name}: не удалось загрузить ни через один прокси`);
-        return [];
     }
 
-    /* --- LOAD ALL --- */
     async function loadAll() {
         const container = document.getElementById('newsContainer');
         setProgress(3);
@@ -764,20 +735,17 @@
 
         let allFresh = [];
         let successCount = 0;
-        
         for (let i = 0; i < SOURCES.length; i++) {
             const src = SOURCES[i];
             const items = await fetchSource(src);
             if (items.length > 0) successCount++;
             allFresh.push(...items);
-            
             const statusEl = document.getElementById('loadingStatus');
             if (statusEl) {
                 statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
             }
             setProgress(5 + Math.round((i+1) / SOURCES.length * 85));
         }
-        
         console.log(`📊 Итого: ${successCount} из ${SOURCES.length} источников дали новости, всего ${allFresh.length} записей`);
 
         const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -795,7 +763,6 @@
         tick();
     }
 
-    /* --- RENDER --- */
     function getFiltered() {
         let list = currentDate === 'week'
             ? allNewsArchive
@@ -845,7 +812,6 @@
         `).join('');
     }
 
-    /* --- TICK --- */
     function tick() {
         const now = new Date();
         document.getElementById('lastUpdate').textContent =
@@ -854,7 +820,6 @@
             now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
     }
 
-    /* --- DIGEST --- */
     function digest() {
         const today = dateKey(new Date());
         const list = allNewsArchive.filter(n => n.date === today);
@@ -879,7 +844,6 @@
         a.click(); URL.revokeObjectURL(a.href);
     }
 
-    /* --- SCHEDULE DIGEST --- */
     function scheduleDigest() {
         const now = new Date(), t = new Date();
         t.setHours(DIGEST_HOUR, 0, 0, 0);
@@ -887,7 +851,6 @@
         setTimeout(() => { digest(); scheduleDigest(); }, t - now);
     }
 
-    /* --- INIT --- */
     function init() {
         try {
             allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
