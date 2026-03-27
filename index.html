@@ -601,322 +601,321 @@
     </div>
 </footer>
 
-<script>
-    /* --- CONFIG --- */
-    let currentFilter = 'all';
-    let currentDate   = null;
-    let allNewsArchive = [];
-    let updateInterval = null;
-    const STORAGE_KEY   = 'news_archive_7days';
-    const DIGEST_HOUR   = 21;
-    const UPDATE_MIN    = 30;
+/* --- CONFIG --- */
+let currentFilter = 'all';
+let currentDate   = null;
+let allNewsArchive = [];
+let updateInterval = null;
+const STORAGE_KEY   = 'news_archive_7days';
+const DIGEST_HOUR   = 21;
+const UPDATE_MIN    = 30;
 
-    const SOURCES = [
-        { name:'CNN',                  url:'http://rss.cnn.com/rss/edition.rss',         lang:'en' },
-        { name:'TechCrunch',           url:'https://techcrunch.com/feed',                lang:'en' },
-        { name:'Bloomberg',            url:'https://www.bloomberg.com/feed',             lang:'en' },
-        { name:'BBC News',             url:'http://feeds.bbci.co.uk/news/rss.xml',       lang:'en' },
-        { name:'Reuters',              url:'https://www.reuters.com/rss/topNews',        lang:'en' },
-        { name:'The Guardian',         url:'https://www.theguardian.com/world/rss',      lang:'en' },
-        { name:'РИА Новости',          url:'https://ria.ru/export/rss2/index.xml',       lang:'ru' },
-        { name:'РБК',                  url:'https://www.rbc.ru/rss/',                    lang:'ru' },
-        { name:'Meduza',               url:'https://meduza.io/rss/all',                  lang:'ru' },
-        { name:'Хроники Туркменистана',url:'https://www.hronikatm.com/feed/',            lang:'ru' },
-        { name:'Turkmenportal',        url:'https://turkmenportal.com/rss/ru',           lang:'ru' },
-        { name:'Asia-Plus',            url:'https://asiaplustj.info/ru/rss.xml',         lang:'ru' },
-        { name:'Sputnik Таджикистан',  url:'https://sputnik-tj.com/rss',                lang:'ru' },
-        { name:'Tengrinews',           url:'https://tengrinews.kz/rss/all.xml',          lang:'ru' },
-        { name:'Gazeta.uz',            url:'https://www.gazeta.uz/rss/ru',               lang:'ru' },
-        { name:'Kaktus.media',         url:'https://kaktus.media/rss',                   lang:'ru' }
-    ];
+const SOURCES = [
+    { name:'CNN',                  url:'http://rss.cnn.com/rss/edition.rss',         lang:'en' },
+    { name:'TechCrunch',           url:'https://techcrunch.com/feed',                lang:'en' },
+    { name:'Bloomberg',            url:'https://www.bloomberg.com/feed',             lang:'en' },
+    { name:'BBC News',             url:'http://feeds.bbci.co.uk/news/rss.xml',       lang:'en' },
+    { name:'Reuters',              url:'https://www.reuters.com/rss/topNews',        lang:'en' },
+    { name:'The Guardian',         url:'https://www.theguardian.com/world/rss',      lang:'en' },
+    { name:'РИА Новости',          url:'https://ria.ru/export/rss2/index.xml',       lang:'ru' },
+    { name:'РБК',                  url:'https://www.rbc.ru/rss/',                    lang:'ru' },
+    { name:'Meduza',               url:'https://meduza.io/rss/all',                  lang:'ru' },
+    { name:'Хроники Туркменистана',url:'https://www.hronikatm.com/feed/',            lang:'ru' },
+    { name:'Turkmenportal',        url:'https://turkmenportal.com/rss/ru',           lang:'ru' },
+    { name:'Asia-Plus',            url:'https://asiaplustj.info/ru/rss.xml',         lang:'ru' },
+    { name:'Sputnik Таджикистан',  url:'https://sputnik-tj.com/rss',                lang:'ru' },
+    { name:'Tengrinews',           url:'https://tengrinews.kz/rss/all.xml',          lang:'ru' },
+    { name:'Gazeta.uz',            url:'https://www.gazeta.uz/rss/ru',               lang:'ru' },
+    { name:'Kaktus.media',         url:'https://kaktus.media/rss',                   lang:'ru' }
+];
 
-    const TOPIC_KW = {
-        politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
-        war:      ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
-        cyber:    ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
-        security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
-        economy:  ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
-    };
+const TOPIC_KW = {
+    politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
+    war:      ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
+    cyber:    ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
+    security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
+    economy:  ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
+};
 
-    const TOPIC_ICON = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
-    const TOPIC_NAME = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
+const TOPIC_ICON = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
+const TOPIC_NAME = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
 
-    /* --- UTIL --- */
-    function dateKey(d) { return d.toISOString().split('T')[0]; }
-    function esc(s) {
-        if (!s) return '';
-        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-    function ago(str) {
-        try {
-            const d = new Date(str), now = new Date();
-            const m = Math.floor((now - d) / 60000);
-            if (m < 1)    return 'только что';
-            if (m < 60)   return `${m} мин назад`;
-            if (m < 1440) return `${Math.floor(m/60)} ч назад`;
-            return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-        } catch { return 'недавно'; }
-    }
-    function setProgress(pct) {
-        const el = document.getElementById('progress');
-        el.style.width   = pct + '%';
-        el.style.opacity = pct > 0 ? '1' : '0';
-    }
+/* --- UTIL --- */
+function dateKey(d) { return d.toISOString().split('T')[0]; }
+function esc(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function ago(str) {
+    try {
+        const d = new Date(str), now = new Date();
+        const m = Math.floor((now - d) / 60000);
+        if (m < 1)    return 'только что';
+        if (m < 60)   return `${m} мин назад`;
+        if (m < 1440) return `${Math.floor(m/60)} ч назад`;
+        return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+    } catch { return 'недавно'; }
+}
+function setProgress(pct) {
+    const el = document.getElementById('progress');
+    el.style.width   = pct + '%';
+    el.style.opacity = pct > 0 ? '1' : '0';
+}
 
-    function detectTopic(title, desc) {
-        const t = (title + ' ' + desc).toLowerCase();
-        for (const [topic, kws] of Object.entries(TOPIC_KW))
-            for (const kw of kws) if (t.includes(kw)) return topic;
-        return 'politics';
-    }
+function detectTopic(title, desc) {
+    const t = (title + ' ' + desc).toLowerCase();
+    for (const [topic, kws] of Object.entries(TOPIC_KW))
+        for (const kw of kws) if (t.includes(kw)) return topic;
+    return 'politics';
+}
 
-    async function translate(text) {
-        if (!text) return text;
-        text = text.substring(0, 500);
-        try {
-            const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru`);
-            const d = await r.json();
-            return d.responseData?.translatedText || text;
-        } catch { return text; }
-    }
+async function translate(text) {
+    if (!text) return text;
+    text = text.substring(0, 500);
+    try {
+        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ru`);
+        const d = await r.json();
+        return d.responseData?.translatedText || text;
+    } catch { return text; }
+}
 
-    /* ========== ЗАГРУЗКА НОВОСТЕЙ ЧЕРЕЗ CLOUDFLARE WORKER ========== */
-    async function fetchSource(src) {
-        const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+/* ========== ЗАГРУЗКА ЧЕРЕЗ ВАШ CLOUDFLARE WORKER ========== */
+async function fetchSource(src) {
+    const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
+    
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 12000);
+        const response = await fetch(workerUrl, { signal: controller.signal });
+        clearTimeout(timeout);
         
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
-            const response = await fetch(workerUrl, { signal: controller.signal });
-            clearTimeout(timeout);
+        if (!response.ok) return [];
+        
+        const data = await response.json();
+        if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
+        
+        const news = [];
+        for (let i = 0; i < data.items.length; i++) {
+            const item = data.items[i];
+            let title = item.title || '';
+            let desc = (item.description || '').substring(0, 400);
+            const link = item.link || '#';
+            const pubDate = item.pubDate || new Date().toISOString();
+            let origTitle = null;
             
-            if (!response.ok) return [];
-            
-            const data = await response.json();
-            if (data.status !== 'ok' || !data.items || data.items.length === 0) return [];
-            
-            const news = [];
-            for (let i = 0; i < data.items.length; i++) {
-                const item = data.items[i];
-                let title = item.title || '';
-                let desc = (item.description || '').substring(0, 400);
-                const link = item.link || '#';
-                const pubDate = item.pubDate || new Date().toISOString();
-                let origTitle = null;
-                
-                if (src.lang === 'en') {
-                    origTitle = title;
-                    try { title = await translate(title); } catch {}
-                    try { if (desc.length > 10) desc = await translate(desc); } catch {}
-                }
-                
-                news.push({
-                    id: `${src.name}-${i}-${Date.now()}`,
-                    title: title.substring(0, 150),
-                    origTitle,
-                    desc,
-                    url: link,
-                    source: src.name,
-                    publishedAt: pubDate,
-                    date: dateKey(new Date(pubDate)),
-                    topic: detectTopic((origTitle || title) + ' ' + desc)
-                });
+            if (src.lang === 'en') {
+                origTitle = title;
+                try { title = await translate(title); } catch {}
+                try { if (desc.length > 10) desc = await translate(desc); } catch {}
             }
             
-            console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
-            return news;
-            
-        } catch (e) {
-            console.warn(`❌ ${src.name}: ошибка загрузки:`, e.message);
-            return [];
+            news.push({
+                id: `${src.name}-${i}-${Date.now()}`,
+                title: title.substring(0, 150),
+                origTitle,
+                desc,
+                url: link,
+                source: src.name,
+                publishedAt: pubDate,
+                date: dateKey(new Date(pubDate)),
+                topic: detectTopic((origTitle || title) + ' ' + desc)
+            });
         }
+        
+        console.log(`✅ ${src.name}: загружено ${news.length} новостей`);
+        return news;
+        
+    } catch (e) {
+        console.warn(`❌ ${src.name}: ошибка загрузки:`, e.message);
+        return [];
     }
+}
 
-    async function loadAll() {
-        const container = document.getElementById('newsContainer');
-        setProgress(3);
+async function loadAll() {
+    const container = document.getElementById('newsContainer');
+    setProgress(3);
+    container.innerHTML = `<div class="state-card">
+        <div class="state-spinner"></div>
+        <div class="state-title">Сбор новостей</div>
+        <div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div>
+    </div>`;
+
+    let allFresh = [];
+    let successCount = 0;
+    for (let i = 0; i < SOURCES.length; i++) {
+        const src = SOURCES[i];
+        const items = await fetchSource(src);
+        if (items.length > 0) successCount++;
+        allFresh.push(...items);
+        const statusEl = document.getElementById('loadingStatus');
+        if (statusEl) {
+            statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
+        }
+        setProgress(5 + Math.round((i+1) / SOURCES.length * 85));
+    }
+    console.log(`📊 Итого: ${successCount} из ${SOURCES.length} источников дали новости, всего ${allFresh.length} записей`);
+
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    const seen = new Set(stored.map(n => n.url));
+    allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
+
+    const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
+    allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff);
+    allNewsArchive.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
+
+    setProgress(100);
+    setTimeout(() => setProgress(0), 700);
+    render();
+    tick();
+}
+
+function getFiltered() {
+    let list = currentDate === 'week'
+        ? allNewsArchive
+        : currentDate
+            ? allNewsArchive.filter(n => n.date === currentDate)
+            : allNewsArchive.filter(n => n.date === dateKey(new Date()));
+    if (currentFilter !== 'all') list = list.filter(n => n.topic === currentFilter);
+    return list;
+}
+
+function render() {
+    const container = document.getElementById('newsContainer');
+    const list = getFiltered();
+
+    document.getElementById('newsCount').textContent = `${list.length} материалов`;
+    document.getElementById('statTotal').textContent = allNewsArchive.length;
+
+    const dateLabel = currentDate === 'week' ? 'За 7 дней' : currentDate ? `${currentDate}` : 'Сегодня';
+    document.getElementById('archiveInfo').innerHTML = `<strong>${dateLabel}</strong> &nbsp;·&nbsp; В архиве: ${allNewsArchive.length}`;
+
+    if (!list.length) {
         container.innerHTML = `<div class="state-card">
-            <div class="state-spinner"></div>
-            <div class="state-title">Сбор новостей</div>
-            <div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div>
+            <div style="font-size:40px">😕</div>
+            <div class="state-title">Нет новостей</div>
+            <div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div>
         </div>`;
-
-        let allFresh = [];
-        let successCount = 0;
-        for (let i = 0; i < SOURCES.length; i++) {
-            const src = SOURCES[i];
-            const items = await fetchSource(src);
-            if (items.length > 0) successCount++;
-            allFresh.push(...items);
-            const statusEl = document.getElementById('loadingStatus');
-            if (statusEl) {
-                statusEl.innerHTML = `Загружено: ${i+1}/${SOURCES.length} источников<br>Найдено новостей: ${allFresh.length}`;
-            }
-            setProgress(5 + Math.round((i+1) / SOURCES.length * 85));
-        }
-        console.log(`📊 Итого: ${successCount} из ${SOURCES.length} источников дали новости, всего ${allFresh.length} записей`);
-
-        const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-        const seen = new Set(stored.map(n => n.url));
-        allNewsArchive = [...allFresh.filter(n => !seen.has(n.url)), ...stored];
-
-        const cutoff = dateKey(new Date(Date.now() - 7 * 864e5));
-        allNewsArchive = allNewsArchive.filter(n => n.date >= cutoff);
-        allNewsArchive.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(allNewsArchive));
-
-        setProgress(100);
-        setTimeout(() => setProgress(0), 700);
-        render();
-        tick();
+        return;
     }
 
-    function getFiltered() {
-        let list = currentDate === 'week'
-            ? allNewsArchive
-            : currentDate
-                ? allNewsArchive.filter(n => n.date === currentDate)
-                : allNewsArchive.filter(n => n.date === dateKey(new Date()));
-        if (currentFilter !== 'all') list = list.filter(n => n.topic === currentFilter);
-        return list;
-    }
-
-    function render() {
-        const container = document.getElementById('newsContainer');
-        const list = getFiltered();
-
-        document.getElementById('newsCount').textContent = `${list.length} материалов`;
-        document.getElementById('statTotal').textContent = allNewsArchive.length;
-
-        const dateLabel = currentDate === 'week' ? 'За 7 дней' : currentDate ? `${currentDate}` : 'Сегодня';
-        document.getElementById('archiveInfo').innerHTML = `<strong>${dateLabel}</strong> &nbsp;·&nbsp; В архиве: ${allNewsArchive.length}`;
-
-        if (!list.length) {
-            container.innerHTML = `<div class="state-card">
-                <div style="font-size:40px">😕</div>
-                <div class="state-title">Нет новостей</div>
-                <div class="state-sub">Попробуйте обновить страницу или нажмите «Обновить»</div>
-            </div>`;
-            return;
-        }
-
-        container.innerHTML = list.map(n => `
-            <article class="card" data-topic="${n.topic}">
-                <div class="card-meta">
-                    <span class="tag tag-${n.topic}">${TOPIC_ICON[n.topic] || '📰'} ${TOPIC_NAME[n.topic] || 'Новости'}</span>
-                    <span class="card-time">${ago(n.publishedAt)}</span>
+    container.innerHTML = list.map(n => `
+        <article class="card" data-topic="${n.topic}">
+            <div class="card-meta">
+                <span class="tag tag-${n.topic}">${TOPIC_ICON[n.topic] || '📰'} ${TOPIC_NAME[n.topic] || 'Новости'}</span>
+                <span class="card-time">${ago(n.publishedAt)}</span>
+            </div>
+            <div class="card-title"><a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a></div>
+            ${n.desc ? `<div class="card-desc">${esc(n.desc)}</div>` : ''}
+            ${n.origTitle ? `<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0, 110))}…</div>` : ''}
+            <div class="card-footer">
+                <div class="card-source">
+                    <div class="source-ico">📰</div>
+                    ${esc(n.source)}
                 </div>
-                <div class="card-title"><a href="${n.url}" target="_blank" rel="noopener">${esc(n.title)}</a></div>
-                ${n.desc ? `<div class="card-desc">${esc(n.desc)}</div>` : ''}
-                ${n.origTitle ? `<div class="card-orig">Оригинал: ${esc(n.origTitle.substring(0, 110))}…</div>` : ''}
-                <div class="card-footer">
-                    <div class="card-source">
-                        <div class="source-ico">📰</div>
-                        ${esc(n.source)}
-                    </div>
-                    <a href="${n.url}" target="_blank" rel="noopener" class="card-read">Читать →</a>
-                </div>
-            </article>
-        `).join('');
-    }
+                <a href="${n.url}" target="_blank" rel="noopener" class="card-read">Читать →</a>
+            </div>
+        </article>
+    `).join('');
+}
 
-    function tick() {
-        const now = new Date();
-        document.getElementById('lastUpdate').textContent =
-            `Обновлено: ${now.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
-        document.getElementById('topDate').textContent =
-            now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-    }
+function tick() {
+    const now = new Date();
+    document.getElementById('lastUpdate').textContent =
+        `Обновлено: ${now.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
+    document.getElementById('topDate').textContent =
+        now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+}
 
-    function digest() {
-        const today = dateKey(new Date());
-        const list = allNewsArchive.filter(n => n.date === today);
-        if (!list.length) { alert('Нет новостей за сегодня'); return; }
-        const now = new Date();
-        let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title>
-        <style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6;padding-bottom:10px}
-        .item{margin:16px 0;padding:14px;border-left:4px solid #5b5bd6;background:#f7f7fb}
-        .t{font-size:17px;font-weight:bold}.d{color:#555;margin:6px 0}.m{font-size:11px;color:#888}.s{font-size:11px;color:#27ae60;margin-top:4px}
-        </style></head><body>
-        <h1>ВЕКТОР — Дайджест ${now.toLocaleDateString('ru-RU')}</h1>
-        <p>Новостей: ${list.length}</p>`;
-        list.forEach(n => {
-            html += `<div class="item"><div class="t"><a href="${n.url}">${esc(n.title)}</a></div>
-            <div class="d">${esc(n.desc)}</div><div class="m">${ago(n.publishedAt)}</div>
-            <div class="s">${n.source}</div>${n.origTitle ? `<div class="s">Ориг.: ${esc(n.origTitle)}</div>` : ''}</div>`;
+function digest() {
+    const today = dateKey(new Date());
+    const list = allNewsArchive.filter(n => n.date === today);
+    if (!list.length) { alert('Нет новостей за сегодня'); return; }
+    const now = new Date();
+    let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title>
+    <style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6;padding-bottom:10px}
+    .item{margin:16px 0;padding:14px;border-left:4px solid #5b5bd6;background:#f7f7fb}
+    .t{font-size:17px;font-weight:bold}.d{color:#555;margin:6px 0}.m{font-size:11px;color:#888}.s{font-size:11px;color:#27ae60;margin-top:4px}
+    </style></head><body>
+    <h1>ВЕКТОР — Дайджест ${now.toLocaleDateString('ru-RU')}</h1>
+    <p>Новостей: ${list.length}</p>`;
+    list.forEach(n => {
+        html += `<div class="item"><div class="t"><a href="${n.url}">${esc(n.title)}</a></div>
+        <div class="d">${esc(n.desc)}</div><div class="m">${ago(n.publishedAt)}</div>
+        <div class="s">${n.source}</div>${n.origTitle ? `<div class="s">Ориг.: ${esc(n.origTitle)}</div>` : ''}</div>`;
+    });
+    html += '</body></html>';
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([html], {type:'application/msword'}));
+    a.download = `Дайджест_ВЕКТОР_${now.toLocaleDateString('ru-RU')}.doc`;
+    a.click(); URL.revokeObjectURL(a.href);
+}
+
+function scheduleDigest() {
+    const now = new Date(), t = new Date();
+    t.setHours(DIGEST_HOUR, 0, 0, 0);
+    if (t <= now) t.setDate(t.getDate() + 1);
+    setTimeout(() => { digest(); scheduleDigest(); }, t - now);
+}
+
+function init() {
+    try {
+        allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        if (allNewsArchive.length) render();
+    } catch {}
+
+    tick();
+    setInterval(tick, 60000);
+
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.dataset.filter;
+            render();
         });
-        html += '</body></html>';
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([html], {type:'application/msword'}));
-        a.download = `Дайджест_ВЕКТОР_${now.toLocaleDateString('ru-RU')}.doc`;
-        a.click(); URL.revokeObjectURL(a.href);
-    }
+    });
 
-    function scheduleDigest() {
-        const now = new Date(), t = new Date();
-        t.setHours(DIGEST_HOUR, 0, 0, 0);
-        if (t <= now) t.setDate(t.getDate() + 1);
-        setTimeout(() => { digest(); scheduleDigest(); }, t - now);
-    }
-
-    function init() {
-        try {
-            allNewsArchive = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-            if (allNewsArchive.length) render();
-        } catch {}
-
-        tick();
-        setInterval(tick, 60000);
-
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentFilter = btn.dataset.filter;
-                render();
-            });
-        });
-
-        document.querySelectorAll('.tl-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const d = parseInt(btn.dataset.days);
-                if (d === 0) currentDate = null;
-                else if (d === 7) currentDate = 'week';
-                else {
-                    const dt = new Date(); dt.setDate(dt.getDate() - d);
-                    currentDate = dateKey(dt);
-                }
-                render();
-            });
-        });
-
-        document.getElementById('customDateBtn').addEventListener('click', () => {
-            const v = document.getElementById('customDateInput').value;
-            if (v) {
-                currentDate = v;
-                document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
-                render();
+    document.querySelectorAll('.tl-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const d = parseInt(btn.dataset.days);
+            if (d === 0) currentDate = null;
+            else if (d === 7) currentDate = 'week';
+            else {
+                const dt = new Date(); dt.setDate(dt.getDate() - d);
+                currentDate = dateKey(dt);
             }
+            render();
         });
+    });
 
-        document.getElementById('refreshBtn').addEventListener('click', loadAll);
-        document.getElementById('dailyDigestBtn').addEventListener('click', digest);
-        document.getElementById('clearArchiveBtn').addEventListener('click', () => {
-            if (confirm('Очистить весь архив?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                allNewsArchive = [];
-                render();
-            }
-        });
+    document.getElementById('customDateBtn').addEventListener('click', () => {
+        const v = document.getElementById('customDateInput').value;
+        if (v) {
+            currentDate = v;
+            document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
+            render();
+        }
+    });
 
-        loadAll();
-        updateInterval = setInterval(loadAll, UPDATE_MIN * 60000);
-        scheduleDigest();
-    }
+    document.getElementById('refreshBtn').addEventListener('click', loadAll);
+    document.getElementById('dailyDigestBtn').addEventListener('click', digest);
+    document.getElementById('clearArchiveBtn').addEventListener('click', () => {
+        if (confirm('Очистить весь архив?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            allNewsArchive = [];
+            render();
+        }
+    });
 
-    init();
+    loadAll();
+    updateInterval = setInterval(loadAll, UPDATE_MIN * 60000);
+    scheduleDigest();
+}
+
+init();
 </script>
 </body>
 </html>
