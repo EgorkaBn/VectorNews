@@ -656,32 +656,18 @@
             const item = data.items[i];
             let title = item.title || '';
             let desc = (item.description || '').substring(0, 400);
-            let origTitle = null;
             
-            if (src.lang === 'en') {
-                origTitle = title;
-                try {
-                    // Задержка 1 секунда между переводами, чтобы не перегружать API
-                    if (i > 0) await new Promise(r => setTimeout(r, 1000));
-                    title = await translate(title);
-                    // Задержка перед переводом описания
-                    await new Promise(r => setTimeout(r, 500));
-                    if (desc.length > 10) desc = await translate(desc);
-                } catch (e) {
-                    console.warn(`⚠️ Ошибка перевода для ${src.name}:`, e.message);
-                }
-            }
-            
+            // Убираем перевод для всех языков — новости остаются на языке оригинала
             news.push({
                 id: `${src.name}-${i}-${Date.now()}`,
                 title: title.substring(0, 150),
-                origTitle,
-                desc,
+                origTitle: null,
+                desc: desc,
                 url: item.link,
                 source: src.name,
                 publishedAt: item.pubDate,
                 date: dateKey(new Date(item.pubDate)),
-                topic: detectTopic((origTitle || title) + ' ' + desc)
+                topic: detectTopic(title + ' ' + desc)
             });
         }
         
