@@ -341,7 +341,6 @@
             font-weight: 600;
             white-space: nowrap;
         }
-        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -413,7 +412,6 @@
             color: #a5a5ff;
             text-decoration: none;
         }
-        /* Состояния */
         .state-card {
             grid-column: 1 / -1;
             background: #0f0f1a;
@@ -434,7 +432,6 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         .state-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
         .state-sub { font-size: 12px; color: #44445a; }
-        /* Подвал */
         .site-footer {
             background: #0f0f1a;
             border-top: 1px solid var(--c-border);
@@ -585,7 +582,6 @@
                 <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">О СИСТЕМЕ</div>
                 <div class="footer-info">
                     Обновление: 30 мин<br>
-                    Перевод: LibreTranslate (с задержкой)<br>
                     Архив: 7 дней<br>
                     Дайджест: по темам
                 </div>
@@ -595,7 +591,6 @@
     </div>
 </footer>
 
-<!-- Модальное окно -->
 <div id="newsModal" class="modal">
     <div class="modal-header">
         <h3>📰 ВЕКТОР · Чтение</h3>
@@ -613,34 +608,30 @@
 </div>
 
 <script>
-    // ============ ИСТОЧНИКИ ============
     const SOURCES = [
-        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
-        { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
-        { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
-        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
-        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' },
-        { name: 'Kaktus.media', url: 'https://kaktus.media/rss', lang: 'ru' },
-        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
-        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
-        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
-        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en', special: 'cnn' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en', special: 'bbc' },
-        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
-        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
-        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
-        { name: 'TechCrunch', url: 'https://techcrunch.com/feed', lang: 'en' }
+        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+        { name: 'РБК', url: 'https://www.rbc.ru/rss/' },
+        { name: 'Meduza', url: 'https://meduza.io/rss/all' },
+        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
+        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' },
+        { name: 'Kaktus.media', url: 'https://kaktus.media/rss' },
+        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
+        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
+        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
+        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
+        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss' },
+        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+        { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+        { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+        { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed' },
+        { name: 'TechCrunch', url: 'https://techcrunch.com/feed' }
     ];
 
     let allNewsArchive = [];
     let currentFilter = 'all';
     let currentDate = null;
     const STORAGE_KEY = 'news_archive_7days';
-    let translateQueue = [];
-    let isTranslating = false;
 
-    // ============ УТИЛИТЫ ============
     function dateKey(d) { return d.toISOString().split('T')[0]; }
     function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function ago(str) {
@@ -670,52 +661,6 @@
         return 'politics';
     }
 
-    // ============ ПЕРЕВОДЧИК LIBRETRANSLATE ============
-    async function translateText(text) {
-        if (!text || text.length < 5) return text;
-        try {
-            const res = await fetch(`https://translate.argosopentech.com/translate`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    q: text.substring(0, 800),
-                    source: 'en',
-                    target: 'ru',
-                    format: 'text'
-                })
-            });
-            const data = await res.json();
-            return data.translatedText || text;
-        } catch (e) {
-            console.warn('Translation error:', e);
-            return text;
-        }
-    }
-
-    async function processTranslateQueue() {
-        if (isTranslating || translateQueue.length === 0) return;
-        isTranslating = true;
-        while (translateQueue.length > 0) {
-            const { text, resolve } = translateQueue.shift();
-            try {
-                const translated = await translateText(text);
-                resolve(translated);
-            } catch (e) {
-                resolve(text);
-            }
-            await new Promise(r => setTimeout(r, 1000));
-        }
-        isTranslating = false;
-    }
-
-    function translateWithDelay(text) {
-        return new Promise((resolve) => {
-            translateQueue.push({ text, resolve });
-            processTranslateQueue();
-        });
-    }
-
-    // ============ ПАРСИНГ RSS ЧЕРЕЗ WORKER ============
     async function fetchSource(src) {
         const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
         try {
@@ -731,35 +676,20 @@
             for (let i = 0; i < Math.min(data.items.length, 8); i++) {
                 const item = data.items[i];
                 let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 800);
-                let originalTitle = null;
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
                 
-                // Специальная обработка для CNN и BBC (иногда title приходит пустым)
-                if (!title && src.special === 'cnn') {
+                // Специальная обработка для CNN и BBC
+                if (!title && src.name === 'CNN') {
                     title = item.description?.substring(0, 100) || 'CNN News';
                 }
-                if (!title && src.special === 'bbc') {
+                if (!title && src.name === 'BBC News') {
                     title = item.description?.substring(0, 100) || 'BBC News';
-                }
-                
-                if (src.lang === 'en' && title && title.length > 5) {
-                    originalTitle = title;
-                    try {
-                        title = await translateWithDelay(title);
-                        if (desc && desc.length > 20) {
-                            desc = await translateWithDelay(desc.substring(0, 600));
-                        }
-                    } catch (e) {
-                        console.warn(`Translation failed for ${src.name}:`, e);
-                    }
                 }
                 
                 news.push({
                     id: `${src.name}-${i}-${Date.now()}`,
                     title: title.substring(0, 200),
-                    originalTitle: originalTitle,
                     description: desc,
-                    fullText: desc,
                     url: item.link,
                     source: src.name,
                     publishedAt: item.pubDate,
@@ -775,7 +705,6 @@
         }
     }
 
-    // ============ ЗАГРУЗКА ВСЕХ НОВОСТЕЙ ============
     async function loadAll() {
         const container = document.getElementById('newsContainer');
         container.innerHTML = `<div class="state-card"><div class="state-spinner"></div><div class="state-title">Сбор новостей</div><div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div></div>`;
@@ -804,7 +733,6 @@
         return list;
     }
 
-    // ============ ОТКРЫТИЕ НОВОСТИ В МОДАЛЬНОМ ОКНЕ ============
     function openNewsModal(news) {
         document.getElementById('modalTitle').innerHTML = esc(news.title);
         document.getElementById('modalSource').innerHTML = `📰 ${esc(news.source)}`;
@@ -820,7 +748,6 @@
         document.body.style.overflow = '';
     }
 
-    // ============ ОТОБРАЖЕНИЕ НОВОСТЕЙ ============
     function render() {
         const list = getFiltered();
         document.getElementById('newsCount').textContent = `${list.length} материалов`;
@@ -861,7 +788,6 @@
         });
     }
 
-    // ============ ДАЙДЖЕСТ ПО ТЕМАМ (БЕЗ ГИПЕРССЫЛОК) ============
     function digestByTopics() {
         const today = dateKey(new Date());
         const todayNews = allNewsArchive.filter(n => n.date === today);
