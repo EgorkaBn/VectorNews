@@ -23,6 +23,7 @@
             --text-muted: #44445a;
             --accent: #5b5bd6;
             --live: #ff3366;
+            --radio-red: #c52a2a;
             --politics: #3b82f6;
             --war: #f43f5e;
             --cyber: #a855f7;
@@ -84,6 +85,72 @@
             letter-spacing: -1px;
         }
         .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
+        
+        /* ============ РАДИО-БЛОК ============ */
+        .radio-block {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 8px 12px;
+            min-width: 260px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .radio-block:hover {
+            border-color: var(--radio-red);
+        }
+        .radio-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .radio-logo {
+            width: 32px;
+            height: 32px;
+            background: var(--radio-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: white;
+        }
+        .radio-title h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .radio-title p {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+        .radio-link {
+            color: var(--radio-red);
+            text-decoration: none;
+            font-size: 10px;
+            margin-left: auto;
+        }
+        .radio-link:hover {
+            text-decoration: underline;
+        }
+        .radio-player {
+            width: 100%;
+            height: 80px;
+            border: none;
+            border-radius: 10px;
+        }
+        .radio-disclaimer {
+            font-size: 8px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 6px;
+        }
+        .radio-disclaimer a {
+            color: var(--radio-red);
+            text-decoration: none;
+        }
+        
         .stats {
             display: flex;
             gap: 1px;
@@ -400,6 +467,11 @@
             background: #4a4aba;
             transform: scale(1.02);
         }
+        @media (max-width: 960px) {
+            .radio-block { min-width: auto; }
+            .radio-player { height: 70px; }
+            .masthead-inner { flex-direction: column; align-items: stretch; }
+        }
     </style>
 </head>
 <body>
@@ -411,7 +483,33 @@
 </div>
 <div class="masthead">
     <div class="masthead-inner">
-        <div class="logo"><h1>ВЕКТОР</h1><p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p></div>
+        <div class="logo">
+            <h1>ВЕКТОР</h1>
+            <p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p>
+        </div>
+        
+        <!-- РАДИО БЛОК ВЕСТИ FM -->
+        <div class="radio-block">
+            <div class="radio-header">
+                <div class="radio-logo">В</div>
+                <div class="radio-title">
+                    <h3>Вести FM</h3>
+                    <p>Новости, аналитика, интервью — 24/7</p>
+                </div>
+                <a href="https://radiovesti.ru" target="_blank" class="radio-link">radiovesti.ru →</a>
+            </div>
+            <iframe 
+                class="radio-player"
+                src="https://radiovesti.ru/player_widget/" 
+                frameborder="0" 
+                scrolling="no" 
+                allow="autoplay">
+            </iframe>
+            <div class="radio-disclaimer">
+                © ВГТРК. Плеер предоставлен официальным сайтом <a href="https://radiovesti.ru" target="_blank">radiovesti.ru</a>
+            </div>
+        </div>
+        
         <div>
             <div class="stats">
                 <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
@@ -496,9 +594,8 @@
 </div>
 
 <script>
-    // ============ НОВЫЙ СПИСОК ИСТОЧНИКОВ (ВСЕ РАБОЧИЕ) ============
+    // ============ ИСТОЧНИКИ (16 РАБОЧИХ) ============
     const SOURCES = [
-        // Российские и центральноазиатские источники
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
         { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
@@ -509,8 +606,6 @@
         { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
         { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
         { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        
-        // Международные источники (работают в РФ)
         { name: 'RT на русском', url: 'https://russian.rt.com/rss.xml', lang: 'ru' },
         { name: 'Euronews', url: 'https://www.euronews.com/rss?lang=ru', lang: 'ru' },
         { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml', lang: 'ru' },
@@ -615,7 +710,6 @@
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
                 
-                // Переводим только английские новости (Al Jazeera, France 24, CBC)
                 if (source.lang === 'en' && title) {
                     originalTitle = title;
                     try {
