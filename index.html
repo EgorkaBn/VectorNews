@@ -2,18 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ВЕКТОР — Мировые новости</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Inter', sans-serif;
             background: #080810;
@@ -22,55 +17,37 @@
             overflow-x: hidden;
         }
         :root {
-            --c-bg: #080810;
             --c-surface: #0f0f1a;
-            --c-elevated: #161625;
             --c-border: rgba(255,255,255,0.07);
-            --c-border-hi: rgba(255,255,255,0.14);
-            --c-text: #e8e8f4;
-            --c-sub: #8888aa;
-            --c-muted: #44445a;
             --c-accent: #5b5bd6;
-            --c-accent-lo: rgba(91,91,214,0.14);
+            --c-live: #ff3366;
             --c-politics: #3b82f6;
             --c-war: #f43f5e;
             --c-cyber: #a855f7;
             --c-security: #f59e0b;
             --c-economy: #10b981;
-            --c-live: #ff3366;
-            --radius-sm: 8px;
-            --radius-md: 14px;
-            --radius-lg: 20px;
-            --shadow-card: 0 4px 24px rgba(0,0,0,0.45);
         }
         #progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; height: 3px; z-index: 9999;
             background: linear-gradient(90deg, #5b5bd6, #a78bfa, #ff3366);
-            width: 0;
-            opacity: 0;
-            transition: width .25s ease, opacity .3s;
+            width: 0; opacity: 0;
+            transition: width .25s ease;
         }
-        /* ============ АДАПТИВНАЯ ШАПКА ============ */
         .topbar {
             height: 36px;
             background: #0f0f1a;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            border-bottom: 1px solid var(--c-border);
             display: flex;
             align-items: center;
         }
         .topbar-inner {
             max-width: 1440px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 16px;
             width: 100%;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 12px;
         }
         .live-pill {
             display: flex;
@@ -78,15 +55,14 @@
             gap: 5px;
             font-size: 9px;
             font-weight: 700;
-            color: #ff3366;
+            color: var(--c-live);
             text-transform: uppercase;
-            white-space: nowrap;
         }
         .live-dot {
             width: 5px;
             height: 5px;
             border-radius: 50%;
-            background: #ff3366;
+            background: var(--c-live);
             animation: blink 1.4s ease infinite;
         }
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
@@ -94,14 +70,10 @@
             font-size: 9px;
             color: #44445a;
         }
-        .topbar-right {
-            display: flex;
-            gap: 12px;
-            white-space: nowrap;
-        }
+        .topbar-right { display: flex; gap: 12px; }
         .masthead {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            padding: 16px;
+            border-bottom: 1px solid var(--c-border);
         }
         .masthead-inner {
             max-width: 1440px;
@@ -110,12 +82,12 @@
             align-items: center;
             justify-content: space-between;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
         }
         .wordmark {
             font-family: 'Unbounded', sans-serif;
             font-weight: 900;
-            font-size: 28px;
+            font-size: 26px;
             letter-spacing: -1.5px;
             background: linear-gradient(135deg, #fff 30%, #5b5bd6 100%);
             -webkit-background-clip: text;
@@ -127,42 +99,29 @@
             letter-spacing: 2px;
             color: #44445a;
             text-transform: uppercase;
-            margin-top: 2px;
         }
         .masthead-stats {
             display: flex;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             border-radius: 12px;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
         .stat-cell {
-            padding: 8px 12px;
+            padding: 6px 10px;
             background: #0f0f1a;
             text-align: center;
             white-space: nowrap;
         }
-        .stat-cell + .stat-cell {
-            border-left: 1px solid rgba(255,255,255,0.07);
-        }
-        .stat-num {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 14px;
-            font-weight: 700;
-        }
-        .stat-lbl {
-            font-size: 8px;
-            color: #44445a;
-            text-transform: uppercase;
-        }
-        /* ============ НАВИГАЦИЯ (АДАПТИВ) ============ */
+        .stat-cell + .stat-cell { border-left: 1px solid var(--c-border); }
+        .stat-num { font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; }
+        .stat-lbl { font-size: 7px; color: #44445a; text-transform: uppercase; }
         .navbar {
             position: sticky;
             top: 0;
             z-index: 200;
             background: rgba(8,8,16,0.95);
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            border-bottom: 1px solid var(--c-border);
         }
         .navbar-inner {
             max-width: 1440px;
@@ -178,14 +137,10 @@
             display: flex;
             gap: 4px;
             overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
             flex: 1;
         }
-        .nav-cats::-webkit-scrollbar {
-            display: none;
-        }
+        .nav-cats::-webkit-scrollbar { display: none; }
         .cat-btn {
             padding: 6px 12px;
             border-radius: 20px;
@@ -196,22 +151,17 @@
             color: #8888aa;
             cursor: pointer;
             white-space: nowrap;
-            transition: all .2s;
         }
         .cat-btn.active {
             background: rgba(91,91,214,0.2);
             color: #a5a5ff;
         }
-        .nav-tools {
-            display: flex;
-            gap: 6px;
-            flex-shrink: 0;
-        }
+        .nav-tools { display: flex; gap: 6px; flex-shrink: 0; }
         .tool-btn {
             height: 34px;
             padding: 0 10px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             background: none;
             font-size: 11px;
             font-weight: 500;
@@ -224,10 +174,9 @@
             border-color: #5b5bd6;
             color: #fff;
         }
-        /* ============ ТАЙМЛАЙН (АДАПТИВ) ============ */
         .timeline-bar {
             background: #0f0f1a;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            border-bottom: 1px solid var(--c-border);
         }
         .timeline-inner {
             max-width: 1440px;
@@ -237,12 +186,9 @@
             align-items: center;
             gap: 8px;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
-        .timeline-inner::-webkit-scrollbar {
-            display: none;
-        }
+        .timeline-inner::-webkit-scrollbar { display: none; }
         .tl-label {
             font-size: 10px;
             font-weight: 600;
@@ -266,15 +212,11 @@
             border: 1px solid #5b5bd6;
             color: #a5a5ff;
         }
-        .tl-datepick {
-            display: flex;
-            gap: 4px;
-            white-space: nowrap;
-        }
+        .tl-datepick { display: flex; gap: 4px; white-space: nowrap; }
         .tl-datepick input {
             padding: 4px 8px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             background: transparent;
             color: #e8e8f4;
             font-size: 10px;
@@ -294,7 +236,6 @@
             color: #44445a;
             white-space: nowrap;
         }
-        /* ============ ОСНОВНОЙ КОНТЕНТ ============ */
         .content-wrap {
             max-width: 1440px;
             margin: 0 auto;
@@ -318,40 +259,31 @@
         .feed-badge {
             font-size: 10px;
             background: #161625;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             padding: 2px 8px;
             border-radius: 20px;
         }
-        /* ============ СЕТКА НОВОСТЕЙ (АДАПТИВ) ============ */
         .news-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 16px;
         }
         @media (min-width: 640px) {
-            .news-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .news-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (min-width: 1024px) {
-            .news-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            .content-wrap {
-                padding: 32px 40px 80px;
-            }
+            .news-grid { grid-template-columns: repeat(3, 1fr); }
+            .content-wrap { padding: 32px 40px 80px; }
         }
         .card {
             background: #0f0f1a;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             border-radius: 20px;
             padding: 18px 16px;
             transition: all .2s;
             cursor: pointer;
         }
-        .card:active {
-            transform: scale(0.98);
-        }
+        .card:active { transform: scale(0.98); }
         .card-meta {
             display: flex;
             justify-content: space-between;
@@ -372,10 +304,7 @@
         .tag-cyber { background: rgba(168,85,247,0.12); color: #d09fff; }
         .tag-security { background: rgba(245,158,11,0.12); color: #ffc84a; }
         .tag-economy { background: rgba(16,185,129,0.12); color: #5eebb8; }
-        .card-time {
-            font-size: 10px;
-            color: #44445a;
-        }
+        .card-time { font-size: 10px; color: #44445a; }
         .card-title {
             font-size: 15px;
             font-weight: 700;
@@ -397,10 +326,9 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            border-top: 1px solid var(--c-border);
             font-size: 11px;
             gap: 8px;
-            flex-wrap: wrap;
         }
         .card-source {
             display: flex;
@@ -411,10 +339,9 @@
         .card-read {
             color: #a5a5ff;
             font-weight: 600;
-            text-decoration: none;
             white-space: nowrap;
         }
-        /* ============ МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА НОВОСТИ ============ */
+        /* Модальное окно */
         .modal {
             display: none;
             position: fixed;
@@ -425,12 +352,8 @@
             background: rgba(8,8,16,0.98);
             z-index: 10000;
             overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
         }
-        .modal.active {
-            display: flex;
-            flex-direction: column;
-        }
+        .modal.active { display: flex; flex-direction: column; }
         .modal-header {
             position: sticky;
             top: 0;
@@ -439,13 +362,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            z-index: 10;
-        }
-        .modal-header h3 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #8888aa;
+            border-bottom: 1px solid var(--c-border);
         }
         .close-modal {
             background: none;
@@ -488,7 +405,7 @@
         }
         .modal-source {
             padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            border-top: 1px solid var(--c-border);
             font-size: 12px;
             color: #44445a;
         }
@@ -496,10 +413,11 @@
             color: #a5a5ff;
             text-decoration: none;
         }
+        /* Состояния */
         .state-card {
             grid-column: 1 / -1;
             background: #0f0f1a;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             border-radius: 20px;
             padding: 40px 20px;
             text-align: center;
@@ -514,24 +432,15 @@
             margin: 0 auto 16px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .state-title {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-        .state-sub {
-            font-size: 12px;
-            color: #44445a;
-        }
+        .state-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+        .state-sub { font-size: 12px; color: #44445a; }
+        /* Подвал */
         .site-footer {
             background: #0f0f1a;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            border-top: 1px solid var(--c-border);
             padding: 32px 20px 24px;
         }
-        .footer-inner {
-            max-width: 1440px;
-            margin: 0 auto;
-        }
+        .footer-inner { max-width: 1440px; margin: 0 auto; }
         .footer-wordmark {
             font-family: 'Unbounded', sans-serif;
             font-size: 20px;
@@ -549,10 +458,7 @@
             gap: 24px;
         }
         @media (min-width: 640px) {
-            .footer-cols {
-                flex-direction: row;
-                justify-content: space-between;
-            }
+            .footer-cols { flex-direction: row; justify-content: space-between; }
         }
         .sources-wrap {
             display: flex;
@@ -564,7 +470,7 @@
             font-size: 9px;
             color: #44445a;
             background: #161625;
-            border: 1px solid rgba(255,255,255,0.07);
+            border: 1px solid var(--c-border);
             padding: 3px 8px;
             border-radius: 20px;
         }
@@ -576,7 +482,7 @@
         .footer-copy {
             margin-top: 24px;
             padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.07);
+            border-top: 1px solid var(--c-border);
             font-size: 10px;
             color: #44445a;
             text-align: center;
@@ -606,7 +512,7 @@
         </div>
         <div class="masthead-stats">
             <div class="stat-cell"><div class="stat-num">16</div><div class="stat-lbl">ИСТ</div></div>
-            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">АРХИВ</div></div>
+            <div class="stat-cell"><div class="stat-num">7</div><div class="stat-lbl">АРХ</div></div>
             <div class="stat-cell"><div class="stat-num" id="statTotal">—</div><div class="stat-lbl">НОВ</div></div>
             <div class="stat-cell"><div class="stat-num">30</div><div class="stat-lbl">МИН</div></div>
         </div>
@@ -679,9 +585,9 @@
                 <div class="footer-section-title" style="font-size:10px;color:#44445a;margin-bottom:8px;">О СИСТЕМЕ</div>
                 <div class="footer-info">
                     Обновление: 30 мин<br>
-                    Перевод: MyMemory (с задержкой)<br>
+                    Перевод: LibreTranslate (с задержкой)<br>
                     Архив: 7 дней<br>
-                    Дайджест: 21:00 МСК
+                    Дайджест: по темам
                 </div>
             </div>
         </div>
@@ -689,7 +595,7 @@
     </div>
 </footer>
 
-<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА НОВОСТИ -->
+<!-- Модальное окно -->
 <div id="newsModal" class="modal">
     <div class="modal-header">
         <h3>📰 ВЕКТОР · Чтение</h3>
@@ -707,6 +613,7 @@
 </div>
 
 <script>
+    // ============ ИСТОЧНИКИ ============
     const SOURCES = [
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
@@ -718,8 +625,8 @@
         { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
         { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
         { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en' },
-        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
+        { name: 'CNN', url: 'http://rss.cnn.com/rss/edition.rss', lang: 'en', special: 'cnn' },
+        { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en', special: 'bbc' },
         { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews', lang: 'en' },
         { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
         { name: 'Bloomberg', url: 'https://www.bloomberg.com/feed', lang: 'en' },
@@ -733,6 +640,7 @@
     let translateQueue = [];
     let isTranslating = false;
 
+    // ============ УТИЛИТЫ ============
     function dateKey(d) { return d.toISOString().split('T')[0]; }
     function esc(s) { if (!s) return ''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function ago(str) {
@@ -762,12 +670,22 @@
         return 'politics';
     }
 
+    // ============ ПЕРЕВОДЧИК LIBRETRANSLATE ============
     async function translateText(text) {
         if (!text || text.length < 5) return text;
         try {
-            const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.substring(0, 800))}&langpair=en|ru`);
+            const res = await fetch(`https://translate.argosopentech.com/translate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    q: text.substring(0, 800),
+                    source: 'en',
+                    target: 'ru',
+                    format: 'text'
+                })
+            });
             const data = await res.json();
-            return data.responseData?.translatedText || text;
+            return data.translatedText || text;
         } catch (e) {
             console.warn('Translation error:', e);
             return text;
@@ -785,7 +703,7 @@
             } catch (e) {
                 resolve(text);
             }
-            await new Promise(r => setTimeout(r, 1200));
+            await new Promise(r => setTimeout(r, 1000));
         }
         isTranslating = false;
     }
@@ -797,6 +715,7 @@
         });
     }
 
+    // ============ ПАРСИНГ RSS ЧЕРЕЗ WORKER ============
     async function fetchSource(src) {
         const workerUrl = `https://news-proxy.galaxyenglishia.workers.dev?url=${encodeURIComponent(src.url)}`;
         try {
@@ -812,14 +731,26 @@
             for (let i = 0; i < Math.min(data.items.length, 8); i++) {
                 const item = data.items[i];
                 let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 600);
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 800);
                 let originalTitle = null;
                 
-                if (src.lang === 'en') {
+                // Специальная обработка для CNN и BBC (иногда title приходит пустым)
+                if (!title && src.special === 'cnn') {
+                    title = item.description?.substring(0, 100) || 'CNN News';
+                }
+                if (!title && src.special === 'bbc') {
+                    title = item.description?.substring(0, 100) || 'BBC News';
+                }
+                
+                if (src.lang === 'en' && title && title.length > 5) {
                     originalTitle = title;
-                    title = await translateWithDelay(title);
-                    if (desc.length > 20) {
-                        desc = await translateWithDelay(desc);
+                    try {
+                        title = await translateWithDelay(title);
+                        if (desc && desc.length > 20) {
+                            desc = await translateWithDelay(desc.substring(0, 600));
+                        }
+                    } catch (e) {
+                        console.warn(`Translation failed for ${src.name}:`, e);
                     }
                 }
                 
@@ -844,6 +775,7 @@
         }
     }
 
+    // ============ ЗАГРУЗКА ВСЕХ НОВОСТЕЙ ============
     async function loadAll() {
         const container = document.getElementById('newsContainer');
         container.innerHTML = `<div class="state-card"><div class="state-spinner"></div><div class="state-title">Сбор новостей</div><div class="state-sub" id="loadingStatus">Загружаем 16 источников...</div></div>`;
@@ -872,6 +804,7 @@
         return list;
     }
 
+    // ============ ОТКРЫТИЕ НОВОСТИ В МОДАЛЬНОМ ОКНЕ ============
     function openNewsModal(news) {
         document.getElementById('modalTitle').innerHTML = esc(news.title);
         document.getElementById('modalSource').innerHTML = `📰 ${esc(news.source)}`;
@@ -887,6 +820,7 @@
         document.body.style.overflow = '';
     }
 
+    // ============ ОТОБРАЖЕНИЕ НОВОСТЕЙ ============
     function render() {
         const list = getFiltered();
         document.getElementById('newsCount').textContent = `${list.length} материалов`;
@@ -927,33 +861,84 @@
         });
     }
 
+    // ============ ДАЙДЖЕСТ ПО ТЕМАМ (БЕЗ ГИПЕРССЫЛОК) ============
+    function digestByTopics() {
+        const today = dateKey(new Date());
+        const todayNews = allNewsArchive.filter(n => n.date === today);
+        if (!todayNews.length) { alert('Нет новостей за сегодня'); return; }
+        
+        const topics = {
+            politics: { name: 'Политика', icon: '🏛', news: [] },
+            war: { name: 'Война и конфликты', icon: '⚔️', news: [] },
+            cyber: { name: 'Кибербезопасность', icon: '🛡', news: [] },
+            security: { name: 'Происшествия', icon: '⚠️', news: [] },
+            economy: { name: 'Экономика', icon: '💰', news: [] }
+        };
+        
+        todayNews.forEach(n => {
+            if (topics[n.topic]) {
+                topics[n.topic].news.push(n);
+            } else {
+                topics.politics.news.push(n);
+            }
+        });
+        
+        let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title>
+        <style>
+            body { font-family: 'Inter', sans-serif; margin: 40px; background: #080810; color: #e8e8f4; }
+            h1 { border-bottom: 3px solid #5b5bd6; padding-bottom: 10px; margin-bottom: 30px; }
+            h2 { margin: 25px 0 15px; padding-left: 10px; border-left: 4px solid #5b5bd6; }
+            .topic-section { margin-bottom: 40px; }
+            .news-item { margin: 16px 0; padding: 16px; background: #0f0f1a; border-radius: 12px; border-left: 3px solid #5b5bd6; }
+            .news-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+            .news-desc { font-size: 14px; color: #8888aa; line-height: 1.5; margin-bottom: 8px; }
+            .news-meta { font-size: 12px; color: #44445a; display: flex; gap: 16px; }
+            .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #44445a; font-size: 11px; color: #44445a; text-align: center; }
+        </style>
+        </head><body>
+        <h1>📰 ВЕКТОР — Дайджест новостей за ${new Date().toLocaleDateString('ru-RU')}</h1>
+        <p style="margin-bottom: 20px; color: #8888aa;">Всего новостей: ${todayNews.length}</p>`;
+        
+        for (const [key, topic] of Object.entries(topics)) {
+            if (topic.news.length === 0) continue;
+            html += `<div class="topic-section">
+                <h2>${topic.icon} ${topic.name}</h2>`;
+            topic.news.forEach(n => {
+                html += `<div class="news-item">
+                    <div class="news-title">${esc(n.title)}</div>
+                    <div class="news-desc">${esc(n.description.substring(0, 300))}${n.description.length > 300 ? '...' : ''}</div>
+                    <div class="news-meta">
+                        <span>📰 ${esc(n.source)}</span>
+                        <span>🕒 ${ago(n.publishedAt)}</span>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+        }
+        
+        html += `<div class="footer">
+            © ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам<br>
+            Дайджест сформирован ${new Date().toLocaleString('ru-RU')}
+        </div></body></html>`;
+        
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([html], {type:'text/html'}));
+        a.download = `Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.html`;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+
     function tick() {
         const n = new Date();
         document.getElementById('lastUpdate').textContent = `Обн: ${n.toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'})}`;
         document.getElementById('topDate').textContent = n.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
     }
 
-    function digest() {
-        const today = dateKey(new Date());
-        const list = allNewsArchive.filter(n => n.date === today);
-        if (!list.length) { alert('Нет новостей за сегодня'); return; }
-        let html = `<html><head><meta charset="UTF-8"><title>Дайджест ВЕКТОР</title><style>body{font-family:Arial;margin:40px}h1{border-bottom:3px solid #5b5bd6}</style></head><body><h1>ВЕКТОР — Дайджест ${new Date().toLocaleDateString('ru-RU')}</h1><p>Новостей: ${list.length}</p>`;
-        list.forEach(n => {
-            html += `<div style="margin:16px 0;padding:14px;border-left:4px solid #5b5bd6"><div><a href="${n.url}">${esc(n.title)}</a></div><div>${esc(n.description)}</div><div>${ago(n.publishedAt)}</div><div>${n.source}</div></div>`;
-        });
-        html += '</body></html>';
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([html], {type:'application/msword'}));
-        a.download = `Дайджест_ВЕКТОР_${new Date().toLocaleDateString('ru-RU')}.doc`;
-        a.click();
-        URL.revokeObjectURL(a.href);
-    }
-
     function scheduleDigest() {
         const now = new Date(), t = new Date();
         t.setHours(21, 0, 0, 0);
         if (t <= now) t.setDate(t.getDate() + 1);
-        setTimeout(() => { digest(); scheduleDigest(); }, t - now);
+        setTimeout(() => { digestByTopics(); scheduleDigest(); }, t - now);
     }
 
     function init() {
@@ -963,6 +948,7 @@
         } catch(e) {}
         tick();
         setInterval(tick, 60000);
+        
         document.querySelectorAll('.cat-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
@@ -971,6 +957,7 @@
                 render();
             });
         });
+        
         document.querySelectorAll('.tl-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.tl-btn').forEach(b => b.classList.remove('active'));
@@ -986,6 +973,7 @@
                 render();
             });
         });
+        
         document.getElementById('customDateBtn').addEventListener('click', () => {
             const v = document.getElementById('customDateInput').value;
             if (v) {
@@ -994,8 +982,9 @@
                 render();
             }
         });
+        
         document.getElementById('refreshBtn').addEventListener('click', loadAll);
-        document.getElementById('dailyDigestBtn').addEventListener('click', digest);
+        document.getElementById('dailyDigestBtn').addEventListener('click', digestByTopics);
         document.getElementById('clearArchiveBtn').addEventListener('click', () => {
             if (confirm('Очистить весь архив?')) {
                 localStorage.removeItem(STORAGE_KEY);
@@ -1003,10 +992,12 @@
                 render();
             }
         });
+        
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
         document.getElementById('newsModal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('newsModal')) closeModal();
         });
+        
         loadAll();
         setInterval(loadAll, 30 * 60000);
         scheduleDigest();
