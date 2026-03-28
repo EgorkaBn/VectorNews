@@ -150,7 +150,7 @@
         }
         .country-btn:hover, .country-btn.active { background: #5b5bd6; color: white; }
         
-        /* Две колонки: лента Inoreader + важные новости */
+        /* Две колонки */
         .two-columns {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -187,7 +187,7 @@
             border-radius: 20px;
         }
         
-        /* Блок важных новостей */
+        /* Блок важных новостей (из Inoreader через iframe) */
         .important-news {
             background: rgba(15,15,26,0.4);
             backdrop-filter: blur(10px);
@@ -209,158 +209,15 @@
             align-items: center;
             gap: 8px;
         }
-        .important-list {
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-height: 700px;
-            overflow-y: auto;
-        }
-        .important-item {
+        .important-iframe-container {
             padding: 12px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid rgba(255,255,255,0.05);
         }
-        .important-item:hover {
-            background: rgba(91,91,214,0.15);
-            transform: translateX(4px);
-        }
-        .important-source {
-            font-size: 10px;
-            color: #5b5bd6;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-        .important-title {
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-        .important-time {
-            font-size: 10px;
-            color: #666;
-        }
-        
-        /* Сетка карточек для тем */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 20px;
-            margin: 32px 0;
-        }
-        .news-card {
-            background: rgba(15,15,26,0.6);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .news-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(91,91,214,0.4);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .card-source {
-            font-size: 11px;
-            color: #5b5bd6;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 12px;
-        }
-        .card-desc {
-            font-size: 13px;
-            color: #888;
-            line-height: 1.5;
-            margin-bottom: 16px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: #666;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .translate-btn {
-            background: rgba(91,91,214,0.2);
-            border: none;
-            border-radius: 20px;
-            padding: 4px 10px;
-            font-size: 10px;
-            color: #a5a5ff;
-            cursor: pointer;
-        }
-        .translate-btn:hover { background: #5b5bd6; color: white; }
-        
-        /* Загрузчик */
-        .loader { text-align: center; padding: 40px; }
-        .spinner { width: 40px; height: 40px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #5b5bd6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .important-iframe-container iframe {
             width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: #0f0f1a;
-            max-width: 700px;
-            width: 90%;
-            border-radius: 24px;
-            padding: 28px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            background: none;
+            height: 600px;
             border: none;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-        }
-        .modal-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; padding-right: 30px; }
-        .modal-meta { font-size: 12px; color: #666; margin-bottom: 20px; }
-        .modal-text { font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
-        .modal-source { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .modal-translate-btn {
-            background: rgba(91,91,214,0.2);
-            border: none;
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 11px;
-            color: #a5a5ff;
-            cursor: pointer;
+            background: transparent;
+            border-radius: 20px;
         }
         
         .footer {
@@ -372,9 +229,62 @@
             color: #666;
         }
         
+        /* AI-помощник */
+        .ai-chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .chat-button {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #5b5bd6, #3a3a9e);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 20px rgba(91,91,214,0.5);
+        }
+        .chat-window {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 340px;
+            height: 500px;
+            background: rgba(15,15,26,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1001;
+        }
+        .chat-window.active { display: flex; }
+        .chat-header {
+            padding: 16px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+        .close-chat { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+        .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .message { max-width: 85%; padding: 10px 14px; border-radius: 18px; font-size: 13px; }
+        .message.user { background: #5b5bd6; align-self: flex-end; }
+        .message.bot { background: rgba(255,255,255,0.1); align-self: flex-start; }
+        .chat-input-area { padding: 12px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px; }
+        .chat-input { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 8px 14px; color: white; font-size: 12px; outline: none; }
+        .chat-send { background: #5b5bd6; border: none; border-radius: 24px; padding: 8px 16px; color: white; cursor: pointer; }
+        .typing-indicator { display: flex; gap: 4px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 18px; align-self: flex-start; }
+        .typing-indicator span { width: 6px; height: 6px; background: #888; border-radius: 50%; animation: typing 1.4s infinite; }
+        @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
+        
         @media (max-width: 900px) {
             .two-columns { grid-template-columns: 1fr; gap: 24px; }
-            .important-list { max-height: 400px; }
         }
         @media (max-width: 768px) {
             .container { padding: 0 16px; }
@@ -382,14 +292,11 @@
             .nav-btn { padding: 6px 12px; font-size: 12px; white-space: nowrap; }
             .countries-grid { gap: 8px; }
             .country-btn { padding: 6px 14px; font-size: 11px; }
-            .inoreader-iframe-container iframe { height: 500px; }
             .widgets-bar { justify-content: center; }
             .header { flex-direction: column; text-align: center; }
             .header-right { justify-content: center; }
-            .news-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 480px) {
-            .inoreader-iframe-container iframe { height: 450px; }
+            .inoreader-iframe-container iframe { height: 500px; }
+            .important-iframe-container iframe { height: 450px; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
@@ -429,61 +336,59 @@
         
         <!-- Навигация по темам -->
         <div class="nav">
-            <button class="nav-btn active" data-view="main" data-filter="all">🌍 Главная</button>
-            <button class="nav-btn" data-view="cards" data-filter="politics">🏛 Политика</button>
-            <button class="nav-btn" data-view="cards" data-filter="war">⚔️ Конфликт</button>
-            <button class="nav-btn" data-view="cards" data-filter="cyber">🛡 Кибербезопасность</button>
-            <button class="nav-btn" data-view="cards" data-filter="security">⚠️ Происшествия</button>
-            <button class="nav-btn" data-view="cards" data-filter="economy">💰 Экономика</button>
+            <button class="nav-btn active" data-filter="">🌍 Главная</button>
+            <button class="nav-btn" data-filter="политика">🏛 Политика</button>
+            <button class="nav-btn" data-filter="война конфликт">⚔️ Конфликт</button>
+            <button class="nav-btn" data-filter="кибербезопасность хакер">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-filter="происшествие теракт">⚠️ Происшествия</button>
+            <button class="nav-btn" data-filter="экономика рынок">💰 Экономика</button>
         </div>
         
         <!-- Блок стран -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
-                <button class="country-btn" data-view="cards" data-country="usa">🇺🇸 США</button>
-                <button class="country-btn" data-view="cards" data-country="japan">🇯🇵 Япония</button>
-                <button class="country-btn" data-view="cards" data-country="tajikistan">🇹🇯 Таджикистан</button>
-                <button class="country-btn" data-view="cards" data-country="turkmenistan">🇹🇲 Туркменистан</button>
-                <button class="country-btn" data-view="cards" data-country="ukraine">🇺🇦 Украина</button>
-                <button class="country-btn" data-view="cards" data-country="iran">🇮🇷 Иран</button>
+                <button class="country-btn" data-filter="США Америка">🇺🇸 США</button>
+                <button class="country-btn" data-filter="Япония">🇯🇵 Япония</button>
+                <button class="country-btn" data-filter="Таджикистан">🇹🇯 Таджикистан</button>
+                <button class="country-btn" data-filter="Туркменистан">🇹🇲 Туркменистан</button>
+                <button class="country-btn" data-filter="Украина">🇺🇦 Украина</button>
+                <button class="country-btn" data-filter="Иран">🇮🇷 Иран</button>
             </div>
         </div>
         
-        <!-- Основной контент -->
-        <div id="mainContent">
-            <!-- Главная страница: лента Inoreader + важные новости -->
-            <div id="mainView" class="two-columns">
-                <div class="inoreader-widget">
-                    <div class="inoreader-header">
-                        <h3>📰 Агрегатор мировых новостей</h3>
-                        <p>Inoreader — 20 источников • Автообновление</p>
-                    </div>
-                    <div class="inoreader-iframe-container">
-                        <iframe 
-                            src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
-                            title="Новостная лента ВЕКТОР"
-                            width="100%" 
-                            height="700" 
-                            frameborder="0"
-                            allowfullscreen>
-                        </iframe>
-                    </div>
+        <!-- Две колонки: лента Inoreader + важные новости -->
+        <div class="two-columns">
+            <div class="inoreader-widget">
+                <div class="inoreader-header">
+                    <h3>📰 Агрегатор мировых новостей</h3>
+                    <p>Inoreader — 20 источников • Автообновление</p>
                 </div>
-                <div class="important-news">
-                    <div class="important-header">
-                        <h3>⭐ Важные новости дня</h3>
-                    </div>
-                    <div class="important-list" id="importantList">
-                        <div class="loader"><div class="spinner" style="width:30px;height:30px;"></div><p>Загрузка...</p></div>
-                    </div>
+                <div class="inoreader-iframe-container">
+                    <iframe 
+                        id="mainIframe"
+                        src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                        title="Новостная лента ВЕКТОР"
+                        width="100%" 
+                        height="700" 
+                        frameborder="0"
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
-            
-            <!-- Карточки новостей (для тем и стран) -->
-            <div id="cardsView" style="display: none;">
-                <div class="news-grid" id="newsGrid">
-                    <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+            <div class="important-news">
+                <div class="important-header">
+                    <h3>⭐ Важные новости дня</h3>
+                </div>
+                <div class="important-iframe-container">
+                    <iframe 
+                        src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?cs=m&n=10&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                        title="Важные новости"
+                        width="100%" 
+                        height="600" 
+                        frameborder="0"
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
         </div>
@@ -491,20 +396,6 @@
         <div class="footer">
             <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · 20 источников · Все права принадлежат авторам</p>
             <p style="margin-top: 8px; font-size: 11px;">Inoreader — платформа для сбора новостей из RSS-лент по всему миру</p>
-        </div>
-    </div>
-    
-    <!-- Модальное окно -->
-    <div id="newsModal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModalBtn">✕</button>
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-meta" id="modalMeta"></div>
-            <div class="modal-text" id="modalText"></div>
-            <div class="modal-source">
-                <span id="modalLink"></span>
-                <button class="modal-translate-btn" id="modalTranslateBtn">🌐 Перевести на русский</button>
-            </div>
         </div>
     </div>
     
@@ -527,204 +418,14 @@
     </div>
 
     <script>
-        // RSS источники
-        const RSS_FEEDS = [
-            { url: 'https://tass.ru/rss/v2.xml', name: 'ТАСС', category: 'politics' },
-            { url: 'https://ria.ru/export/rss2/index.xml', name: 'РИА Новости', category: 'politics' },
-            { url: 'https://meduza.io/rss/all', name: 'Meduza', category: 'all' },
-            { url: 'http://feeds.bbci.co.uk/news/rss.xml', name: 'BBC News', category: 'all' },
-            { url: 'https://www.theguardian.com/world/rss', name: 'The Guardian', category: 'all' },
-            { url: 'https://www.vedomosti.ru/rss/news', name: 'Ведомости', category: 'economy' },
-            { url: 'https://www.kommersant.ru/RSS/news.xml', name: 'Коммерсантъ', category: 'economy' },
-            { url: 'https://www.reuters.com/rss/topNews', name: 'Reuters', category: 'all' },
-            { url: 'https://www.aljazeera.com/xml/rss/all.xml', name: 'Al Jazeera', category: 'war' },
-            { url: 'https://www3.nhk.or.jp/rss/news/cat0.xml', name: 'NHK World', category: 'japan' },
-            { url: 'https://asiaplustj.info/ru/rss.xml', name: 'Asia-Plus', category: 'tajikistan' },
-            { url: 'https://sputnik-tj.com/rss', name: 'Sputnik Таджикистан', category: 'tajikistan' },
-            { url: 'https://www.hronikatm.com/feed/', name: 'Хроники Туркменистана', category: 'turkmenistan' },
-            { url: 'https://turkmenportal.com/rss/ru', name: 'Turkmenportal', category: 'turkmenistan' },
-            { url: 'https://tengrinews.kz/rss/all.xml', name: 'Tengrinews', category: 'all' },
-            { url: 'https://feeds.npr.org/1001/rss.xml', name: 'NPR', category: 'usa' },
-            { url: 'https://abcnews.go.com/abcnews/topstories', name: 'ABC News', category: 'usa' }
-        ];
-        
-        let allNews = [];
-        let currentView = 'main';
-        let currentFilter = 'all';
-        let currentCountry = null;
-        
-        const categoryKeywords = {
-            politics: ['политик', 'президент', 'выбор', 'закон', 'санкц', 'госдеп', 'путин', 'байден', 'трамп', 'кремль', 'белый дом'],
-            war: ['войн', 'арми', 'танк', 'ракет', 'удар', 'наступлен', 'оборон', 'конфликт', 'сво', 'украин', 'палестин', 'израиль', 'дрон'],
-            cyber: ['кибер', 'хакер', 'взлом', 'данн', 'безопасност', 'уязвим', 'атак', 'шифрован'],
-            security: ['теракт', 'взрыв', 'катастроф', 'пожар', 'чп', 'происшеств', 'криминал', 'убийств', 'задержан', 'арест', 'дтп'],
-            economy: ['экономик', 'рынок', 'нефт', 'цена', 'доллар', 'рубл', 'инфляц', 'ввп', 'кризис', 'инвестиц', 'бюджет'],
-            usa: ['сша', 'америк', 'вашингтон', 'трамп', 'байден', 'конгресс', 'new york', 'washington'],
-            japan: ['япони', 'токио', 'japan', 'tokyo'],
-            tajikistan: ['таджикистан', 'душанбе', 'таджик'],
-            turkmenistan: ['туркменистан', 'ашхабад', 'туркмен'],
-            ukraine: ['украин', 'киев', 'kiev', 'донбас'],
-            iran: ['иран', 'тегеран', 'iran', 'tehran']
-        };
-        
-        function detectCategory(title, desc) {
-            const text = (title + ' ' + desc).toLowerCase();
-            for (const [cat, keywords] of Object.entries(categoryKeywords)) {
-                for (const kw of keywords) {
-                    if (text.includes(kw)) return cat;
-                }
-            }
-            return 'all';
+        // Дата и время
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
         }
-        
-        async function fetchRSS(url) {
-            try {
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-                const response = await fetch(proxyUrl);
-                const data = await response.json();
-                if (data.contents) {
-                    const parser = new DOMParser();
-                    const xml = parser.parseFromString(data.contents, 'text/xml');
-                    const items = [...xml.querySelectorAll('item')];
-                    return items.slice(0, 5).map(item => ({
-                        title: item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || '',
-                        description: item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 300) || '',
-                        url: item.querySelector('link')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
-                        publishedAt: item.querySelector('pubDate')?.textContent || new Date().toISOString()
-                    }));
-                }
-            } catch(e) { return []; }
-            return [];
-        }
-        
-        async function loadAllNews() {
-            allNews = [];
-            for (const feed of RSS_FEEDS) {
-                const items = await fetchRSS(feed.url);
-                items.forEach(item => {
-                    if (item.title) {
-                        allNews.push({
-                            ...item,
-                            source: feed.name,
-                            category: detectCategory(item.title, item.description)
-                        });
-                    }
-                });
-            }
-            allNews.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-            
-            // Обновляем важные новости
-            const importantList = document.getElementById('importantList');
-            const importantNews = allNews.slice(0, 8);
-            importantList.innerHTML = importantNews.map(news => `
-                <div class="important-item" onclick="openModal('${escapeHtml(news.title)}', '${escapeHtml(news.source)}', '${escapeHtml(news.description)}', '${escapeHtml(news.url)}', '${news.publishedAt}')">
-                    <div class="important-source">📰 ${escapeHtml(news.source)}</div>
-                    <div class="important-title">${escapeHtml(news.title)}</div>
-                    <div class="important-time">🕒 ${ago(news.publishedAt)}</div>
-                </div>
-            `).join('');
-        }
-        
-        function renderCards() {
-            const grid = document.getElementById('newsGrid');
-            let filtered = [...allNews];
-            
-            if (currentCountry) {
-                const countryKeywordsMap = {
-                    usa: ['сша', 'америк', 'вашингтон', 'трамп', 'байден'],
-                    japan: ['япони', 'токио'],
-                    tajikistan: ['таджикистан', 'душанбе'],
-                    turkmenistan: ['туркменистан', 'ашхабад'],
-                    ukraine: ['украин', 'киев'],
-                    iran: ['иран', 'тегеран']
-                };
-                const keywords = countryKeywordsMap[currentCountry] || [];
-                filtered = filtered.filter(n => {
-                    const text = (n.title + ' ' + n.description).toLowerCase();
-                    return keywords.some(kw => text.includes(kw));
-                });
-            } else if (currentFilter !== 'all') {
-                filtered = filtered.filter(n => n.category === currentFilter);
-            }
-            
-            filtered = filtered.slice(0, 24);
-            
-            if (!filtered.length) {
-                grid.innerHTML = '<div class="loader"><p>😕 Новостей пока нет</p></div>';
-                return;
-            }
-            
-            grid.innerHTML = filtered.map(news => `
-                <div class="news-card" onclick="openModal('${escapeHtml(news.title)}', '${escapeHtml(news.source)}', '${escapeHtml(news.description)}', '${escapeHtml(news.url)}', '${news.publishedAt}')">
-                    <div class="card-source">📰 ${escapeHtml(news.source)}</div>
-                    <div class="card-title">${escapeHtml(news.title)}</div>
-                    <div class="card-desc">${escapeHtml(news.description.substring(0, 120))}${news.description.length > 120 ? '...' : ''}</div>
-                    <div class="card-footer">
-                        <span>🕒 ${ago(news.publishedAt)}</span>
-                        <button class="translate-btn" onclick="event.stopPropagation(); translateText('${escapeHtml(news.title)}', '${escapeHtml(news.description)}')">🌐 Перевести</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
-        function ago(dateStr) {
-            try {
-                const d = new Date(dateStr);
-                if (isNaN(d.getTime())) return 'недавно';
-                const m = Math.floor((new Date() - d) / 60000);
-                if (m < 1) return 'только что';
-                if (m < 60) return `${m} мин назад`;
-                if (m < 1440) return `${Math.floor(m/60)} ч назад`;
-                return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-            } catch { return 'недавно'; }
-        }
-        
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-        
-        window.translateText = async function(title, desc) {
-            const text = title + '. ' + desc;
-            try {
-                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=${encodeURIComponent(text.substring(0, 1000))}`);
-                const data = await response.json();
-                let translated = '';
-                if (data && data[0]) {
-                    for (const segment of data[0]) {
-                        if (segment[0]) translated += segment[0];
-                    }
-                }
-                alert('📝 Перевод:\n\n' + (translated || 'Не удалось перевести'));
-            } catch(e) { alert('Ошибка перевода'); }
-        };
-        
-        window.openModal = function(title, source, text, url, date) {
-            document.getElementById('modalTitle').innerHTML = title;
-            document.getElementById('modalMeta').innerHTML = `${source} · ${ago(date)} · ${new Date(date).toLocaleString('ru-RU')}`;
-            document.getElementById('modalText').innerHTML = text || 'Описание отсутствует.';
-            document.getElementById('modalLink').innerHTML = `📌 Источник: <a href="${url}" target="_blank">${source}</a> — Все права принадлежат автору.`;
-            document.getElementById('newsModal').classList.add('active');
-            document.getElementById('modalTranslateBtn').onclick = () => translateText(title, text);
-        };
-        
-        function closeModal() {
-            document.getElementById('newsModal').classList.remove('active');
-        }
-        
-        // Переключение между главной и карточками
-        function switchToMain() {
-            currentView = 'main';
-            document.getElementById('mainView').style.display = 'grid';
-            document.getElementById('cardsView').style.display = 'none';
-        }
-        
-        function switchToCards() {
-            currentView = 'cards';
-            document.getElementById('mainView').style.display = 'none';
-            document.getElementById('cardsView').style.display = 'block';
-            renderCards();
-        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
         
         // Погода
         async function getWeather() {
@@ -742,6 +443,8 @@
                 }
             } catch(e) {}
         }
+        getWeather();
+        setInterval(getWeather, 30 * 60 * 1000);
         
         // Радио
         let audio = null;
@@ -767,12 +470,39 @@
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
         
-        // Дата и время
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        // Фильтрация в Inoreader
+        const mainIframe = document.getElementById('mainIframe');
+        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f';
+        
+        function updateFilter(searchTerm) {
+            if (searchTerm && searchTerm !== '') {
+                mainIframe.src = `${baseUrl}&q=${encodeURIComponent(searchTerm)}`;
+            } else {
+                mainIframe.src = baseUrl;
+            }
         }
+        
+        // Обработчики навигации
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.country-btn').forEach(c => c.classList.remove('active'));
+                const filter = btn.dataset.filter;
+                updateFilter(filter);
+            };
+        });
+        
+        document.querySelectorAll('.country-btn').forEach(btn => {
+            btn.onclick = () => {
+                document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
+                document.querySelector('.nav-btn[data-filter=""]').classList.add('active');
+                const filter = btn.dataset.filter;
+                updateFilter(filter);
+            };
+        });
         
         // AI-помощник
         const chatButton = document.getElementById('chatButton');
@@ -785,7 +515,7 @@
         chatButton.onclick = () => chatWindow.classList.toggle('active');
         closeChatBtn.onclick = () => chatWindow.classList.remove('active');
         
-        async function translateTextQuick(text) {
+        async function translateText(text) {
             try {
                 const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=${encodeURIComponent(text)}`);
                 const data = await response.json();
@@ -799,12 +529,17 @@
             } catch(e) { return text; }
         }
         
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        
         async function getAIResponse(message) {
             const msg = message.toLowerCase();
             if (msg.includes('переведи') || msg.includes('перевод')) {
                 const textToTranslate = msg.replace(/переведи|перевод/gi, '').trim();
                 if (textToTranslate) {
-                    const translated = await translateTextQuick(textToTranslate);
+                    const translated = await translateText(textToTranslate);
                     return `🌐 Перевод: ${translated}`;
                 }
             }
@@ -836,55 +571,6 @@
         
         chatSend.onclick = sendMessage;
         chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
-        
-        // Инициализация
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        getWeather();
-        setInterval(getWeather, 30 * 60 * 1000);
-        loadAllNews();
-        setInterval(loadAllNews, 10 * 60 * 1000);
-        
-        document.getElementById('closeModalBtn').onclick = closeModal;
-        document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
-        
-        // Обработчики навигации
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.querySelectorAll('.country-btn').forEach(c => c.classList.remove('active'));
-                
-                const view = btn.dataset.view;
-                const filter = btn.dataset.filter;
-                
-                if (view === 'main') {
-                    currentFilter = 'all';
-                    currentCountry = null;
-                    switchToMain();
-                } else {
-                    currentFilter = filter;
-                    currentCountry = null;
-                    switchToCards();
-                }
-            };
-        });
-        
-        document.querySelectorAll('.country-btn').forEach(btn => {
-            btn.onclick = () => {
-                document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-                document.querySelector('.nav-btn[data-view="cards"]').classList.add('active');
-                
-                currentCountry = btn.dataset.country;
-                currentFilter = 'all';
-                switchToCards();
-            };
-        });
-        
-        // Показываем главную по умолчанию
-        switchToMain();
     </script>
 </body>
 </html>
