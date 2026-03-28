@@ -157,7 +157,28 @@
         }
         .country-btn:hover, .country-btn.active { background: #5b5bd6; color: white; }
         
-        /* Сетка новостей */
+        /* Основной контент */
+        .main-view { display: block; }
+        .cards-view { display: none; }
+        
+        /* Iframe Inoreader */
+        .iframe-container {
+            background: rgba(15,15,26,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 4px;
+            margin: 32px 0;
+        }
+        .iframe-container iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            border-radius: 20px;
+        }
+        
+        /* Сетка новостей для тем */
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -345,6 +366,7 @@
             .header { flex-direction: column; text-align: center; }
             .header-right { justify-content: center; }
             .info-bar { justify-content: center; }
+            .iframe-container iframe { height: 500px; }
             .news-grid { grid-template-columns: 1fr; }
         }
         ::-webkit-scrollbar { width: 6px; }
@@ -383,35 +405,49 @@
         
         <!-- Навигация по темам -->
         <div class="nav">
-            <button class="nav-btn active" data-query="world">🌍 Главная</button>
-            <button class="nav-btn" data-query="politics OR government OR election OR president OR Putin OR Biden OR Trump OR Kremlin OR White House">🏛 Политика</button>
-            <button class="nav-btn" data-query="war OR conflict OR military OR Ukraine OR Israel OR Palestine OR Gaza OR Russia Ukraine">⚔️ Конфликт</button>
-            <button class="nav-btn" data-query="cyber OR hacking OR data breach OR ransomware OR security OR cyberattack">🛡 Кибербезопасность</button>
-            <button class="nav-btn" data-query="terror OR explosion OR fire OR accident OR crime OR disaster OR emergency">⚠️ Происшествия</button>
-            <button class="nav-btn" data-query="economy OR market OR oil OR dollar OR ruble OR inflation OR crisis OR business">💰 Экономика</button>
+            <button class="nav-btn active" data-view="main">🌍 Главная</button>
+            <button class="nav-btn" data-view="cards" data-query="politics OR government OR election OR president OR Putin OR Biden OR Trump OR Kremlin OR White House">🏛 Политика</button>
+            <button class="nav-btn" data-view="cards" data-query="war OR conflict OR military OR Ukraine OR Israel OR Palestine OR Gaza OR Russia Ukraine">⚔️ Конфликт</button>
+            <button class="nav-btn" data-view="cards" data-query="cyber OR hacking OR data breach OR ransomware OR security OR cyberattack">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-view="cards" data-query="terror OR explosion OR fire OR accident OR crime OR disaster OR emergency">⚠️ Происшествия</button>
+            <button class="nav-btn" data-view="cards" data-query="economy OR market OR oil OR dollar OR ruble OR inflation OR crisis OR business">💰 Экономика</button>
         </div>
         
         <!-- Блок стран -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
-                <button class="country-btn" data-query="USA OR United States OR Washington OR Biden OR Trump OR America">🇺🇸 США</button>
-                <button class="country-btn" data-query="Japan OR Tokyo">🇯🇵 Япония</button>
-                <button class="country-btn" data-query="Tajikistan OR Dushanbe">🇹🇯 Таджикистан</button>
-                <button class="country-btn" data-query="Turkmenistan OR Ashgabat">🇹🇲 Туркменистан</button>
-                <button class="country-btn" data-query="Ukraine OR Kyiv">🇺🇦 Украина</button>
-                <button class="country-btn" data-query="Iran OR Tehran">🇮🇷 Иран</button>
+                <button class="country-btn" data-view="cards" data-query="USA OR United States OR Washington OR Biden OR Trump OR America">🇺🇸 США</button>
+                <button class="country-btn" data-view="cards" data-query="Japan OR Tokyo">🇯🇵 Япония</button>
+                <button class="country-btn" data-view="cards" data-query="Tajikistan OR Dushanbe">🇹🇯 Таджикистан</button>
+                <button class="country-btn" data-view="cards" data-query="Turkmenistan OR Ashgabat">🇹🇲 Туркменистан</button>
+                <button class="country-btn" data-view="cards" data-query="Ukraine OR Kyiv">🇺🇦 Украина</button>
+                <button class="country-btn" data-view="cards" data-query="Iran OR Tehran">🇮🇷 Иран</button>
             </div>
         </div>
         
-        <!-- Сетка новостей -->
-        <div id="newsGrid" class="news-grid">
-            <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+        <!-- Главная (Inoreader iframe) -->
+        <div id="mainView" class="main-view">
+            <div class="iframe-container">
+                <iframe 
+                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                    title="Новостная лента ВЕКТОР"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+        
+        <!-- Карточки новостей для тем -->
+        <div id="cardsView" class="cards-view">
+            <div class="news-grid" id="newsGrid">
+                <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+            </div>
         </div>
         
         <div class="footer">
             <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам</p>
-            <p style="margin-top: 8px; font-size: 11px;">Новости предоставлены NewsAPI.org</p>
+            <p style="margin-top: 8px; font-size: 11px;">Главная лента — Inoreader · Поиск по темам — NewsAPI через Cloudflare Worker</p>
         </div>
     </div>
     
@@ -448,12 +484,12 @@
     </div>
 
     <script>
-        // ============ НАСТРОЙКИ NEWSAPI ============
-        const API_KEY = 'c4d548d6f05e4d11af43a0f684c14dee';
-        const API_URL = 'https://newsapi.org/v2/everything';
+        // ============ НАСТРОЙКИ ============
+        const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
         
-        let currentQuery = 'world';
-        let allArticles = [];
+        let currentView = 'main';
+        let currentQuery = '';
+        let currentArticles = [];
         
         // ============ ДАТА И ВРЕМЯ ============
         function updateDateTime() {
@@ -507,25 +543,25 @@
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
         
-        // ============ ЗАГРУЗКА НОВОСТЕЙ ИЗ NEWSAPI ============
-        async function loadNews(query) {
+        // ============ ЗАГРУЗКА НОВОСТЕЙ ЧЕРЕЗ WORKER ============
+        async function loadNewsByQuery(query) {
             const grid = document.getElementById('newsGrid');
             grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
             
             try {
-                const url = `${API_URL}?q=${encodeURIComponent(query)}&language=en&sortBy=publishedAt&pageSize=30&apiKey=${API_KEY}`;
+                const url = `${WORKER_URL}?q=${encodeURIComponent(query)}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                if (data.status === 'ok' && data.articles) {
-                    allArticles = data.articles.filter(article => article.title && article.description && article.title !== '[Removed]' && article.title !== null);
-                    renderNews();
+                if (data.articles) {
+                    currentArticles = data.articles.filter(a => a.title && a.description && a.title !== '[Removed]');
+                    renderCards();
                 } else {
-                    grid.innerHTML = `<div class="loader"><p>😕 Ошибка: ${data.message || 'Не удалось загрузить новости'}</p></div>`;
+                    grid.innerHTML = `<div class="loader"><p>😕 Новостей не найдено</p></div>`;
                 }
             } catch (error) {
-                console.error('Error loading news:', error);
-                grid.innerHTML = '<div class="loader"><p>😕 Ошибка подключения к NewsAPI</p></div>';
+                console.error('Error:', error);
+                grid.innerHTML = `<div class="loader"><p>😕 Ошибка загрузки. Попробуйте позже.</p></div>`;
             }
         }
         
@@ -546,16 +582,16 @@
             return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
         
-        function renderNews() {
+        function renderCards() {
             const grid = document.getElementById('newsGrid');
-            if (!allArticles.length) {
+            if (!currentArticles.length) {
                 grid.innerHTML = '<div class="loader"><p>😕 Новостей не найдено</p></div>';
                 return;
             }
             
-            grid.innerHTML = allArticles.slice(0, 24).map(article => `
-                <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source.name)}', '${escapeHtml(article.description || 'Описание отсутствует')}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
-                    <div class="card-source">📰 ${escapeHtml(article.source.name)}</div>
+            grid.innerHTML = currentArticles.slice(0, 24).map(article => `
+                <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source?.name || 'Источник')}', '${escapeHtml(article.description || 'Описание отсутствует')}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
+                    <div class="card-source">📰 ${escapeHtml(article.source?.name || 'Источник')}</div>
                     <div class="card-title">${escapeHtml(article.title)}</div>
                     <div class="card-desc">${escapeHtml((article.description || '').substring(0, 120))}${(article.description || '').length > 120 ? '...' : ''}</div>
                     <div class="card-footer">
@@ -599,14 +635,36 @@
         document.getElementById('closeModalBtn').onclick = closeModal;
         document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
         
-        // ============ ФИЛЬТРАЦИЯ ============
+        // ============ ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ГЛАВНОЙ И ТЕМАМИ ============
+        const mainView = document.getElementById('mainView');
+        const cardsView = document.getElementById('cardsView');
+        
+        function switchToMain() {
+            currentView = 'main';
+            mainView.style.display = 'block';
+            cardsView.style.display = 'none';
+        }
+        
+        function switchToCards(query) {
+            currentView = 'cards';
+            currentQuery = query;
+            mainView.style.display = 'none';
+            cardsView.style.display = 'block';
+            loadNewsByQuery(query);
+        }
+        
+        // Обработчики кнопок
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.onclick = () => {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.country-btn').forEach(c => c.classList.remove('active'));
-                currentQuery = btn.dataset.query;
-                loadNews(currentQuery);
+                
+                if (btn.dataset.view === 'main') {
+                    switchToMain();
+                } else {
+                    switchToCards(btn.dataset.query);
+                }
             };
         });
         
@@ -615,13 +673,12 @@
                 document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-                document.querySelector('.nav-btn[data-query="world"]').classList.add('active');
-                currentQuery = btn.dataset.query;
-                loadNews(currentQuery);
+                document.querySelector('.nav-btn[data-view="main"]').classList.add('active');
+                switchToCards(btn.dataset.query);
             };
         });
         
-        // ============ AI-ПОМОЩНИК ============
+        // AI-помощник
         const chatButton = document.getElementById('chatButton');
         const chatWindow = document.getElementById('chatWindow');
         const closeChatBtn = document.getElementById('closeChatBtn');
@@ -684,9 +741,8 @@
         chatSend.onclick = sendMessage;
         chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
         
-        // Загружаем новости
-        loadNews('world');
-        setInterval(() => loadNews(currentQuery), 10 * 60 * 1000);
+        // По умолчанию показываем главную
+        switchToMain();
     </script>
 </body>
 </html>
