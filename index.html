@@ -23,7 +23,7 @@
             --text-muted: #44445a;
             --accent: #5b5bd6;
             --live: #ff3366;
-            --radio-red: #c52a2a;
+            --radio-red: #e31e24;
             --politics: #3b82f6;
             --war: #f43f5e;
             --cyber: #a855f7;
@@ -86,49 +86,109 @@
         }
         .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
         
-        /* ============ РАДИО ВЕСТИ FM ============ */
+        /* ============ РАДИО ГОВОРИТ МОСКВА ============ */
         .radio-block {
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
             border-radius: 20px;
-            padding: 10px 14px;
-            min-width: 260px;
+            padding: 12px 16px;
+            min-width: 280px;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            transition: all 0.2s;
         }
         .radio-block:hover { border-color: var(--radio-red); }
         .radio-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             flex-wrap: wrap;
             gap: 8px;
         }
         .radio-brand { display: flex; align-items: center; gap: 10px; }
         .radio-icon {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             background: var(--radio-red);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             color: white;
         }
-        .radio-brand h3 { font-size: 13px; font-weight: 700; color: var(--text); }
-        .radio-brand p { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
+        .radio-brand h3 { font-size: 14px; font-weight: 700; color: var(--text); }
+        .radio-brand p { font-size: 9px; color: var(--text-muted); margin-top: 2px; }
         .radio-badge {
-            background: rgba(197,42,42,0.2);
-            padding: 3px 8px;
+            background: rgba(227,30,36,0.2);
+            padding: 4px 10px;
             border-radius: 20px;
-            font-size: 9px;
+            font-size: 10px;
             color: var(--radio-red);
-            border: 1px solid rgba(197,42,42,0.3);
+            border: 1px solid rgba(227,30,36,0.3);
         }
-        .radio-footer { display: flex; justify-content: center; margin-top: 6px; }
-        .radio-footer a { color: var(--radio-red); text-decoration: none; font-size: 9px; }
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+        }
+        .play-radio-btn {
+            width: 48px;
+            height: 48px;
+            background: var(--radio-red);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(227,30,36,0.3);
+            flex-shrink: 0;
+        }
+        .play-radio-btn:hover { transform: scale(1.05); }
+        .track-info { flex: 1; min-width: 0; }
+        .track-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .track-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-artist { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+        .live-badge-small {
+            display: inline-block;
+            background: var(--radio-red);
+            color: white;
+            font-size: 8px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 8px;
+            animation: pulse 1.5s infinite;
+        }
+        .radio-news-section {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px solid var(--border);
+        }
+        .radio-news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .radio-news-header span { font-size: 10px; font-weight: 600; color: var(--text-secondary); }
+        .radio-news-list { max-height: 110px; overflow-y: auto; }
+        .radio-news-item {
+            display: flex;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+        .radio-news-item:hover { background: rgba(227,30,36,0.05); margin: 0 -4px; padding: 6px 4px; border-radius: 8px; }
+        .radio-news-bullet { color: var(--radio-red); font-size: 12px; flex-shrink: 0; }
+        .radio-news-title { font-size: 11px; flex: 1; line-height: 1.4; }
+        .radio-news-time { font-size: 9px; color: var(--text-muted); flex-shrink: 0; }
+        .radio-more { text-align: center; margin-top: 8px; }
+        .radio-more a { color: var(--radio-red); font-size: 9px; text-decoration: none; }
         
         .stats {
             display: flex;
@@ -661,29 +721,40 @@
             <p>МИРОВЫЕ НОВОСТИ · 20 ИСТОЧНИКОВ</p>
         </div>
         
-        <!-- РАДИО ВЕСТИ FM -->
+        <!-- РАДИО ГОВОРИТ МОСКВА -->
         <div class="radio-block">
             <div class="radio-header">
                 <div class="radio-brand">
-                    <div class="radio-icon">В</div>
+                    <div class="radio-icon">ГМ</div>
                     <div>
-                        <h3>Вести FM</h3>
-                        <p>Новости 24/7</p>
+                        <h3>Говорит Москва</h3>
+                        <p>Новости 24/7 · 94.8 FM</p>
                     </div>
                 </div>
                 <div class="radio-badge">🔴 LIVE</div>
             </div>
-            <iframe 
-                src="https://radiovesti.ru/player_widget/" 
-                width="100%" 
-                height="70" 
-                frameborder="0" 
-                scrolling="no" 
-                allow="autoplay"
-                style="border-radius: 12px;">
-            </iframe>
-            <div class="radio-footer">
-                <a href="https://radiovesti.ru" target="_blank">radiovesti.ru →</a>
+            <div class="player-controls">
+                <button id="playRadioBtn" class="play-radio-btn">
+                    <span id="playIcon" style="font-size: 20px; color: white;">▶</span>
+                    <span id="pauseIcon" style="font-size: 20px; color: white; display: none;">⏸</span>
+                </button>
+                <div class="track-info">
+                    <div class="track-label">СЕЙЧАС В ЭФИРЕ</div>
+                    <div class="track-name" id="trackName">Говорит Москва</div>
+                    <div class="track-artist" id="trackArtist">Прямой эфир</div>
+                </div>
+            </div>
+            <div class="radio-news-section">
+                <div class="radio-news-header">
+                    <span>📰 ПОСЛЕДНИЕ НОВОСТИ</span>
+                    <span id="radioNewsTime" style="font-size: 8px; color: var(--text-muted);">обновление...</span>
+                </div>
+                <div id="radioNewsContainer" class="radio-news-list">
+                    <div style="font-size: 11px; color: var(--text-muted); text-align: center; padding: 8px;">Загрузка новостей...</div>
+                </div>
+                <div class="radio-more">
+                    <a href="https://govoritmoskva.ru" target="_blank">Все новости →</a>
+                </div>
             </div>
         </div>
         
@@ -727,7 +798,7 @@
         <span class="news-count" id="newsCount">—</span>
     </div>
     <div class="news-grid" id="newsGrid">
-        <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>
+        <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p><p style="font-size: 12px; color: #666; margin-top: 8px;" id="loadStatus"></p></div>
     </div>
 </main>
 <footer class="footer">
@@ -752,13 +823,13 @@
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">О СИСТЕМЕ</div>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.6;">
                     Обновление: 07:00, 13:00, 19:00 МСК<br>
-                    Перевод: Google Translate (EN → RU)<br>
-                    Полные тексты: через Cloudflare Worker<br>
-                    Все права принадлежат авторам
+                    Все новости взяты из открытых RSS-лент официальных СМИ<br>
+                    Права на контент принадлежат соответствующим издателям<br>
+                    При цитировании обязательна ссылка на источник
                 </div>
             </div>
         </div>
-        <div class="copyright">© 2025 ВЕКТОР · Новости из открытых источников · Все права сохранены</div>
+        <div class="copyright">© 2025 ВЕКТОР · Новости из открытых источников · Все права принадлежат авторам</div>
     </div>
 </footer>
 
@@ -767,50 +838,33 @@
     <div class="modal-content">
         <div class="modal-title" id="modalTitle"></div>
         <div class="modal-meta"><span id="modalSource"></span><span id="modalDate"></span></div>
-        <div class="modal-text" id="modalText">Загрузка полного текста...</div>
+        <div class="modal-text" id="modalText"></div>
         <div class="modal-source" id="modalOriginalLink"></div>
     </div>
 </div>
 
 <script>
-    // ============ 20 ИСТОЧНИКОВ (ВСЕ РАБОЧИЕ) ============
+    // ============ 20 ИСТОЧНИКОВ ============
     const SOURCES = [
-        // Россия (6)
         { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml', lang: 'ru' },
         { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
         { name: 'Lenta.ru', url: 'https://lenta.ru/rss', lang: 'ru' },
         { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news', lang: 'ru' },
         { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml', lang: 'ru' },
-        
-        // США (3)
         { name: 'NPR', url: 'https://feeds.npr.org/1001/rss.xml', lang: 'en' },
         { name: 'ABC News', url: 'https://abcnews.go.com/abcnews/topstories', lang: 'en' },
         { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News', lang: 'en' },
-        
-        // Великобритания (3)
         { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
         { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
         { name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/uk.xml', lang: 'en' },
-        
-        // Туркменистан (2)
         { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
         { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
-        
-        // Таджикистан (2)
         { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
         { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        
-        // Казахстан (1)
         { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
-        
-        // Япония (1)
         { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml', lang: 'en' },
-        
-        // Ближний Восток (1)
         { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml', lang: 'en' },
-        
-        // Центральная Азия (1)
         { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' }
     ];
 
@@ -824,76 +878,68 @@
     const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
     const UPDATE_TIMES = [7, 13, 19];
 
+    // ============ УТИЛИТЫ ============
     function formatDate(date) {
         return date.toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
     }
-
     function formatTime(date) {
         return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }
-
     function updateDateTime() {
         const now = new Date();
         document.getElementById('currentDate').textContent = formatDate(now);
         document.getElementById('currentTime').textContent = formatTime(now);
     }
-
     function ago(dateStr) {
         try {
             const d = new Date(dateStr);
             if (isNaN(d.getTime())) return 'недавно';
-            const now = new Date();
-            const diff = Math.floor((now - d) / 60000);
-            if (diff < 1) return 'только что';
-            if (diff < 60) return `${diff} мин назад`;
-            if (diff < 1440) return `${Math.floor(diff/60)} ч назад`;
+            const m = Math.floor((new Date() - d) / 60000);
+            if (m < 1) return 'только что';
+            if (m < 60) return `${m} мин назад`;
+            if (m < 1440) return `${Math.floor(m/60)} ч назад`;
             return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
         } catch { return 'недавно'; }
     }
-
     function escapeHtml(text) {
         if (!text) return '';
         return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
-
     function detectTopic(title, desc) {
         const t = (title + ' ' + desc).toLowerCase();
-        const keywords = {
-            politics: ['политик', 'президент', 'встреч', 'визит', 'переговор', 'саммит', 'дипломат', 'посол', 'кремль', 'белый дом', 'конгресс', 'парламент', 'выбор', 'закон', 'санкц', 'госдеп', 'путин', 'байден', 'трамп'],
-            war: ['войн', 'арми', 'военн', 'танк', 'ракет', 'удар', 'наступлен', 'оборон', 'вооружен', 'конфликт', 'сво', 'украин', 'палестин', 'израиль', 'дрон', 'беспилотник'],
-            cyber: ['кибер', 'хакер', 'взлом', 'данн', 'безопасност', 'уязвим', 'атак', 'шифрован', 'ransomware', 'cyber', 'вирус'],
-            security: ['теракт', 'взрыв', 'катастроф', 'пожар', 'чп', 'происшеств', 'криминал', 'убийств', 'задержан', 'арест', 'дтп', 'крушен', 'наводнен', 'землетрясен', 'авария'],
-            economy: ['экономик', 'рынок', 'нефт', 'цена', 'доллар', 'рубл', 'инфляц', 'санкц', 'ввп', 'кризис', 'инвестиц', 'торговл', 'бюджет', 'ставка', 'центробанк']
+        const kw = {
+            politics: ['политик','президент','встреч','визит','переговор','саммит','дипломат','посол','кремль','белый дом','конгресс','парламент','выбор','закон','санкц','госдеп','путин','байден','трамп'],
+            war: ['войн','арми','военн','танк','ракет','удар','наступлен','оборон','вооружен','конфликт','сво','украин','палестин','израиль','дрон','беспилотник'],
+            cyber: ['кибер','хакер','взлом','данн','безопасност','уязвим','атак','шифрован','ransomware','cyber','вирус'],
+            security: ['теракт','взрыв','катастроф','пожар','чп','происшеств','криминал','убийств','задержан','арест','дтп','крушен','наводнен','землетрясен','авария'],
+            economy: ['экономик','рынок','нефт','цена','доллар','рубл','инфляц','санкц','ввп','кризис','инвестиц','торговл','бюджет','ставка','центробанк']
         };
-        for (const [topic, words] of Object.entries(keywords)) {
-            for (const word of words) {
-                if (t.includes(word)) return topic;
-            }
+        for (const [topic, words] of Object.entries(kw)) {
+            for (const w of words) if (t.includes(w)) return topic;
         }
         return 'politics';
     }
 
+    // ============ ПЕРЕВОД (Google Translate) ============
     async function translateText(text) {
         if (!text || text.length < 5) return text;
         if (translationCache.has(text)) return translationCache.get(text);
-        
         try {
             const url = `${WORKER_URL}?action=translate&text=${encodeURIComponent(text.substring(0, 500))}`;
-            const response = await fetch(url);
-            const data = await response.json();
+            const res = await fetch(url);
+            const data = await res.json();
             const translated = data.translated || text;
             translationCache.set(text, translated);
             return translated;
-        } catch (e) {
-            return text;
-        }
+        } catch (e) { return text; }
     }
 
-    async function fetchRSS(source) {
+    // ============ ЗАГРУЗКА НОВОСТЕЙ ============
+    async function fetchSource(source) {
         const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
         try {
             const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
+            const timeout = setTimeout(() => controller.abort(), 15000);
             const res = await fetch(url, { signal: controller.signal });
             clearTimeout(timeout);
             if (!res.ok) return [];
@@ -901,15 +947,13 @@
             if (data.status !== 'ok' || !data.items) return [];
             
             const news = [];
-            for (let i = 0; i < Math.min(data.items.length, 6); i++) {
+            for (let i = 0; i < Math.min(data.items.length, 5); i++) {
                 const item = data.items[i];
-                let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 400);
-                let link = item.link || '';
+                let title = item.title?.replace(/<[^>]*>/g, '') || '';
+                let desc = item.description?.replace(/<[^>]*>/g, '').substring(0, 300) || '';
+                let link = item.link?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#';
                 let originalTitle = null;
                 
-                // Очищаем от CDATA и лишних символов
-                link = link.replace(/<!\[CDATA\[|\]\]>/g, '');
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
                 
@@ -917,12 +961,8 @@
                     originalTitle = title;
                     try {
                         title = await translateText(title);
-                        if (desc.length > 20) {
-                            desc = await translateText(desc.substring(0, 350));
-                        }
-                    } catch (e) {
-                        console.warn(`Translation failed for ${source.name}`);
-                    }
+                        if (desc.length > 20) desc = await translateText(desc.substring(0, 280));
+                    } catch(e) {}
                 }
                 
                 news.push({
@@ -930,7 +970,6 @@
                     title: title.substring(0, 180),
                     originalTitle: originalTitle,
                     description: desc || 'Описание отсутствует',
-                    fullText: desc || 'Описание отсутствует',
                     url: link,
                     source: source.name,
                     publishedAt: item.pubDate,
@@ -946,50 +985,31 @@
         }
     }
 
-    async function loadFullNews(newsUrl) {
-        const url = `${WORKER_URL}?action=getFullNews&url=${encodeURIComponent(newsUrl)}`;
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 10000);
-            const res = await fetch(url, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) return null;
-            const data = await res.json();
-            return data.fullText || null;
-        } catch (e) {
-            return null;
-        }
-    }
-
     async function updateNews() {
         if (isUpdating) return;
         isUpdating = true;
-        
         const updateInfo = document.getElementById('lastUpdateInfo');
+        const loadStatus = document.getElementById('loadStatus');
         updateInfo.innerHTML = '🔄 Обновление новостей...';
+        loadStatus.innerHTML = 'Загрузка 20 источников...';
         
-        let allFresh = [];
-        for (let i = 0; i < SOURCES.length; i++) {
-            const items = await fetchRSS(SOURCES[i]);
-            allFresh.push(...items);
-        }
-
-        allFresh.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+        const promises = SOURCES.map(s => fetchSource(s));
+        const results = await Promise.all(promises);
+        const allFresh = results.flat();
         
         const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
         const seen = new Set(cached.map(n => n.url));
         allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
-        
+        allNews.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
         if (allNews.length > 300) allNews = allNews.slice(0, 300);
         
         localStorage.setItem('vector_news', JSON.stringify(allNews));
         localStorage.setItem('vector_news_last_update', new Date().toISOString());
         
         document.getElementById('totalNews').textContent = allNews.length;
-        
         const now = new Date();
         updateInfo.innerHTML = `📰 Последнее обновление: ${now.toLocaleString('ru-RU')}`;
-        
+        loadStatus.innerHTML = `✅ Загружено ${allNews.length} новостей`;
         renderNews();
         isUpdating = false;
     }
@@ -1020,106 +1040,131 @@
         const filtered = getFilteredNews();
         const grid = document.getElementById('newsGrid');
         document.getElementById('newsCount').textContent = `${filtered.length} материалов`;
-
         if (!filtered.length) {
-            grid.innerHTML = `<div class="loader"><p style="font-size: 40px;">😕</p><p>Нет новостей за выбранный период</p><p style="font-size: 12px; color: #666;">Попробуйте изменить дату или дождитесь следующего обновления</p></div>`;
+            grid.innerHTML = `<div class="loader"><p style="font-size: 40px;">😕</p><p>Нет новостей за выбранный период</p><p style="font-size: 12px; color: #666;">Попробуйте изменить дату или нажмите «Обновить»</p></div>`;
             return;
         }
-
-        const topicNames = { politics: 'Политика', war: 'Война', cyber: 'Кибербезопасность', security: 'Происшествия', economy: 'Экономика' };
-        const topicIcons = { politics: '🏛', war: '⚔️', cyber: '🛡', security: '⚠️', economy: '💰' };
-
-        grid.innerHTML = filtered.map(news => `
-            <div class="news-card" data-id="${news.id}" data-topic="${news.topic}">
-                <span class="card-topic topic-${news.topic}">${topicIcons[news.topic] || '📰'} ${topicNames[news.topic] || 'Новости'}</span>
-                <div class="card-title">${escapeHtml(news.title)}</div>
-                <div class="card-desc">${escapeHtml(news.description.substring(0, 150))}${news.description.length > 150 ? '...' : ''}</div>
+        const topicNames = { politics:'Политика', war:'Война', cyber:'Кибербезопасность', security:'Происшествия', economy:'Экономика' };
+        const topicIcons = { politics:'🏛', war:'⚔️', cyber:'🛡', security:'⚠️', economy:'💰' };
+        grid.innerHTML = filtered.map(n => `
+            <div class="news-card" data-id="${n.id}" data-topic="${n.topic}">
+                <span class="card-topic topic-${n.topic}">${topicIcons[n.topic] || '📰'} ${topicNames[n.topic] || 'Новости'}</span>
+                <div class="card-title">${escapeHtml(n.title)}</div>
+                <div class="card-desc">${escapeHtml(n.description.substring(0, 150))}${n.description.length > 150 ? '...' : ''}</div>
                 <div class="card-footer">
-                    <div class="card-source">📰 ${escapeHtml(news.source)}</div>
-                    <div class="card-time">🕒 ${ago(news.publishedAt)}</div>
+                    <div class="card-source">📰 ${escapeHtml(n.source)}</div>
+                    <div class="card-time">🕒 ${ago(n.publishedAt)}</div>
                 </div>
             </div>
         `).join('');
-
         document.querySelectorAll('.news-card').forEach(card => {
             card.addEventListener('click', async () => {
                 const news = allNews.find(n => n.id === card.dataset.id);
-                if (news) await openModal(news);
+                if (news) openModal(news);
             });
         });
     }
 
-    async function openModal(news) {
-        const modal = document.getElementById('newsModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalSource = document.getElementById('modalSource');
-        const modalDate = document.getElementById('modalDate');
-        const modalText = document.getElementById('modalText');
-        const modalOriginalLink = document.getElementById('modalOriginalLink');
-        
-        modalTitle.innerHTML = escapeHtml(news.title);
-        modalSource.innerHTML = `📰 ${escapeHtml(news.source)}`;
-        modalDate.innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
-        modalText.innerHTML = '<div class="modal-loading"><div class="spinner" style="width: 32px; height: 32px;"></div><p>Загрузка полного текста новости...</p></div>';
-        modalOriginalLink.innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
-        modal.classList.add('active');
+    function openModal(news) {
+        document.getElementById('modalTitle').innerHTML = escapeHtml(news.title);
+        document.getElementById('modalSource').innerHTML = `📰 ${escapeHtml(news.source)}`;
+        document.getElementById('modalDate').innerHTML = `🕒 ${ago(news.publishedAt)} · ${new Date(news.publishedAt).toLocaleString('ru-RU')}`;
+        document.getElementById('modalText').innerHTML = escapeHtml(news.description) || 'Описание отсутствует.';
+        document.getElementById('modalOriginalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(news.source)} (оригинал)</a> — Все права принадлежат автору.`;
+        document.getElementById('newsModal').classList.add('active');
         document.body.style.overflow = 'hidden';
-        
-        const fullText = await loadFullNews(news.url);
-        
-        if (fullText && fullText.length > 100) {
-            modalText.innerHTML = escapeHtml(fullText);
-            if (news.originalTitle) {
-                modalText.innerHTML += `<div class="original-text">📖 Оригинал: ${escapeHtml(news.originalTitle)}</div>`;
-            }
-        } else {
-            let message = `⚠️ Полный текст новости недоступен для чтения на сайте источника.<br><br>`;
-            message += `📌 Вы можете прочитать новость по ссылке: <a href="${news.url}" target="_blank" rel="noopener noreferrer" style="color: #5b5bd6;">${escapeHtml(news.source)}</a><br><br>`;
-            message += `💡 Краткое содержание: ${escapeHtml(news.description)}`;
-            modalText.innerHTML = message;
-        }
     }
-
     function closeModal() {
         document.getElementById('newsModal').classList.remove('active');
         document.body.style.overflow = '';
     }
-
     function scheduleUpdate() {
         const now = new Date();
-        const currentHour = now.getHours();
-        
         let nextUpdateHour = null;
-        for (const hour of UPDATE_TIMES) {
-            if (hour > currentHour) {
-                nextUpdateHour = hour;
-                break;
-            }
-        }
-        if (nextUpdateHour === null) {
-            nextUpdateHour = UPDATE_TIMES[0] + 24;
-        }
-        
+        for (const h of UPDATE_TIMES) if (h > now.getHours()) { nextUpdateHour = h; break; }
+        if (!nextUpdateHour) nextUpdateHour = UPDATE_TIMES[0] + 24;
         const nextUpdate = new Date(now);
         nextUpdate.setHours(nextUpdateHour, 0, 0, 0);
-        if (nextUpdate <= now) {
-            nextUpdate.setDate(nextUpdate.getDate() + 1);
-            nextUpdate.setHours(UPDATE_TIMES[0], 0, 0, 0);
-        }
-        
-        const delay = nextUpdate - now;
-        console.log(`Следующее обновление в: ${nextUpdate.toLocaleString('ru-RU')}`);
-        
-        setTimeout(() => {
-            updateNews();
-            scheduleUpdate();
-        }, delay);
+        if (nextUpdate <= now) nextUpdate.setDate(nextUpdate.getDate() + 1);
+        setTimeout(() => { updateNews(); scheduleUpdate(); }, nextUpdate - now);
     }
 
+    // ============ РАДИО ГОВОРИТ МОСКВА ============
+    let radioAudio = null;
+    let isRadioPlaying = false;
+    const playRadioBtn = document.getElementById('playRadioBtn');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const trackName = document.getElementById('trackName');
+    const trackArtist = document.getElementById('trackArtist');
+    
+    function initRadio() {
+        if (!radioAudio) {
+            radioAudio = new Audio();
+            radioAudio.src = 'https://icecast.govoritmoskva.ru/gm128.mp3';
+            radioAudio.preload = 'none';
+            radioAudio.onerror = () => { trackName.textContent = 'Ошибка потока'; };
+        }
+    }
+    function toggleRadio() {
+        initRadio();
+        if (isRadioPlaying) {
+            radioAudio.pause();
+            isRadioPlaying = false;
+            playIcon.style.display = 'inline';
+            pauseIcon.style.display = 'none';
+        } else {
+            radioAudio.play().then(() => {
+                isRadioPlaying = true;
+                playIcon.style.display = 'none';
+                pauseIcon.style.display = 'inline';
+            }).catch(() => { trackName.textContent = 'Нажмите для запуска'; });
+        }
+    }
+    playRadioBtn.onclick = toggleRadio;
+    document.body.addEventListener('click', initRadio, { once: true });
+    
+    async function loadRadioNews() {
+        try {
+            const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://govoritmoskva.ru/rss.xml')}`;
+            const res = await fetch(proxyUrl);
+            const data = await res.json();
+            if (data && data.items) {
+                const container = document.getElementById('radioNewsContainer');
+                container.innerHTML = data.items.slice(0, 4).map((item, idx) => {
+                    const title = item.title.replace(/<[^>]*>/g, '');
+                    const time = new Date(item.pubDate);
+                    const timeStr = `${time.getHours().toString().padStart(2,'0')}:${time.getMinutes().toString().padStart(2,'0')}`;
+                    return `<div class="radio-news-item" onclick="window.open('${item.link}', '_blank')">
+                        <div class="radio-news-bullet">${idx+1}</div>
+                        <div class="radio-news-title">${title}</div>
+                        <div class="radio-news-time">${timeStr}</div>
+                    </div>`;
+                }).join('');
+                document.getElementById('radioNewsTime').textContent = new Date().toLocaleTimeString().slice(0,5);
+            }
+        } catch(e) { console.log('Radio news error'); }
+    }
+    loadRadioNews();
+    setInterval(loadRadioNews, 60000);
+    
+    async function fetchCurrentTrack() {
+        try {
+            const res = await fetch('https://govoritmoskva.ru/api/now/');
+            const data = await res.json();
+            if (data && data.title) {
+                trackName.textContent = data.title;
+                trackArtist.textContent = data.artist || 'Говорит Москва';
+            }
+        } catch(e) { trackName.textContent = 'Прямой эфир'; trackArtist.textContent = 'Говорит Москва'; }
+    }
+    fetchCurrentTrack();
+    setInterval(fetchCurrentTrack, 30000);
+
+    // ============ ИНИЦИАЛИЗАЦИЯ ============
     function init() {
         updateDateTime();
         setInterval(updateDateTime, 1000);
-
         try {
             const cached = JSON.parse(localStorage.getItem('vector_news') || '[]');
             if (cached.length) {
@@ -1127,18 +1172,12 @@
                 renderNews();
                 document.getElementById('totalNews').textContent = allNews.length;
                 const lastUpdate = localStorage.getItem('vector_news_last_update');
-                if (lastUpdate) {
-                    document.getElementById('lastUpdateInfo').innerHTML = `📰 Последнее обновление: ${new Date(lastUpdate).toLocaleString('ru-RU')}`;
-                }
-            } else {
-                updateNews();
+                if (lastUpdate) document.getElementById('lastUpdateInfo').innerHTML = `📰 Последнее обновление: ${new Date(lastUpdate).toLocaleString('ru-RU')}`;
             }
-        } catch (e) {
-            updateNews();
-        }
-        
+        } catch(e) {}
+        updateNews();
         scheduleUpdate();
-
+        
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
@@ -1147,39 +1186,29 @@
                 renderNews();
             });
         });
-
         document.querySelectorAll('.timeline-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                customDate = null;
-                currentDays = parseInt(btn.dataset.days);
+                const d = parseInt(btn.dataset.days);
+                if (d === 0) currentDate = null;
+                else if (d === 7) currentDate = 'week';
+                else { const dt = new Date(); dt.setDate(dt.getDate() - d); customDate = dt.toISOString().split('T')[0]; currentDays = 0; }
                 renderNews();
             });
         });
-
         document.getElementById('applyDate').addEventListener('click', () => {
-            const val = document.getElementById('customDate').value;
-            if (val) {
-                customDate = val;
-                currentDays = 0;
-                document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
-                renderNews();
-            }
+            const v = document.getElementById('customDate').value;
+            if (v) { customDate = v; currentDays = 0; renderNews(); }
         });
-
         document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-        document.getElementById('newsModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('newsModal')) closeModal();
-        });
-        
+        document.getElementById('newsModal').addEventListener('click', (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); });
         const refreshBtn = document.createElement('button');
         refreshBtn.textContent = '↻ Обновить';
         refreshBtn.className = 'refresh-btn';
         refreshBtn.onclick = () => updateNews();
         document.querySelector('.masthead-inner .stats').after(refreshBtn);
     }
-
     init();
 </script>
 
@@ -1383,7 +1412,6 @@
     <div class="chat-button" id="chatButton">
         <div class="compass-icon">🧭</div>
     </div>
-    
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
             <div class="chat-header-info">
@@ -1415,21 +1443,15 @@
 </div>
 
 <script>
-    // AI-помощник ДЕДУС
     const chatButton = document.getElementById('chatButton');
     const chatWindow = document.getElementById('chatWindow');
     const closeChat = document.getElementById('closeChat');
     const chatSend = document.getElementById('chatSend');
     const chatInput = document.getElementById('chatInput');
     const chatMessages = document.getElementById('chatMessages');
-    
     let isTyping = false;
     
-    chatButton.onclick = () => {
-        chatWindow.classList.toggle('active');
-        if (chatWindow.classList.contains('active')) chatInput.focus();
-    };
-    
+    chatButton.onclick = () => { chatWindow.classList.toggle('active'); if (chatWindow.classList.contains('active')) chatInput.focus(); };
     closeChat.onclick = () => chatWindow.classList.remove('active');
     
     function showTyping() {
@@ -1442,105 +1464,62 @@
         chatMessages.appendChild(typingDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    
     function hideTyping() {
         const typing = document.getElementById('typingIndicator');
         if (typing) typing.remove();
         isTyping = false;
     }
-    
     function addMessage(text, isUser = false) {
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
-        if (!isUser) {
-            messageDiv.innerHTML = `<div class="message-name">🧭 ДЕДУС</div>${text}`;
-        } else {
-            messageDiv.textContent = text;
-        }
-        chatMessages.appendChild(messageDiv);
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+        if (!isUser) msgDiv.innerHTML = `<div class="message-name">🧭 ДЕДУС</div>${text}`;
+        else msgDiv.textContent = text;
+        chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-    
     function searchNewsInSite(query) {
-        if (!allNews || allNews.length === 0) return null;
+        if (!allNews || !allNews.length) return null;
         const keywords = query.toLowerCase().split(' ');
-        const relevant = allNews.filter(news => {
-            const text = (news.title + ' ' + news.description).toLowerCase();
+        const relevant = allNews.filter(n => {
+            const text = (n.title + ' ' + n.description).toLowerCase();
             return keywords.some(kw => text.includes(kw));
         });
         return relevant.slice(0, 5);
     }
-    
-    async function getAIResponse(message) {
-        const msg = message.toLowerCase().trim();
-        
-        if (msg.match(/привет|здравствуй|добрый день|хай|hi|hello|дедус/)) {
-            return "Привет! Я ДЕДУС — твой навигатор по новостям. Чем могу помочь? Могу показать последние новости по теме, найти информацию или ответить на вопросы о сайте.";
-        }
-        
-        if (msg.match(/обновление|когда обновляется|как часто|свежие|актуальные/)) {
-            return "📅 Новости обновляются 3 раза в день: в 07:00, 13:00 и 19:00 по московскому времени. При первом открытии вы видите последнюю загруженную версию. Нажмите кнопку «↻ Обновить», чтобы загрузить свежие новости вручную.";
-        }
-        
-        if (msg.match(/источник|откуда|из каких|где берутся|rss/)) {
-            return "📰 Мы собираем новости из 20 проверенных источников:\n\n🇷🇺 Россия: ТАСС, РИА Новости, Meduza, Lenta.ru, Ведомости, Известия\n🇺🇸 США: NPR, ABC News, Associated Press\n🇬🇧 Британия: BBC News, The Guardian, Sky News\n🇹🇲 Туркменистан: Хроники Туркменистана, Turkmenportal\n🇹🇯 Таджикистан: Asia-Plus, Sputnik Таджикистан\n🇰🇿 Казахстан: Tengrinews\n🇯🇵 Япония: NHK World\n🇸🇦 Ближний Восток: Al Jazeera\n🌏 Центральная Азия: Gazeta.uz\n\nАнглийские новости автоматически переводятся на русский язык.";
-        }
-        
-        if (msg.match(/категория|тема|раздел|фильтр|политика|война|экономика|кибер|происшествие/)) {
-            return "🏷️ На сайте есть 5 категорий новостей:\n• 🏛 Политика\n• ⚔️ Война и конфликты\n• 🛡 Кибербезопасность\n• ⚠️ Происшествия\n• 💰 Экономика\n\nВыберите категорию в верхнем меню — и новости отфильтруются по вашим интересам!";
-        }
-        
-        if (msg.match(/архив|старые|прошлые|дата|вчера|неделя/)) {
-            return "📆 Вы можете смотреть новости за предыдущие дни. Используйте панель «АРХИВ» вверху страницы:\n• Сегодня\n• Вчера\n• 2/3 дня назад\n• За неделю\n• Или выберите любую дату в календаре.";
-        }
-        
-        if (msg.match(/радио|плеер|вести|маяк|эфир|онлайн|известия/)) {
-            return "🎙️ На сайте доступно онлайн-радио «Вести FM». Просто нажмите кнопку воспроизведения в плеере!";
-        }
-        
-        if (msg.match(/найти|покажи|расскажи|что там|новости о|события|происходит/)) {
-            const relevant = searchNewsInSite(message);
-            if (relevant && relevant.length > 0) {
-                let response = `🔍 По вашему запросу "${message}" нашёл ${relevant.length} новостей на сайте:\n\n`;
-                relevant.forEach((news, idx) => {
-                    const date = new Date(news.publishedAt).toLocaleDateString('ru-RU');
-                    response += `${idx + 1}. **${news.title}**\n   📰 ${news.source} · ${date}\n\n`;
-                });
-                response += `Нажмите на любую новость на главной странице, чтобы прочитать полностью.`;
-                return response;
+    async function getAIResponse(msg) {
+        const m = msg.toLowerCase().trim();
+        if (m.match(/привет|здравствуй|хай|hi|дедус/)) return "Привет! Я ДЕДУС — твой навигатор по новостям. Чем могу помочь?";
+        if (m.match(/обновление|когда обновляется/)) return "📅 Новости обновляются 3 раза в день: в 07:00, 13:00 и 19:00 по московскому времени.";
+        if (m.match(/источник|откуда|rss/)) return "📰 Мы собираем новости из 20 проверенных источников: российские, американские, британские, центральноазиатские и другие. Все права принадлежат авторам.";
+        if (m.match(/категория|тема|политика|война|экономика/)) return "🏷️ На сайте есть 5 категорий: Политика, Война, Кибербезопасность, Происшествия, Экономика. Выберите в меню!";
+        if (m.match(/архив|старые|дата|вчера|неделя/)) return "📆 Вы можете смотреть новости за предыдущие дни. Используйте панель «АРХИВ» вверху страницы.";
+        if (m.match(/радио|плеер|говорит москва/)) return "🎙️ На сайте доступно радио «Говорит Москва». Нажмите кнопку воспроизведения в плеере!";
+        if (m.match(/найти|покажи|расскажи|новости о/)) {
+            const relevant = searchNewsInSite(msg);
+            if (relevant && relevant.length) {
+                let resp = `🔍 По запросу "${msg}" нашёл ${relevant.length} новостей:\n\n`;
+                relevant.forEach((n, idx) => { resp += `${idx+1}. **${n.title}**\n   📰 ${n.source} · ${ago(n.publishedAt)}\n\n`; });
+                resp += `Нажмите на любую новость, чтобы прочитать полностью.`;
+                return resp;
             }
-            return `🔍 По запросу "${message}" ничего не найдено. Попробуйте другие ключевые слова или спросите о категориях новостей.`;
+            return `🔍 По запросу "${msg}" ничего не найдено. Попробуйте другие ключевые слова.`;
         }
-        
-        if (msg.match(/кто ты|что ты|расскажи о себе|твои возможности/)) {
-            return "🧭 Я ДЕДУС — AI-помощник и навигатор по новостям. Мои возможности:\n\n📰 **Поиск новостей** — могу найти новости на сайте по теме\n📊 **Структурирование** — группирую новости по темам\n💡 **Советы** — помогаю разобраться в категориях и фильтрах\n\nЧем могу помочь?";
-        }
-        
-        if (msg.match(/что это|о сайте|вектор|агрегатор|зачем|как работает/)) {
-            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 20 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника ДЕДУС.";
-        }
-        
-        return "🔍 Я пока не нашёл ответ на этот вопрос. Попробуйте спросить о:\n• последних новостях по теме\n• категориях новостей\n• источниках информации\n• обновлении ленты\n• радио на сайте";
+        if (m.match(/кто ты|что ты|возможности/)) return "🧭 Я ДЕДУС — AI-помощник. Ищу новости, помогаю с категориями, отвечаю на вопросы.";
+        if (m.match(/о сайте|вектор|агрегатор/)) return "✨ ВЕКТОР — новостной агрегатор из 20 источников. Все новости с указанием авторства, без нарушения прав.";
+        return "🔍 Я пока не нашёл ответ. Спросите о новостях, категориях, источниках или радио.";
     }
-    
     async function sendMessage() {
-        const message = chatInput.value.trim();
-        if (!message) return;
-        
-        addMessage(message, true);
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+        addMessage(msg, true);
         chatInput.value = '';
         showTyping();
-        
-        const response = await getAIResponse(message);
-        
+        const resp = await getAIResponse(msg);
         hideTyping();
-        addMessage(response, false);
+        addMessage(resp, false);
     }
-    
     chatSend.onclick = sendMessage;
-    chatInput.onkeypress = (e) => {
-        if (e.key === 'Enter') sendMessage();
-    };
+    chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
 </script>
 
 </body>
