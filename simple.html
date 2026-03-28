@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ВЕКТОР — Тест новостей</title>
+    <style>
+        body { font-family: system-ui; background: #080810; color: white; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 16px; }
+        .card { background: #0f0f1a; border-radius: 16px; padding: 16px; border: 1px solid #2a2a3a; cursor: pointer; }
+        .card:hover { border-color: #5b5bd6; transform: translateY(-2px); transition: all 0.2s; }
+        .source { color: #5b5bd6; font-size: 12px; margin-bottom: 8px; }
+        .title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+        .desc { font-size: 13px; color: #aaa; margin-bottom: 12px; }
+        .time { font-size: 11px; color: #666; }
+        .loader { text-align: center; padding: 40px; }
+        .spinner { width: 40px; height: 40px; border: 3px solid #2a2a3a; border-top-color: #5b5bd6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal.active { display: flex; align-items: center; justify-content: center; }
+        .modal-content {
+            background: #0f0f1a;
+            max-width: 700px;
+            width: 90%;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid #2a2a3a;
+        }
+        .close-modal {
+            float: right;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
+        .modal-meta { color: #666; font-size: 12px; margin-bottom: 20px; }
+        .modal-text { line-height: 1.6; margin-bottom: 20px; }
+        .modal-source { padding-top: 16px; border-top: 1px solid #2a2a3a; font-size: 12px; }
+        .modal-source a { color: #5b5bd6; }
+    </style>
+</head>
+<body>
+    <h1>ВЕКТОР</h1>
+    <p>Мировые новости · 20 источников</p>
+    <div id="newsGrid" class="news-grid">
+        <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">✕</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-meta"><span id="modalSource"></span> · <span id="modalDate"></span></div>
+            <div class="modal-text" id="modalText"></div>
+            <div class="modal-source" id="modalLink"></div>
+        </div>
+    </div>
+
+    <script>
+        const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
+        
+        const SOURCES = [
+            { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
+            { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+            { name: 'Meduza', url: 'https://meduza.io/rss/all' },
+            { name: 'Lenta.ru', url: 'https://lenta.ru/rss' },
+            { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news' },
+            { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml' },
+            { name: 'NPR', url: 'https://feeds.npr.org/1001/rss.xml' },
+            { name: 'ABC News', url: 'https://abcnews.go.com/abcnews/topstories' },
+            { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News' },
+            { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+            { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+            { name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/uk.xml' },
+            { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
+            { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' },
+            { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
+            { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' },
+            { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml' },
+            { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml' },
+            { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' },
+            { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru' }
+        ];
+
+        let allNews = [];
+
+        async function fetchSource(source) {
+            const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(timeout);
+                if (!res.ok) return [];
+                const data = await res.json();
+                if (data.status !== 'ok' || !data.items) return [];
+                
+                return data.items.slice(0, 5).map(item => ({
+                    title: item.title?.replace(/<[^>]*>/g, '') || 'Новость',
+                    description: item.description?.replace(/<[^>]*>/g, '').substring(0, 300) || '',
+                    url: item.link?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
+                    source: source.name,
+                    publishedAt: item.pubDate
+                }));
+            } catch (e) {
+                console.warn(`❌ ${source.name}:`, e.message);
+                return [];
+            }
+        }
+
+        async function loadAll() {
+            const grid = document.getElementById('newsGrid');
+            let allFresh = [];
+            for (const source of SOURCES) {
+                const items = await fetchSource(source);
+                allFresh.push(...items);
+            }
+            allNews = allFresh.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+            renderNews();
+        }
+
+        function ago(dateStr) {
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return 'недавно';
+                const m = Math.floor((new Date() - d) / 60000);
+                if (m < 1) return 'только что';
+                if (m < 60) return `${m} мин назад`;
+                if (m < 1440) return `${Math.floor(m/60)} ч назад`;
+                return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+            } catch { return 'недавно'; }
+        }
+
+        function renderNews() {
+            const grid = document.getElementById('newsGrid');
+            if (!allNews.length) {
+                grid.innerHTML = `<div class="loader"><p>😕 Новостей пока нет. Попробуйте обновить страницу.</p></div>`;
+                return;
+            }
+            grid.innerHTML = allNews.map(news => `
+                <div class="card" onclick="openModal(${JSON.stringify(news).replace(/"/g, '&quot;')})">
+                    <div class="source">📰 ${news.source}</div>
+                    <div class="title">${news.title}</div>
+                    <div class="desc">${news.description.substring(0, 150)}${news.description.length > 150 ? '...' : ''}</div>
+                    <div class="time">🕒 ${ago(news.publishedAt)}</div>
+                </div>
+            `).join('');
+        }
+
+        window.openModal = function(news) {
+            document.getElementById('modalTitle').innerHTML = news.title;
+            document.getElementById('modalSource').innerHTML = news.source;
+            document.getElementById('modalDate').innerHTML = ago(news.publishedAt) + ' · ' + new Date(news.publishedAt).toLocaleString('ru-RU');
+            document.getElementById('modalText').innerHTML = news.description || 'Описание отсутствует.';
+            document.getElementById('modalLink').innerHTML = `📌 Источник: <a href="${news.url}" target="_blank">${news.source}</a> — Все права принадлежат автору.`;
+            document.getElementById('modal').classList.add('active');
+        };
+
+        document.getElementById('closeModal').onclick = () => {
+            document.getElementById('modal').classList.remove('active');
+        };
+        document.getElementById('modal').onclick = (e) => {
+            if (e.target === document.getElementById('modal')) document.getElementById('modal').classList.remove('active');
+        };
+
+        loadAll();
+        setInterval(loadAll, 30 * 60 * 1000);
+    </script>
+</body>
+</html>
