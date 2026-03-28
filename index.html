@@ -41,7 +41,8 @@
         }
         .logo { display: flex; align-items: center; gap: 12px; }
         .logo-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, #5b5bd6, #8b8bff);
             border-radius: 12px;
             display: flex;
@@ -150,7 +151,7 @@
         }
         .country-btn:hover, .country-btn.active { background: #5b5bd6; color: white; }
         
-        /* Две колонки */
+        /* Две колонки с iframe */
         .two-columns {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -158,28 +159,16 @@
             margin: 32px 0;
         }
         
-        /* Виджет Inoreader */
-        .inoreader-widget {
+        .iframe-container {
             background: rgba(15,15,26,0.4);
             backdrop-filter: blur(10px);
             border-radius: 28px;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.08);
+            padding: 4px;
         }
-        .inoreader-header {
-            padding: 16px 20px;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-        .inoreader-header h3 { font-size: 14px; font-weight: 600; color: #a5a5ff; }
-        .inoreader-header p { font-size: 11px; color: #666; }
-        .inoreader-iframe-container { background: #0a0a0f; padding: 4px; }
-        .inoreader-iframe-container iframe {
+        
+        .iframe-container iframe {
             width: 100%;
             height: 700px;
             border: none;
@@ -187,37 +176,8 @@
             border-radius: 20px;
         }
         
-        /* Блок важных новостей (из Inoreader через iframe) */
-        .important-news {
-            background: rgba(15,15,26,0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-            height: fit-content;
-        }
-        .important-header {
-            padding: 16px 20px;
-            background: rgba(0,0,0,0.3);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .important-header h3 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #ff3366;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .important-iframe-container {
-            padding: 12px;
-        }
-        .important-iframe-container iframe {
-            width: 100%;
+        .important-container iframe {
             height: 600px;
-            border: none;
-            background: transparent;
-            border-radius: 20px;
         }
         
         .footer {
@@ -295,8 +255,8 @@
             .widgets-bar { justify-content: center; }
             .header { flex-direction: column; text-align: center; }
             .header-right { justify-content: center; }
-            .inoreader-iframe-container iframe { height: 500px; }
-            .important-iframe-container iframe { height: 450px; }
+            .iframe-container iframe { height: 500px; }
+            .important-container iframe { height: 450px; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
@@ -357,39 +317,23 @@
             </div>
         </div>
         
-        <!-- Две колонки: лента Inoreader + важные новости -->
+        <!-- Две колонки с iframe (без шапок) -->
         <div class="two-columns">
-            <div class="inoreader-widget">
-                <div class="inoreader-header">
-                    <h3>📰 Агрегатор мировых новостей</h3>
-                    <p>Inoreader — 20 источников • Автообновление</p>
-                </div>
-                <div class="inoreader-iframe-container">
-                    <iframe 
-                        id="mainIframe"
-                        src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
-                        title="Новостная лента ВЕКТОР"
-                        width="100%" 
-                        height="700" 
-                        frameborder="0"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+            <div class="iframe-container">
+                <iframe 
+                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                    title="Новостная лента ВЕКТОР"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
             </div>
-            <div class="important-news">
-                <div class="important-header">
-                    <h3>⭐ Важные новости дня</h3>
-                </div>
-                <div class="important-iframe-container">
-                    <iframe 
-                        src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?cs=m&n=10&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
-                        title="Важные новости"
-                        width="100%" 
-                        height="600" 
-                        frameborder="0"
-                        allowfullscreen>
-                    </iframe>
-                </div>
+            <div class="iframe-container important-container">
+                <iframe 
+                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?cs=m&n=10&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                    title="Важные новости"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
             </div>
         </div>
         
@@ -470,9 +414,9 @@
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
         
-        // Фильтрация в Inoreader
-        const mainIframe = document.getElementById('mainIframe');
-        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f';
+        // Фильтрация
+        const mainIframe = document.querySelector('.two-columns .iframe-container:first-child iframe');
+        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f';
         
         function updateFilter(searchTerm) {
             if (searchTerm && searchTerm !== '') {
@@ -482,14 +426,12 @@
             }
         }
         
-        // Обработчики навигации
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.onclick = () => {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.country-btn').forEach(c => c.classList.remove('active'));
-                const filter = btn.dataset.filter;
-                updateFilter(filter);
+                updateFilter(btn.dataset.filter);
             };
         });
         
@@ -499,8 +441,7 @@
                 btn.classList.add('active');
                 document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
                 document.querySelector('.nav-btn[data-filter=""]').classList.add('active');
-                const filter = btn.dataset.filter;
-                updateFilter(filter);
+                updateFilter(btn.dataset.filter);
             };
         });
         
