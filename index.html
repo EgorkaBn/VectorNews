@@ -78,49 +78,6 @@
         }
         .date, .time { color: #fff; }
         
-        /* Биржевые индикаторы */
-        .markets {
-            background: rgba(15,15,26,0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            padding: 16px 20px;
-            margin: 20px 0;
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow-x: auto;
-        }
-        .markets-inner {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            gap: 16px;
-            min-width: 600px;
-        }
-        .market-group {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        .market-item {
-            text-align: center;
-            min-width: 70px;
-        }
-        .market-code {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-        }
-        .market-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #fff;
-        }
-        .market-change {
-            font-size: 10px;
-        }
-        .market-change.positive { color: #10b981; }
-        .market-change.negative { color: #f43f5e; }
-        
-        /* Радио Коммерсантъ FM */
         .radio-block {
             background: rgba(15,15,26,0.6);
             backdrop-filter: blur(10px);
@@ -196,11 +153,15 @@
         }
         .country-btn:hover, .country-btn.active { background: #5b5bd6; color: white; }
         
-        /* Основной контент */
-        .main-view { display: block; }
-        .cards-view { display: none; }
+        /* Две колонки на главной */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin: 32px 0;
+        }
         
-        /* Iframe Inoreader (аккуратный) */
+        /* Iframe Inoreader */
         .iframe-container {
             background: rgba(15,15,26,0.4);
             backdrop-filter: blur(10px);
@@ -208,23 +169,124 @@
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.08);
             padding: 4px;
-            margin: 32px 0;
         }
         .iframe-container iframe {
             width: 100%;
-            height: 600px;
+            height: 650px;
             border: none;
             border-radius: 20px;
         }
         
-        /* Сетка новостей для тем */
+        /* Правая колонка */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        /* Биржевые индикаторы */
+        .markets-widget {
+            background: rgba(15,15,26,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .markets-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #a5a5ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .markets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .market-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .market-name {
+            font-size: 12px;
+            color: #888;
+        }
+        .market-value {
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .market-change {
+            font-size: 10px;
+            margin-left: 6px;
+        }
+        .market-change.positive { color: #10b981; }
+        .market-change.negative { color: #f43f5e; }
+        
+        /* Календарь */
+        .calendar-widget {
+            background: rgba(15,15,26,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .calendar-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #a5a5ff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .calendar-month {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            gap: 4px;
+        }
+        .calendar-day {
+            font-size: 12px;
+            padding: 6px 0;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+        .calendar-day.today {
+            background: #5b5bd6;
+            color: white;
+        }
+        .calendar-day.other-month {
+            color: #444;
+        }
+        
+        /* Карточки новостей для тем */
+        .cards-view { display: none; }
         .news-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
             margin: 32px 0;
         }
-        
         .news-card {
             background: rgba(15,15,26,0.6);
             backdrop-filter: blur(10px);
@@ -396,6 +458,9 @@
         .typing-indicator span { width: 6px; height: 6px; background: #888; border-radius: 50%; animation: typing 1.4s infinite; }
         @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
         
+        @media (max-width: 900px) {
+            .two-columns { grid-template-columns: 1fr; gap: 24px; }
+        }
         @media (max-width: 768px) {
             .container { padding: 0 16px; }
             .nav { overflow-x: auto; justify-content: flex-start; border-radius: 20px; }
@@ -407,7 +472,6 @@
             .info-bar { justify-content: center; }
             .iframe-container iframe { height: 450px; }
             .news-grid { grid-template-columns: 1fr; }
-            .markets-inner { justify-content: flex-start; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
@@ -430,75 +494,23 @@
                     </div>
                     <div class="radio-block">
                         <button class="radio-btn" id="radioBtn">🎙️ Включить</button>
-                        <span class="radio-status" id="radioStatus">Ъ FM</span>
+                        <span class="radio-status" id="radioStatus">Коммерсантъ FM</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Биржевые индикаторы -->
-        <div class="markets" id="marketsWidget">
-            <div class="markets-inner">
-                <div class="market-group">
-                    <div class="market-item">
-                        <div class="market-code">USD/RUB</div>
-                        <div class="market-value">81,57</div>
-                        <div class="market-change positive">+0,67%</div>
-                    </div>
-                    <div class="market-item">
-                        <div class="market-code">EUR/RUB</div>
-                        <div class="market-value">94,10</div>
-                        <div class="market-change positive">+0,76%</div>
-                    </div>
-                    <div class="market-item">
-                        <div class="market-code">CNY/RUB</div>
-                        <div class="market-value">11,82</div>
-                        <div class="market-change positive">+0,14%</div>
-                    </div>
-                </div>
-                <div class="market-group">
-                    <div class="market-item">
-                        <div class="market-code">IMOEX</div>
-                        <div class="market-value">2 789,61</div>
-                        <div class="market-change negative">-1,18%</div>
-                    </div>
-                    <div class="market-item">
-                        <div class="market-code">RTSI</div>
-                        <div class="market-value">1 082,99</div>
-                        <div class="market-change positive">+0,02%</div>
-                    </div>
-                    <div class="market-item">
-                        <div class="market-code">Brent</div>
-                        <div class="market-value">114,96</div>
-                        <div class="market-change positive">+0,45%</div>
-                    </div>
-                </div>
-                <div class="market-group">
-                    <div class="market-item">
-                        <div class="market-code">Gold</div>
-                        <div class="market-value">4 608,80</div>
-                        <div class="market-change positive">+0,20%</div>
-                    </div>
-                    <div class="market-item">
-                        <div class="market-code">BTC/USD</div>
-                        <div class="market-value">66 380</div>
-                        <div class="market-change negative">-519</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Навигация по темам (расширенные ключевые слова) -->
+        <!-- Навигация по темам -->
         <div class="nav">
             <button class="nav-btn active" data-view="main">🌍 Главная</button>
             <button class="nav-btn" data-view="cards" data-query="политика|президент|выборы|закон|санкции|госдеп|кремль|белый дом|конгресс|путин|байден|трамп|макрон|шольц|дипломатия|переговоры|саммит|встреча|визит|посол|договор|союз|нато|оон|внешняя политика|реформа|оппозиция|протесты">🏛 Политика</button>
             <button class="nav-btn" data-view="cards" data-query="война|конфликт|армия|танк|ракета|удар|обстрел|бомбардировка|дрон|беспилотник|наступление|оборона|штурм|операция|сво|мобилизация|фронт|вооружение|жертвы|погибшие|раненые|эвакуация|беженцы|перемирие|украина|израиль|палестина|газа|хуситы|йемен|сирия">⚔️ Конфликт</button>
-            <button class="nav-btn" data-view="cards" data-query="кибер|кибербезопасность|хакер|хакеры|взлом|утечка данных|ddos|атака|вирус|шифровальщик|ransomware|malware|фишинг|уязвимость|безопасность|защита|кибератака|киберугроза|киберпреступность|it|интернет|сервер|облако">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-view="cards" data-query="кибер|кибербезопасность|хакер|хакеры|взлом|유течка данных|ddos|атака|вирус|шифровальщик|ransomware|malware|фишинг|уязвимость|безопасность|защита|кибератака|киберугроза|киберпреступность|it|интернет|сервер|облако">🛡 Кибербезопасность</button>
             <button class="nav-btn" data-view="cards" data-query="теракт|взрыв|пожар|катастрофа|крушение|дтп|авария|наводнение|паводок|землетрясение|ураган|шторм|спасение|мчс|пострадавшие|жертвы|криминал|убийство|ограбление|нападение|задержание|арест">⚠️ Происшествия</button>
             <button class="nav-btn" data-view="cards" data-query="экономика|ввп|кризис|рецессия|инфляция|цены|нефть|газ|баррель|доллар|евро|рубль|курс|ключевая ставка|центробанк|кредит|ипотека|налоги|бюджет|госдолг|инвестиции|бизнес|рынок|акции|санкции|импорт|экспорт">💰 Экономика</button>
         </div>
         
-        <!-- Блок стран (расширенные ключевые слова) -->
+        <!-- Блок стран -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
@@ -511,15 +523,29 @@
             </div>
         </div>
         
-        <!-- Главная (Inoreader iframe) -->
-        <div id="mainView" class="main-view">
-            <div class="iframe-container">
-                <iframe 
-                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
-                    title="Новостная лента ВЕКТОР"
-                    frameborder="0"
-                    allowfullscreen>
-                </iframe>
+        <!-- Главная страница -->
+        <div id="mainView">
+            <div class="two-columns">
+                <div class="iframe-container">
+                    <iframe 
+                        src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
+                        title="Новостная лента ВЕКТОР"
+                        frameborder="0"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="sidebar">
+                    <!-- Биржевые индикаторы -->
+                    <div class="markets-widget">
+                        <div class="markets-title">📊 Рынки</div>
+                        <div class="markets-grid" id="marketsGrid"></div>
+                    </div>
+                    <!-- Календарь -->
+                    <div class="calendar-widget">
+                        <div class="calendar-title">📅 Календарь</div>
+                        <div id="calendar"></div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -532,7 +558,7 @@
         
         <div class="footer">
             <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам</p>
-            <p style="margin-top: 8px; font-size: 11px;">Главная лента — Inoreader · Поиск по темам — RSS-агрегация · Биржевые данные — информационные агентства</p>
+            <p style="margin-top: 8px; font-size: 11px;">Главная лента — Inoreader · Поиск по темам — RSS-агрегация</p>
         </div>
     </div>
     
@@ -569,6 +595,93 @@
     </div>
 
     <script>
+        // ============ РАДИО КОММЕРСАНТЪ FM ============
+        let audio = null;
+        let isPlaying = false;
+        const radioBtn = document.getElementById('radioBtn');
+        const radioStatus = document.getElementById('radioStatus');
+        
+        function initRadio() {
+            if (!audio) {
+                audio = new Audio();
+                audio.src = 'https://kommersant-fm.cdnvideo.ru/kommersant_fm_128.mp3';
+                audio.preload = 'none';
+                audio.onplaying = () => { radioStatus.textContent = 'Играет'; radioBtn.textContent = '⏸️ Остановить'; radioBtn.classList.add('stop'); };
+                audio.onpause = () => { radioStatus.textContent = 'Коммерсантъ FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
+                audio.onerror = () => { radioStatus.textContent = 'Ошибка потока'; };
+            }
+        }
+        
+        function toggleRadio() {
+            initRadio();
+            if (isPlaying) { audio.pause(); isPlaying = false; }
+            else { audio.play().then(() => { isPlaying = true; }).catch(() => { radioStatus.textContent = 'Нажмите для запуска'; }); }
+        }
+        radioBtn.onclick = toggleRadio;
+        document.body.addEventListener('click', initRadio, { once: true });
+        
+        // ============ БИРЖЕВЫЕ ИНДИКАТОРЫ ============
+        const marketData = [
+            { name: 'USD/RUB', value: '81.57', change: '+0.67%', positive: true },
+            { name: 'EUR/RUB', value: '94.10', change: '+0.76%', positive: true },
+            { name: 'CNY/RUB', value: '11.82', change: '+0.14%', positive: true },
+            { name: 'IMOEX', value: '2 789.61', change: '-1.18%', positive: false },
+            { name: 'RTSI', value: '1 082.99', change: '+0.02%', positive: true },
+            { name: 'Brent', value: '114.96', change: '+0.45%', positive: true },
+            { name: 'Gold', value: '4 608.80', change: '+0.20%', positive: true },
+            { name: 'BTC/USD', value: '66 380', change: '-519', positive: false }
+        ];
+        
+        function renderMarkets() {
+            const container = document.getElementById('marketsGrid');
+            if (!container) return;
+            container.innerHTML = marketData.map(item => `
+                <div class="market-item">
+                    <span class="market-name">${item.name}</span>
+                    <div>
+                        <span class="market-value">${item.value}</span>
+                        <span class="market-change ${item.positive ? 'positive' : 'negative'}">${item.change}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        renderMarkets();
+        
+        // ============ КАЛЕНДАРЬ ============
+        function renderCalendar() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth();
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+            const daysInMonth = lastDay.getDate();
+            const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+            
+            let calendarHtml = `<div class="calendar-month">${today.toLocaleString('ru-RU', { month: 'long', year: 'numeric' })}</div>`;
+            calendarHtml += `<div class="calendar-weekdays">Пн Вт Ср Чт Пт Сб Вс</div>`;
+            calendarHtml += `<div class="calendar-days">`;
+            
+            for (let i = 0; i < startDay; i++) {
+                const prevDay = prevMonthDays - startDay + i + 1;
+                calendarHtml += `<div class="calendar-day other-month">${prevDay}</div>`;
+            }
+            
+            for (let d = 1; d <= daysInMonth; d++) {
+                const isToday = d === today.getDate();
+                calendarHtml += `<div class="calendar-day ${isToday ? 'today' : ''}">${d}</div>`;
+            }
+            
+            const remainingDays = 42 - (startDay + daysInMonth);
+            for (let i = 1; i <= remainingDays; i++) {
+                calendarHtml += `<div class="calendar-day other-month">${i}</div>`;
+            }
+            
+            calendarHtml += `</div>`;
+            document.getElementById('calendar').innerHTML = calendarHtml;
+        }
+        renderCalendar();
+        
         // ============ RSS ИСТОЧНИКИ ============
         const RSS_FEEDS = [
             { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
@@ -593,44 +706,8 @@
             { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml' }
         ];
         
-        let currentView = 'main';
-        let currentQuery = '';
         let allArticles = [];
-        let filteredArticles = [];
-        
-        // ============ ДАТА И ВРЕМЯ ============
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-        }
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        
-        // ============ РАДИО КОММЕРСАНТЪ FM ============
-        let audio = null;
-        let isPlaying = false;
-        const radioBtn = document.getElementById('radioBtn');
-        const radioStatus = document.getElementById('radioStatus');
-        
-        function initRadio() {
-            if (!audio) {
-                audio = new Audio();
-                audio.src = 'https://kommersant-fm.cdnvideo.ru/kommersant_fm_64.mp3';
-                audio.preload = 'none';
-                audio.onplaying = () => { radioStatus.textContent = 'Играет'; radioBtn.textContent = '⏸️ Остановить'; radioBtn.classList.add('stop'); };
-                audio.onpause = () => { radioStatus.textContent = 'Ъ FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
-                audio.onerror = () => { radioStatus.textContent = 'Ошибка потока'; };
-            }
-        }
-        
-        function toggleRadio() {
-            initRadio();
-            if (isPlaying) { audio.pause(); isPlaying = false; }
-            else { audio.play().then(() => { isPlaying = true; }).catch(() => {}); }
-        }
-        radioBtn.onclick = toggleRadio;
-        document.body.addEventListener('click', initRadio, { once: true });
+        let currentQuery = '';
         
         // ============ RSS ПАРСИНГ ============
         const PROXIES = [
@@ -657,7 +734,7 @@
                 const parser = new DOMParser();
                 const xml = parser.parseFromString(xmlText, 'text/xml');
                 const items = [...xml.querySelectorAll('item')];
-                return items.slice(0, 8).map(item => ({
+                return items.slice(0, 6).map(item => ({
                     title: item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || 'Новость',
                     description: item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 300) || '',
                     url: item.querySelector('link')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
@@ -671,7 +748,7 @@
         
         async function loadAllRSS() {
             const grid = document.getElementById('newsGrid');
-            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>';
+            if (grid) grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>';
             
             allArticles = [];
             for (const feed of RSS_FEEDS) {
@@ -682,22 +759,17 @@
             
             if (currentQuery) {
                 filterArticles();
-            } else {
-                renderCards(allArticles.slice(0, 30));
             }
         }
         
         function filterArticles() {
-            if (!currentQuery) {
-                filteredArticles = allArticles.slice(0, 30);
-            } else {
-                const keywords = currentQuery.toLowerCase().split('|');
-                filteredArticles = allArticles.filter(article => {
-                    const text = (article.title + ' ' + article.description).toLowerCase();
-                    return keywords.some(kw => text.includes(kw));
-                }).slice(0, 30);
-            }
-            renderCards(filteredArticles);
+            if (!currentQuery) return;
+            const keywords = currentQuery.toLowerCase().split('|');
+            const filtered = allArticles.filter(article => {
+                const text = (article.title + ' ' + article.description).toLowerCase();
+                return keywords.some(kw => text.includes(kw));
+            }).slice(0, 30);
+            renderCards(filtered);
         }
         
         function ago(dateStr) {
@@ -719,6 +791,7 @@
         
         function renderCards(articles) {
             const grid = document.getElementById('newsGrid');
+            if (!grid) return;
             if (!articles.length) {
                 grid.innerHTML = '<div class="loader"><p>😕 Новостей не найдено</p></div>';
                 return;
@@ -774,13 +847,11 @@
         const cardsView = document.getElementById('cardsView');
         
         function switchToMain() {
-            currentView = 'main';
             mainView.style.display = 'block';
             cardsView.style.display = 'none';
         }
         
         function switchToCards(query) {
-            currentView = 'cards';
             currentQuery = query;
             mainView.style.display = 'none';
             cardsView.style.display = 'block';
@@ -881,7 +952,7 @@
         
         // Загрузка новостей для карточек
         loadAllRSS();
-        setInterval(loadAllRSS, 10 * 60 * 1000);
+        setInterval(loadAllRSS, 15 * 60 * 1000);
         
         // По умолчанию показываем главную
         switchToMain();
