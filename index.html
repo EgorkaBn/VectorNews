@@ -1099,58 +1099,61 @@
     }
 
     async function fetchRSS(source) {
-        const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
-        try {
-            const controller = new AbortController();
-            const timeout = setTimeout(() => controller.abort(), 12000);
-            const res = await fetch(url, { signal: controller.signal });
-            clearTimeout(timeout);
-            if (!res.ok) return [];
-            const data = await res.json();
-            if (data.status !== 'ok' || !data.items) return [];
+    const url = `${WORKER_URL}?url=${encodeURIComponent(source.url)}`;
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 12000);
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+        if (!res.ok) return [];
+        const data = await res.json();
+        if (data.status !== 'ok' || !data.items) return [];
+        
+        const news = [];
+        for (let i = 0; i < Math.min(data.items.length, 6); i++) {
+            const item = data.items[i];
+            let title = item.title || '';
+            let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 300);
+            let link = item.link || '';
+            // Очищаем ссылку от CDATA
+            link = link.replace(/<!\[CDATA\[|\]\]>/g, '');
+            let originalTitle = null;
             
-            const news = [];
-            for (let i = 0; i < Math.min(data.items.length, 6); i++) {
-                const item = data.items[i];
-                let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 300);
-                let originalTitle = null;
-                
-                if (!title && desc) title = desc.substring(0, 80);
-                if (!title) title = 'Новость';
-                
-                if (source.lang === 'en' && title) {
-                    originalTitle = title;
-                    try {
-                        title = await translateText(title);
-                        if (desc.length > 20) {
-                            desc = await translateText(desc.substring(0, 300));
-                        }
-                    } catch (e) {
-                        console.warn(`Translation failed for ${source.name}`);
+            if (!title && desc) title = desc.substring(0, 80);
+            if (!title) title = 'Новость';
+            
+            if (source.lang === 'en' && title) {
+                originalTitle = title;
+                try {
+                    title = await translateText(title);
+                    if (desc.length > 20) {
+                        desc = await translateText(desc.substring(0, 300));
                     }
+                } catch (e) {
+                    console.warn(`Translation failed for ${source.name}`);
                 }
-                
-                news.push({
-                    id: `${source.name}-${i}-${Date.now()}`,
-                    title: title.substring(0, 150),
-                    originalTitle: originalTitle,
-                    description: desc || 'Описание отсутствует',
-                    fullText: null,
-                    url: item.link,
-                    source: source.name,
-                    publishedAt: item.pubDate,
-                    date: new Date(item.pubDate).toISOString().split('T')[0],
-                    topic: detectTopic(title, desc)
-                });
             }
-            console.log(`✅ ${source.name}: ${news.length} новостей`);
-            return news;
-        } catch (e) {
-            console.warn(`❌ ${source.name}:`, e.message);
-            return [];
+            
+            news.push({
+                id: `${source.name}-${i}-${Date.now()}`,
+                title: title.substring(0, 150),
+                originalTitle: originalTitle,
+                description: desc || 'Описание отсутствует',
+                fullText: null,
+                url: link,
+                source: source.name,
+                publishedAt: item.pubDate,
+                date: new Date(item.pubDate).toISOString().split('T')[0],
+                topic: detectTopic(title, desc)
+            });
         }
+        console.log(`✅ ${source.name}: ${news.length} новостей`);
+        return news;
+    } catch (e) {
+        console.warn(`❌ ${source.name}:`, e.message);
+        return [];
     }
+}
 
     async function loadFullNews(newsUrl) {
         const url = `${WORKER_URL}?action=getFullNews&url=${encodeURIComponent(newsUrl)}`;
