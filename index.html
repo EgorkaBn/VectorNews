@@ -2,576 +2,117 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ВЕКТОР — Мировые новости</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #080810;
             color: #e8e8f4;
             min-height: 100vh;
-            overflow-x: hidden;
         }
-        :root {
-            --bg: #080810;
-            --surface: #0f0f1a;
-            --border: rgba(255,255,255,0.07);
-            --text-secondary: #8888aa;
-            --text-muted: #44445a;
-            --accent: #5b5bd6;
-            --politics: #3b82f6;
-            --war: #f43f5e;
-            --cyber: #a855f7;
-            --security: #f59e0b;
-            --economy: #10b981;
-            --usa: #1e3a8a;
-            --japan: #b91c1c;
-            --tajikistan: #0d9488;
-            --turkmenistan: #b45309;
-            --ukraine: #1e88e5;
-            --iran: #16a34a;
-        }
-        
-        /* Шапка */
-        .top-bar {
-            background: var(--surface);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 20px;
-        }
-        .top-bar-inner {
+        .container {
             max-width: 1400px;
             margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
-        }
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #ff3366;
-        }
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #ff3366;
-            border-radius: 50%;
-            animation: pulse 1.5s ease infinite;
-        }
-        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
-        .datetime { display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); }
-        .date, .time { background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 20px; }
-        
-        /* Мастхед */
-        .masthead {
-            padding: 24px 20px;
-            border-bottom: 1px solid var(--border);
-        }
-        .masthead-inner {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         .logo h1 {
-            font-size: 36px;
-            font-weight: 900;
+            font-size: 32px;
             background: linear-gradient(135deg, #fff, #5b5bd6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }
         .logo p {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
+            color: #888;
+            font-size: 12px;
         }
         .google-translate {
             background: rgba(255,255,255,0.05);
             padding: 8px 12px;
             border-radius: 12px;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        /* Основной контент */
-        .main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 32px 20px 60px;
-        }
-        
-        /* Секции */
-        .section {
-            margin-bottom: 48px;
-        }
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--border);
-        }
-        .section-icon {
-            font-size: 28px;
-        }
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-        }
-        .section-title.politics { color: var(--politics); }
-        .section-title.war { color: var(--war); }
-        .section-title.cyber { color: var(--cyber); }
-        .section-title.security { color: var(--security); }
-        .section-title.economy { color: var(--economy); }
-        .section-title.usa { color: var(--usa); }
-        .section-title.japan { color: var(--japan); }
-        .section-title.tajikistan { color: var(--tajikistan); }
-        .section-title.turkmenistan { color: var(--turkmenistan); }
-        .section-title.ukraine { color: var(--ukraine); }
-        .section-title.iran { color: var(--iran); }
-        
-        /* Сетка новостей */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 18px;
-        }
-        .news-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-        .news-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-        .news-card[data-topic="politics"]::before { background: var(--politics); }
-        .news-card[data-topic="war"]::before { background: var(--war); }
-        .news-card[data-topic="cyber"]::before { background: var(--cyber); }
-        .news-card[data-topic="security"]::before { background: var(--security); }
-        .news-card[data-topic="economy"]::before { background: var(--economy); }
-        .news-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-        .news-card:hover::before { opacity: 1; }
-        .news-source {
-            font-size: 11px;
-            color: var(--accent);
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        .news-title {
-            font-size: 16px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 8px;
-        }
-        .news-desc {
-            font-size: 12px;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 12px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .news-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 10px;
-            color: var(--text-muted);
-        }
-        
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(8,8,16,0.98);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        .modal-content {
-            background: var(--surface);
-            max-width: 700px;
-            width: 90%;
+        .inoreader-widget {
             border-radius: 20px;
-            padding: 24px;
-            border: 1px solid var(--border);
+            overflow: hidden;
+            background: #0f0f1a;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            margin-bottom: 24px;
         }
-        .close-modal {
-            float: right;
-            background: none;
+        iframe {
+            width: 100%;
+            height: 800px;
             border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
+            background: #0f0f1a;
         }
-        .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; }
-        .modal-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 20px; }
-        .modal-text { font-size: 15px; line-height: 1.6; margin-bottom: 20px; }
-        .modal-source { padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; }
-        .modal-source a { color: var(--accent); }
-        
-        /* Загрузчик */
-        .loader {
-            text-align: center;
-            padding: 40px;
-        }
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
         .footer {
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            padding: 32px 20px;
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px;
+            color: #666;
             text-align: center;
-            font-size: 11px;
-            color: var(--text-muted);
         }
-        .footer a { color: var(--accent); text-decoration: none; }
-        
+        .footer a {
+            color: #5b5bd6;
+            text-decoration: none;
+        }
         @media (max-width: 768px) {
-            .masthead-inner { flex-direction: column; align-items: stretch; }
-            .section-title { font-size: 18px; }
-            .news-grid { grid-template-columns: 1fr; }
+            .container { padding: 16px; }
+            .header { flex-direction: column; text-align: center; }
+            .logo h1 { font-size: 24px; }
+            iframe { height: 600px; }
         }
     </style>
 </head>
 <body>
-<div class="top-bar">
-    <div class="top-bar-inner">
-        <div class="live-badge"><div class="live-dot"></div><span>LIVE</span></div>
-        <div class="datetime"><div class="date" id="currentDate"></div><div class="time" id="currentTime"></div></div>
-    </div>
-</div>
-<div class="masthead">
-    <div class="masthead-inner">
-        <div class="logo">
-            <h1>ВЕКТОР</h1>
-            <p>Мировые новости · 20 источников</p>
-        </div>
-        <div class="google-translate">
-            <div id="google_translate_element"></div>
-        </div>
-    </div>
-</div>
-
-<main class="main">
-    <!-- ТЕМАТИЧЕСКИЕ РАЗДЕЛЫ -->
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🏛️</span>
-            <h2 class="section-title politics">Политика</h2>
-        </div>
-        <div class="news-grid" id="politics-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">⚔️</span>
-            <h2 class="section-title war">Конфликты / Война</h2>
-        </div>
-        <div class="news-grid" id="war-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🛡️</span>
-            <h2 class="section-title cyber">Кибербезопасность</h2>
-        </div>
-        <div class="news-grid" id="cyber-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">⚠️</span>
-            <h2 class="section-title security">Происшествия</h2>
-        </div>
-        <div class="news-grid" id="security-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">💰</span>
-            <h2 class="section-title economy">Экономика</h2>
-        </div>
-        <div class="news-grid" id="economy-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <!-- СТРАНЫ -->
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇺🇸</span>
-            <h2 class="section-title usa">США</h2>
-        </div>
-        <div class="news-grid" id="usa-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇯🇵</span>
-            <h2 class="section-title japan">Япония</h2>
-        </div>
-        <div class="news-grid" id="japan-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇹🇯</span>
-            <h2 class="section-title tajikistan">Таджикистан</h2>
-        </div>
-        <div class="news-grid" id="tajikistan-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇹🇲</span>
-            <h2 class="section-title turkmenistan">Туркменистан</h2>
-        </div>
-        <div class="news-grid" id="turkmenistan-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇺🇦</span>
-            <h2 class="section-title ukraine">Украина</h2>
-        </div>
-        <div class="news-grid" id="ukraine-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-
-    <div class="section">
-        <div class="section-header">
-            <span class="section-icon">🇮🇷</span>
-            <h2 class="section-title iran">Иран</h2>
-        </div>
-        <div class="news-grid" id="iran-grid"><div class="loader"><div class="spinner"></div><p>Загрузка...</p></div></div>
-    </div>
-</main>
-
-<footer class="footer">
-    <div class="footer-inner">
-        <p>© 2025 ВЕКТОР · Новости из открытых источников · Все права принадлежат авторам</p>
-        <p style="margin-top: 8px;"><a href="https://www.inoreader.com" target="_blank">Inoreader</a></p>
-    </div>
-</footer>
-
-<div id="newsModal" class="modal">
-    <div class="modal-content">
-        <button class="close-modal" id="closeModalBtn">✕</button>
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-meta"><span id="modalSource"></span> · <span id="modalDate"></span></div>
-        <div class="modal-text" id="modalText"></div>
-        <div class="modal-source" id="modalLink"></div>
-    </div>
-</div>
-
-<script>
-    // Источники по категориям
-    const SOURCES = {
-        // Тематические
-        politics: ['https://tass.ru/rss/v2.xml', 'https://ria.ru/export/rss2/index.xml', 'https://www.vedomosti.ru/rss/news', 'https://www.kommersant.ru/RSS/news.xml', 'https://www.theguardian.com/world/rss', 'https://www.reuters.com/rss/topNews'],
-        war: ['https://ria.ru/export/rss2/index.xml', 'https://www.reuters.com/rss/topNews', 'https://www.aljazeera.com/xml/rss/all.xml'],
-        cyber: ['https://www.reuters.com/rss/topNews', 'https://www.theguardian.com/world/rss', 'https://feeds.ap.org/rss/content/News'],
-        security: ['https://tass.ru/rss/v2.xml', 'https://ria.ru/export/rss2/index.xml', 'https://www.reuters.com/rss/topNews'],
-        economy: ['https://www.vedomosti.ru/rss/news', 'https://www.kommersant.ru/RSS/news.xml', 'https://www.reuters.com/rss/topNews', 'https://feeds.ap.org/rss/content/News'],
-        
-        // Страны
-        usa: ['http://feeds.bbci.co.uk/news/rss.xml', 'https://www.theguardian.com/world/rss', 'https://www.reuters.com/rss/topNews', 'https://feeds.ap.org/rss/content/News', 'http://rss.cnn.com/rss/edition.rss'],
-        japan: ['https://www3.nhk.or.jp/rss/news/cat0.xml', 'https://www.reuters.com/rss/topNews'],
-        tajikistan: ['https://asiaplustj.info/ru/rss.xml', 'https://sputnik-tj.com/rss'],
-        turkmenistan: ['https://www.hronikatm.com/feed/', 'https://turkmenportal.com/rss/ru'],
-        ukraine: ['https://www.reuters.com/rss/topNews', 'https://www.aljazeera.com/xml/rss/all.xml', 'http://feeds.bbci.co.uk/news/rss.xml'],
-        iran: ['https://www.aljazeera.com/xml/rss/all.xml', 'https://www.reuters.com/rss/topNews']
-    };
-
-    const PROXIES = [
-        async (url) => { const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); const data = await res.json(); return data.contents; },
-        async (url) => { const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`); const data = await res.json(); return data.data || (typeof data === 'string' ? data : null); },
-        async (url) => { const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`); return await res.text(); }
-    ];
-
-    let allNews = [];
-    let newsByTopic = {};
-
-    async function fetchWithProxy(url) {
-        for (const proxy of PROXIES) {
-            try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 10000);
-                const result = await proxy(url);
-                clearTimeout(timeout);
-                if (result && result.length > 100) return result;
-            } catch(e) {}
-        }
-        throw new Error('All proxies failed');
-    }
-
-    async function fetchSource(url, sourceName) {
-        try {
-            const xmlText = await fetchWithProxy(url);
-            const parser = new DOMParser();
-            const xml = parser.parseFromString(xmlText, 'text/xml');
-            const items = [...xml.querySelectorAll('item')];
-            return items.slice(0, 6).map(item => ({
-                title: item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || 'Новость',
-                description: item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
-                url: item.querySelector('link')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
-                source: sourceName,
-                publishedAt: item.querySelector('pubDate')?.textContent || new Date().toISOString()
-            }));
-        } catch(e) {
-            return [];
-        }
-    }
-
-    async function loadAll() {
-        const categories = Object.keys(SOURCES);
-        for (const category of categories) {
-            const container = document.getElementById(`${category}-grid`);
-            if (container) container.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка...</p></div>';
-        }
-
-        for (const category of categories) {
-            const urls = SOURCES[category];
-            let categoryNews = [];
-            for (const url of urls) {
-                let sourceName = '';
-                if (url.includes('tass.ru')) sourceName = 'ТАСС';
-                else if (url.includes('ria.ru')) sourceName = 'РИА Новости';
-                else if (url.includes('vedomosti')) sourceName = 'Ведомости';
-                else if (url.includes('kommersant')) sourceName = 'Коммерсантъ';
-                else if (url.includes('guardian')) sourceName = 'The Guardian';
-                else if (url.includes('reuters')) sourceName = 'Reuters';
-                else if (url.includes('ap.org')) sourceName = 'Associated Press';
-                else if (url.includes('bbc')) sourceName = 'BBC';
-                else if (url.includes('cnn')) sourceName = 'CNN';
-                else if (url.includes('aljazeera')) sourceName = 'Al Jazeera';
-                else if (url.includes('nhk')) sourceName = 'NHK World';
-                else if (url.includes('asiaplustj')) sourceName = 'Asia-Plus';
-                else if (url.includes('sputnik-tj')) sourceName = 'Sputnik Таджикистан';
-                else if (url.includes('hronikatm')) sourceName = 'Хроники Туркменистана';
-                else if (url.includes('turkmenportal')) sourceName = 'Turkmenportal';
-                
-                const news = await fetchSource(url, sourceName);
-                categoryNews.push(...news);
-            }
-            categoryNews.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-            newsByTopic[category] = categoryNews.slice(0, 12);
-            renderCategory(category);
-        }
-    }
-
-    function renderCategory(category) {
-        const container = document.getElementById(`${category}-grid`);
-        if (!container) return;
-        const news = newsByTopic[category] || [];
-        if (!news.length) {
-            container.innerHTML = '<div class="loader"><p>😕 Новостей пока нет</p></div>';
-            return;
-        }
-        container.innerHTML = news.map(n => `
-            <div class="news-card" onclick="openModal('${escapeHtml(n.title)}', '${escapeHtml(n.source)}', '${escapeHtml(n.description)}', '${escapeHtml(n.url)}', '${n.publishedAt}')">
-                <div class="news-source">📰 ${escapeHtml(n.source)}</div>
-                <div class="news-title">${escapeHtml(n.title)}</div>
-                <div class="news-desc">${escapeHtml(n.description.substring(0, 120))}${n.description.length > 120 ? '...' : ''}</div>
-                <div class="news-footer">
-                    <span>🕒 ${ago(n.publishedAt)}</span>
-                </div>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <h1>ВЕКТОР</h1>
+                <p>Мировые новости · 20 источников</p>
             </div>
-        `).join('');
-    }
+            <div class="google-translate">
+                <div id="google_translate_element"></div>
+            </div>
+        </div>
+        
+        <div class="inoreader-widget">
+            <iframe 
+                src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html"
+                title="Новостная лента ВЕКТОР"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
+        </div>
+        
+        <div class="footer">
+            © 2025 ВЕКТОР · Новости из открытых источников · 
+            <a href="https://www.inoreader.com" target="_blank">Inoreader</a>
+        </div>
+    </div>
 
-    function ago(dateStr) {
-        try {
-            const d = new Date(dateStr);
-            if (isNaN(d.getTime())) return 'недавно';
-            const m = Math.floor((new Date() - d) / 60000);
-            if (m < 1) return 'только что';
-            if (m < 60) return `${m} мин назад`;
-            if (m < 1440) return `${Math.floor(m/60)} ч назад`;
-            return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
-        } catch { return 'недавно'; }
-    }
-
-    function escapeHtml(text) {
-        if (!text) return '';
-        return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-    }
-
-    window.openModal = function(title, source, text, url, date) {
-        document.getElementById('modalTitle').innerHTML = title;
-        document.getElementById('modalSource').innerHTML = source;
-        document.getElementById('modalDate').innerHTML = ago(date) + ' · ' + new Date(date).toLocaleString('ru-RU');
-        document.getElementById('modalText').innerHTML = text || 'Описание отсутствует.';
-        document.getElementById('modalLink').innerHTML = `📌 Источник: <a href="${url}" target="_blank">${source}</a> — Все права принадлежат автору.`;
-        document.getElementById('newsModal').classList.add('active');
-    };
-
-    function closeModal() {
-        document.getElementById('newsModal').classList.remove('active');
-    }
-
-    function updateDateTime() {
-        const now = new Date();
-        document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-        document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-    }
-
-    function init() {
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        loadAll();
-        setInterval(loadAll, 30 * 60 * 1000);
-        document.getElementById('closeModalBtn').onclick = closeModal;
-        document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
-    }
-
-    // Google Translate
-    function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-            pageLanguage: 'auto',
-            includedLanguages: 'ru,en',
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-        }, 'google_translate_element');
-    }
-
-    init();
-</script>
-<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'auto',
+                includedLanguages: 'ru,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
