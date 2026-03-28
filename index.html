@@ -56,7 +56,7 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
             flex-wrap: wrap;
         }
         
@@ -100,6 +100,7 @@
         }
         .radio-btn.stop { background: rgba(255,51,102,0.2); color: #ff3366; border: 1px solid rgba(255,51,102,0.5); }
         .radio-status { font-size: 10px; color: #888; }
+        .radio-time { font-size: 10px; color: #666; margin-left: 8px; }
         
         /* Навигация */
         .nav {
@@ -202,8 +203,8 @@
             gap: 8px;
         }
         .markets-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
         .market-item {
@@ -214,16 +215,16 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .market-name {
-            font-size: 12px;
+            font-size: 13px;
             color: #888;
         }
         .market-value {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
         }
         .market-change {
-            font-size: 10px;
-            margin-left: 6px;
+            font-size: 11px;
+            margin-left: 8px;
         }
         .market-change.positive { color: #10b981; }
         .market-change.negative { color: #f43f5e; }
@@ -247,8 +248,8 @@
         }
         .calendar-month {
             text-align: center;
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 600;
             margin-bottom: 16px;
         }
         .calendar-weekdays {
@@ -269,7 +270,6 @@
             font-size: 12px;
             padding: 6px 0;
             border-radius: 30px;
-            cursor: pointer;
         }
         .calendar-day.today {
             background: #5b5bd6;
@@ -494,7 +494,8 @@
                     </div>
                     <div class="radio-block">
                         <button class="radio-btn" id="radioBtn">🎙️ Включить</button>
-                        <span class="radio-status" id="radioStatus">Коммерсантъ FM</span>
+                        <span class="radio-status" id="radioStatus">Радио России</span>
+                        <span class="radio-time" id="radioTime"></span>
                     </div>
                 </div>
             </div>
@@ -503,23 +504,21 @@
         <!-- Навигация по темам -->
         <div class="nav">
             <button class="nav-btn active" data-view="main">🌍 Главная</button>
-            <button class="nav-btn" data-view="cards" data-query="политика|президент|выборы|закон|санкции|госдеп|кремль|белый дом|конгресс|путин|байден|трамп|макрон|шольц|дипломатия|переговоры|саммит|встреча|визит|посол|договор|союз|нато|оон|внешняя политика|реформа|оппозиция|протесты">🏛 Политика</button>
-            <button class="nav-btn" data-view="cards" data-query="война|конфликт|армия|танк|ракета|удар|обстрел|бомбардировка|дрон|беспилотник|наступление|оборона|штурм|операция|сво|мобилизация|фронт|вооружение|жертвы|погибшие|раненые|эвакуация|беженцы|перемирие|украина|израиль|палестина|газа|хуситы|йемен|сирия">⚔️ Конфликт</button>
-            <button class="nav-btn" data-view="cards" data-query="кибер|кибербезопасность|хакер|хакеры|взлом|유течка данных|ddos|атака|вирус|шифровальщик|ransomware|malware|фишинг|уязвимость|безопасность|защита|кибератака|киберугроза|киберпреступность|it|интернет|сервер|облако">🛡 Кибербезопасность</button>
-            <button class="nav-btn" data-view="cards" data-query="теракт|взрыв|пожар|катастрофа|крушение|дтп|авария|наводнение|паводок|землетрясение|ураган|шторм|спасение|мчс|пострадавшие|жертвы|криминал|убийство|ограбление|нападение|задержание|арест">⚠️ Происшествия</button>
-            <button class="nav-btn" data-view="cards" data-query="экономика|ввп|кризис|рецессия|инфляция|цены|нефть|газ|баррель|доллар|евро|рубль|курс|ключевая ставка|центробанк|кредит|ипотека|налоги|бюджет|госдолг|инвестиции|бизнес|рынок|акции|санкции|импорт|экспорт">💰 Экономика</button>
+            <button class="nav-btn" data-view="cards" data-topic="politics">🏛 Политика</button>
+            <button class="nav-btn" data-view="cards" data-topic="war">⚔️ Конфликт</button>
+            <button class="nav-btn" data-view="cards" data-topic="cyber">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-view="cards" data-topic="security">⚠️ Происшествия</button>
+            <button class="nav-btn" data-view="cards" data-topic="economy">💰 Экономика</button>
         </div>
         
         <!-- Блок стран -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
-                <button class="country-btn" data-view="cards" data-query="сша|америка|вашингтон|трамп|байден|конгресс|белый дом|республиканцы|демократы|нью-йорк|калифорния|техас">🇺🇸 США</button>
-                <button class="country-btn" data-view="cards" data-query="япония|токио|японский|осаке|киото">🇯🇵 Япония</button>
-                <button class="country-btn" data-view="cards" data-query="таджикистан|душанбе|таджик|рахмон">🇹🇯 Таджикистан</button>
-                <button class="country-btn" data-view="cards" data-query="туркменистан|ашхабад|туркмен|бердымухамедов">🇹🇲 Туркменистан</button>
-                <button class="country-btn" data-view="cards" data-query="украина|киев|украинский|донбасс|донецк|луганск|зеленский">🇺🇦 Украина</button>
-                <button class="country-btn" data-view="cards" data-query="иран|тегеран|иранский|раиси|аятолла">🇮🇷 Иран</button>
+                <button class="country-btn" data-view="cards" data-topic="japan">🇯🇵 Япония</button>
+                <button class="country-btn" data-view="cards" data-topic="tajikistan">🇹🇯 Таджикистан</button>
+                <button class="country-btn" data-view="cards" data-topic="turkmenistan">🇹🇲 Туркменистан</button>
+                <button class="country-btn" data-view="cards" data-topic="middleeast">🇸🇦 Ближний Восток</button>
             </div>
         </div>
         
@@ -595,7 +594,61 @@
     </div>
 
     <script>
-        // ============ РАДИО КОММЕРСАНТЪ FM ============
+        // ============ ИСТОЧНИКИ ПО ТЕМАМ ============
+        const TOPIC_FEEDS = {
+            politics: [
+                { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
+                { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+                { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' }
+            ],
+            war: [
+                { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' },
+                { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+                { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' }
+            ],
+            cyber: [
+                { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+                { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' }
+            ],
+            security: [
+                { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+                { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' }
+            ],
+            economy: [
+                { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news' },
+                { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' }
+            ],
+            japan: [
+                { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml' },
+                { name: 'The Japan Times', url: 'https://www.japantimes.co.jp/feed/' }
+            ],
+            tajikistan: [
+                { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml' },
+                { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss' }
+            ],
+            turkmenistan: [
+                { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/' },
+                { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru' }
+            ],
+            middleeast: [
+                { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' }
+            ]
+        };
+        
+        let currentArticles = [];
+        let currentTopic = '';
+        
+        // ============ ДАТА И ВРЕМЯ ============
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+            document.getElementById('radioTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit' });
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // ============ РАДИО РОССИИ (РАБОТАЕТ СТАБИЛЬНО) ============
         let audio = null;
         let isPlaying = false;
         const radioBtn = document.getElementById('radioBtn');
@@ -604,18 +657,18 @@
         function initRadio() {
             if (!audio) {
                 audio = new Audio();
-                audio.src = 'https://kommersant-fm.cdnvideo.ru/kommersant_fm_128.mp3';
+                audio.src = 'https://icecast.vgtrk.cdnvideo.ru/rrzon_mp3_128kbps';
                 audio.preload = 'none';
                 audio.onplaying = () => { radioStatus.textContent = 'Играет'; radioBtn.textContent = '⏸️ Остановить'; radioBtn.classList.add('stop'); };
-                audio.onpause = () => { radioStatus.textContent = 'Коммерсантъ FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
-                audio.onerror = () => { radioStatus.textContent = 'Ошибка потока'; };
+                audio.onpause = () => { radioStatus.textContent = 'Радио России'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
+                audio.onerror = () => { radioStatus.textContent = 'Ошибка'; };
             }
         }
         
         function toggleRadio() {
             initRadio();
             if (isPlaying) { audio.pause(); isPlaying = false; }
-            else { audio.play().then(() => { isPlaying = true; }).catch(() => { radioStatus.textContent = 'Нажмите для запуска'; }); }
+            else { audio.play().then(() => { isPlaying = true; }).catch(() => {}); }
         }
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
@@ -625,9 +678,6 @@
             { name: 'USD/RUB', value: '81.57', change: '+0.67%', positive: true },
             { name: 'EUR/RUB', value: '94.10', change: '+0.76%', positive: true },
             { name: 'CNY/RUB', value: '11.82', change: '+0.14%', positive: true },
-            { name: 'IMOEX', value: '2 789.61', change: '-1.18%', positive: false },
-            { name: 'RTSI', value: '1 082.99', change: '+0.02%', positive: true },
-            { name: 'Brent', value: '114.96', change: '+0.45%', positive: true },
             { name: 'Gold', value: '4 608.80', change: '+0.20%', positive: true },
             { name: 'BTC/USD', value: '66 380', change: '-519', positive: false }
         ];
@@ -682,33 +732,6 @@
         }
         renderCalendar();
         
-        // ============ RSS ИСТОЧНИКИ ============
-        const RSS_FEEDS = [
-            { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
-            { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
-            { name: 'Meduza', url: 'https://meduza.io/rss/all' },
-            { name: 'Lenta.ru', url: 'https://lenta.ru/rss' },
-            { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news' },
-            { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml' },
-            { name: 'Коммерсантъ', url: 'https://www.kommersant.ru/RSS/news.xml' },
-            { name: 'Российская газета', url: 'https://rg.ru/xml/index.xml' },
-            { name: 'Московский комсомолец', url: 'https://www.mk.ru/rss/news/index.xml' },
-            { name: 'Газета.ru', url: 'https://www.gazeta.ru/export/rss/lenta.xml' },
-            { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
-            { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
-            { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
-            { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News' },
-            { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' },
-            { name: 'NPR', url: 'https://feeds.npr.org/1001/rss.xml' },
-            { name: 'ABC News', url: 'https://abcnews.go.com/abcnews/topstories' },
-            { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml' },
-            { name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/uk.xml' },
-            { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml' }
-        ];
-        
-        let allArticles = [];
-        let currentQuery = '';
-        
         // ============ RSS ПАРСИНГ ============
         const PROXIES = [
             async (url) => { const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); const data = await res.json(); return data.contents; },
@@ -746,30 +769,21 @@
             }
         }
         
-        async function loadAllRSS() {
+        async function loadTopic(topic) {
             const grid = document.getElementById('newsGrid');
-            if (grid) grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>';
+            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
             
-            allArticles = [];
-            for (const feed of RSS_FEEDS) {
+            const feeds = TOPIC_FEEDS[topic];
+            if (!feeds) return;
+            
+            let allNews = [];
+            for (const feed of feeds) {
                 const items = await fetchRSS(feed);
-                allArticles.push(...items);
+                allNews.push(...items);
             }
-            allArticles.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-            
-            if (currentQuery) {
-                filterArticles();
-            }
-        }
-        
-        function filterArticles() {
-            if (!currentQuery) return;
-            const keywords = currentQuery.toLowerCase().split('|');
-            const filtered = allArticles.filter(article => {
-                const text = (article.title + ' ' + article.description).toLowerCase();
-                return keywords.some(kw => text.includes(kw));
-            }).slice(0, 30);
-            renderCards(filtered);
+            allNews.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+            currentArticles = allNews.slice(0, 24);
+            renderCards();
         }
         
         function ago(dateStr) {
@@ -789,14 +803,13 @@
             return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
         
-        function renderCards(articles) {
+        function renderCards() {
             const grid = document.getElementById('newsGrid');
-            if (!grid) return;
-            if (!articles.length) {
+            if (!currentArticles.length) {
                 grid.innerHTML = '<div class="loader"><p>😕 Новостей не найдено</p></div>';
                 return;
             }
-            grid.innerHTML = articles.map(article => `
+            grid.innerHTML = currentArticles.map(article => `
                 <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source)}', '${escapeHtml(article.description)}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
                     <div class="card-source">📰 ${escapeHtml(article.source)}</div>
                     <div class="card-title">${escapeHtml(article.title)}</div>
@@ -851,15 +864,11 @@
             cardsView.style.display = 'none';
         }
         
-        function switchToCards(query) {
-            currentQuery = query;
+        function switchToCards(topic) {
+            currentTopic = topic;
             mainView.style.display = 'none';
             cardsView.style.display = 'block';
-            if (allArticles.length) {
-                filterArticles();
-            } else {
-                loadAllRSS().then(() => filterArticles());
-            }
+            loadTopic(topic);
         }
         
         // Обработчики кнопок
@@ -872,7 +881,7 @@
                 if (btn.dataset.view === 'main') {
                     switchToMain();
                 } else {
-                    switchToCards(btn.dataset.query);
+                    switchToCards(btn.dataset.topic);
                 }
             };
         });
@@ -883,7 +892,7 @@
                 btn.classList.add('active');
                 document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
                 document.querySelector('.nav-btn[data-view="main"]').classList.add('active');
-                switchToCards(btn.dataset.query);
+                switchToCards(btn.dataset.topic);
             };
         });
         
@@ -922,13 +931,13 @@
                 }
             }
             if (msg.includes('источник') || msg.includes('откуда')) {
-                return "📰 Мы собираем новости из 20 официальных RSS-источников: ТАСС, РИА, Meduza, BBC, The Guardian, Reuters, и другие. Все права принадлежат авторам.";
+                return "📰 Мы собираем новости из проверенных RSS-источников: ТАСС, Reuters, The Guardian, Al Jazeera, BBC, Ведомости, NHK, Asia-Plus, и другие. Все права принадлежат авторам.";
             }
             if (msg.includes('категория') || msg.includes('тема')) {
-                return "🏷️ На сайте есть категории: Политика, Конфликт, Кибербезопасность, Происшествия, Экономика, а также новости по странам: США, Япония, Таджикистан, Туркменистан, Украина, Иран.";
+                return "🏷️ На сайте есть категории: Политика, Конфликт, Кибербезопасность, Происшествия, Экономика, а также новости по странам: Япония, Таджикистан, Туркменистан, Ближний Восток.";
             }
             if (msg.includes('радио')) {
-                return "🎙️ На сайте работает радио «Коммерсантъ FM». Нажмите кнопку «Включить» в правом верхнем углу, чтобы начать прослушивание.";
+                return "🎙️ На сайте работает радио «Радио России». Нажмите кнопку «Включить» в правом верхнем углу, чтобы начать прослушивание.";
             }
             return `Я могу:\n• Перевести текст — напиши "переведи [текст]"\n• Рассказать об источниках — спроси "откуда новости"\n• Помочь с категориями — спроси "какие темы"\n• Подсказать про радио — спроси "радио"`;
         }
@@ -949,10 +958,6 @@
         
         chatSend.onclick = sendMessage;
         chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
-        
-        // Загрузка новостей для карточек
-        loadAllRSS();
-        setInterval(loadAllRSS, 15 * 60 * 1000);
         
         // По умолчанию показываем главную
         switchToMain();
