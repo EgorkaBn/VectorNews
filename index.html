@@ -2,18 +2,26 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
     <title>ВЕКТОР — Мировые новости</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #080810;
-            color: #e8e8f4;
-            min-height: 100vh;
-            overflow-x: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #ffffff;
+            line-height: 1.5;
+        }
+        
+        /* Градиентный фон */
         body::before {
             content: '';
             position: fixed;
@@ -21,16 +29,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(91,91,214,0.08) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 70%, rgba(255,51,102,0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 30%, rgba(91,91,214,0.12) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(255,51,102,0.08) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 0 24px;
         }
         
         /* Шапка */
@@ -38,105 +46,348 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 32px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         
         .logo {
             display: flex;
-            align-items: baseline;
+            align-items: center;
             gap: 12px;
-            flex-wrap: wrap;
         }
         
         .logo h1 {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
-            background: linear-gradient(135deg, #fff, #a5a5ff, #5b5bd6);
+            background: linear-gradient(135deg, #fff, #a5a5ff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
         }
         
-        .logo .badge {
+        .logo-badge {
             background: rgba(91,91,214,0.2);
             padding: 4px 12px;
-            border-radius: 30px;
+            border-radius: 100px;
             font-size: 12px;
             font-weight: 500;
             color: #a5a5ff;
             border: 1px solid rgba(91,91,214,0.3);
         }
         
-        .logo p {
-            width: 100%;
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+        
+        .nav a {
+            color: #888;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav a:hover, .nav a.active {
+            color: #fff;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .subscribe-btn {
+            background: #ff3366;
+            border: none;
+            border-radius: 40px;
+            padding: 8px 20px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .subscribe-btn:hover {
+            background: #ff5c85;
+            transform: scale(1.02);
+        }
+        
+        .search-icon {
+            font-size: 20px;
+            cursor: pointer;
+            color: #888;
+            transition: color 0.2s;
+        }
+        
+        .search-icon:hover {
+            color: #fff;
+        }
+        
+        /* Блок BREAKING */
+        .breaking {
+            margin: 48px 0;
+        }
+        
+        .breaking-label {
+            display: inline-block;
+            background: #ff3366;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .breaking-card {
+            background: linear-gradient(135deg, #1a1a2a, #0f0f1a);
+            border-radius: 28px;
+            padding: 40px;
+            border: 1px solid rgba(255,255,255,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .breaking-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(91,91,214,0.1));
+            pointer-events: none;
+        }
+        
+        .breaking-title {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 16px;
+            max-width: 70%;
+        }
+        
+        .breaking-desc {
+            font-size: 16px;
+            color: #aaa;
+            margin-bottom: 24px;
+            max-width: 60%;
+            line-height: 1.6;
+        }
+        
+        .breaking-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #5b5bd6, #8b8bff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .author-info {
+            font-size: 14px;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .author-date {
             font-size: 12px;
             color: #666;
-            margin-top: 4px;
         }
         
-        .header-right {
+        /* Сетка новостей */
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 48px 0 24px;
             display: flex;
             align-items: center;
+            gap: 12px;
+        }
+        
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .news-card {
+            background: #0f0f1a;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(91,91,214,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
+        .card-category {
+            display: inline-block;
+            background: rgba(91,91,214,0.15);
+            color: #a5a5ff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+        
+        .card-desc {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .card-source {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        /* Боковая панель */
+        .two-columns {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 48px;
+            margin: 48px 0;
+        }
+        
+        .sidebar {
+            background: #0f0f1a;
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .trending-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+        }
+        
+        .trending-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ff3366;
+            opacity: 0.6;
+        }
+        
+        .trending-title {
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+        
+        /* Радио и погода */
+        .info-widgets {
+            display: flex;
             gap: 16px;
-            flex-wrap: wrap;
+            margin-top: 24px;
         }
         
-        /* Погода */
-        .weather-widget {
+        .widget {
             background: rgba(15,15,26,0.6);
             backdrop-filter: blur(10px);
             border-radius: 40px;
-            padding: 6px 16px;
+            padding: 8px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
             border: 1px solid rgba(255,255,255,0.1);
         }
         
-        .weather-icon { font-size: 28px; }
-        .weather-info { display: flex; flex-direction: column; }
-        .weather-temp { font-size: 18px; font-weight: 700; color: #fff; }
-        .weather-desc { font-size: 10px; color: #888; }
-        
-        /* Радио */
-        .radio-widget {
-            background: rgba(15,15,26,0.6);
-            backdrop-filter: blur(10px);
-            border-radius: 40px;
-            padding: 6px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .weather-icon { font-size: 24px; }
+        .weather-temp { font-size: 16px; font-weight: 600; }
+        .weather-desc { font-size: 12px; color: #888; }
         
         .radio-btn {
             background: #ff3366;
             border: none;
             border-radius: 30px;
-            padding: 6px 14px;
+            padding: 6px 16px;
             color: white;
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
             transition: all 0.2s;
         }
         
-        .radio-btn:hover { background: #ff5c85; transform: scale(1.02); }
-        .radio-btn.stop { background: rgba(255,51,102,0.2); border: 1px solid rgba(255,51,102,0.5); color: #ff3366; }
+        .radio-btn.stop {
+            background: rgba(255,51,102,0.2);
+            border: 1px solid rgba(255,51,102,0.5);
+            color: #ff3366;
+        }
+        
         .radio-status { font-size: 11px; color: #888; }
         
         .live-indicator {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: rgba(255,51,102,0.1);
             padding: 6px 14px;
             border-radius: 40px;
@@ -144,365 +395,340 @@
         }
         
         .live-dot {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             background: #ff3366;
             border-radius: 50%;
             animation: pulse 1.5s ease infinite;
         }
         
         @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
-        .live-text { font-size: 11px; font-weight: 600; color: #ff3366; letter-spacing: 1px; }
         
         .datetime {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             font-size: 13px;
-            font-weight: 500;
             color: #888;
         }
         
         .date, .time {
             background: rgba(255,255,255,0.03);
-            padding: 6px 14px;
+            padding: 4px 12px;
             border-radius: 30px;
-            backdrop-filter: blur(4px);
         }
         
-        .google-translate {
-            background: rgba(255,255,255,0.03);
-            padding: 6px 12px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        /* Сетка новостей */
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-            margin-top: 24px;
-        }
-        
-        .news-card {
-            background: #0f0f1a;
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 20px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .news-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, #5b5bd6, #a5a5ff);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(91,91,214,0.4);
-            box-shadow: 0 12px 28px rgba(0,0,0,0.3);
-        }
-        
-        .news-card:hover::before { opacity: 1; }
-        
-        .news-source {
-            font-size: 11px;
-            color: #5b5bd6;
-            margin-bottom: 10px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .news-title {
-            font-size: 18px;
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-        
-        .news-desc {
-            font-size: 13px;
-            color: #888;
-            line-height: 1.5;
-            margin-bottom: 16px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        
-        .news-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 11px;
-            color: #666;
-            padding-top: 12px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        /* Загрузчик */
-        .loader {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 60px 20px;
-        }
-        
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid rgba(255,255,255,0.1);
-            border-top-color: #5b5bd6;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 16px;
-        }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
-        
-        /* Модальное окно */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(8,8,16,0.98);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-        
-        .modal.active { display: flex; align-items: center; justify-content: center; }
-        
-        .modal-content {
-            background: #0f0f1a;
-            max-width: 700px;
-            width: 90%;
-            border-radius: 24px;
-            padding: 28px;
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 24px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-        }
-        
-        .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 16px; padding-right: 30px; }
-        .modal-meta { font-size: 12px; color: #666; margin-bottom: 20px; display: flex; gap: 16px; flex-wrap: wrap; }
-        .modal-text { font-size: 15px; line-height: 1.6; margin-bottom: 24px; max-height: 400px; overflow-y: auto; }
-        .modal-source { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; }
-        .modal-source a { color: #5b5bd6; text-decoration: none; }
-        
+        /* Подвал */
         .footer {
-            margin-top: 48px;
-            padding-top: 24px;
+            margin-top: 64px;
+            padding: 32px 0;
             border-top: 1px solid rgba(255,255,255,0.08);
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
-            font-size: 12px;
+            gap: 20px;
+            font-size: 13px;
             color: #666;
         }
         
-        .footer-links { display: flex; gap: 24px; }
-        .footer a { color: #888; text-decoration: none; transition: color 0.2s; }
-        .footer a:hover { color: #a5a5ff; }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
         
-        @media (max-width: 768px) {
-            .container { padding: 16px; }
+        .footer a {
+            color: #888;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: #a5a5ff;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .two-columns { grid-template-columns: 1fr; gap: 32px; }
+            .breaking-title { font-size: 28px; max-width: 100%; }
+            .breaking-desc { max-width: 100%; }
+            .nav { display: none; }
+            .container { padding: 0 20px; }
+        }
+        
+        @media (max-width: 600px) {
             .header { flex-direction: column; text-align: center; }
-            .header-right { justify-content: center; }
-            .logo h1 { font-size: 28px; }
+            .header-actions { flex-wrap: wrap; justify-content: center; }
             .news-grid { grid-template-columns: 1fr; }
-            iframe { height: 550px; }
-            .footer { flex-direction: column; text-align: center; }
+            .breaking-card { padding: 24px; }
+            .breaking-title { font-size: 22px; }
         }
         
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #5b5bd6; border-radius: 10px; }
+        
+        /* Inoreader iframe */
+        .inoreader-widget {
+            background: rgba(15,15,26,0.4);
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin: 48px 0;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 650px;
+            border: none;
+            background: transparent;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Шапка -->
         <div class="header">
             <div class="logo">
                 <h1>ВЕКТОР</h1>
-                <div class="badge">20 источников</div>
-                <p>Мировые новости · Аналитика · 24/7</p>
+                <div class="logo-badge">20 источников</div>
             </div>
-            <div class="header-right">
-                <div class="weather-widget" id="weatherWidget">
-                    <div class="weather-icon" id="weatherIcon">☀️</div>
-                    <div class="weather-info">
-                        <div class="weather-temp" id="weatherTemp">--°C</div>
-                        <div class="weather-desc" id="weatherDesc">Москва</div>
-                    </div>
-                </div>
-                <div class="radio-widget">
-                    <button class="radio-btn" id="radioBtn">🎙️ Включить</button>
-                    <span class="radio-status" id="radioStatus">Вести FM</span>
-                </div>
+            <div class="nav">
+                <a href="#" class="active">Главная</a>
+                <a href="#">Политика</a>
+                <a href="#">Мир</a>
+                <a href="#">Экономика</a>
+                <a href="#">Технологии</a>
+            </div>
+            <div class="header-actions">
                 <div class="live-indicator">
                     <div class="live-dot"></div>
-                    <span class="live-text">LIVE</span>
+                    <span>LIVE</span>
                 </div>
                 <div class="datetime">
                     <div class="date" id="currentDate"></div>
                     <div class="time" id="currentTime"></div>
                 </div>
-                <div class="google-translate">
-                    <div id="google_translate_element"></div>
+                <div class="info-widgets">
+                    <div class="widget" id="weatherWidget">
+                        <div class="weather-icon" id="weatherIcon">☀️</div>
+                        <div>
+                            <div class="weather-temp" id="weatherTemp">--°C</div>
+                            <div class="weather-desc" id="weatherDesc">Москва</div>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <button class="radio-btn" id="radioBtn">🎙️ Включить</button>
+                        <span class="radio-status" id="radioStatus">Радио России</span>
+                    </div>
+                </div>
+                <div class="subscribe-btn" id="googleTranslateBtn">🌐 Translate</div>
+            </div>
+        </div>
+        
+        <!-- BREAKING (последняя главная новость) -->
+        <div class="breaking">
+            <div class="breaking-label">⚡ СЕЙЧАС В ЭФИРЕ</div>
+            <div class="breaking-card">
+                <h2 class="breaking-title" id="breakingTitle">Загрузка главной новости...</h2>
+                <p class="breaking-desc" id="breakingDesc"></p>
+                <div class="breaking-author">
+                    <div class="author-avatar">В</div>
+                    <div class="author-info">
+                        <div class="author-name">ВЕКТОР</div>
+                        <div class="author-date" id="breakingDate"></div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <div id="newsGrid" class="news-grid">
-            <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+        <!-- Лента новостей Inoreader -->
+        <div class="inoreader-widget">
+            <iframe 
+                src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?theme=dark&style=cards"
+                title="Новостная лента ВЕКТОР"
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
         </div>
         
+        <!-- Две колонки: последние новости + тренды -->
+        <div class="two-columns">
+            <div>
+                <div class="section-title">📰 Последние новости</div>
+                <div class="news-grid" id="latestNewsGrid">
+                    <div class="loader" style="text-align:center; padding:40px;">
+                        <div class="spinner" style="width:40px;height:40px;border:2px solid rgba(255,255,255,0.1);border-top-color:#5b5bd6;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+                        <p>Загрузка...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="sidebar-title">🔥 Популярное</div>
+                <div id="trendingList">
+                    <div style="text-align:center; padding:20px;">Загрузка...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Подвал -->
         <div class="footer">
-            <div class="copyright">© 2025 ВЕКТОР · Все права на новости принадлежат авторам</div>
+            <div>© 2025 ВЕКТОР · Новости из открытых источников</div>
             <div class="footer-links">
-                <a href="#" style="cursor: default;">20 источников</a>
-                <a href="#" style="cursor: default;">Обновляется автоматически</a>
+                <a href="#">20 источников</a>
+                <a href="#">Обновляется автоматически</a>
+                <a href="#">Inoreader</a>
             </div>
         </div>
     </div>
-
-    <div id="newsModal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModalBtn">✕</button>
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-meta"><span id="modalSource"></span> · <span id="modalDate"></span></div>
-            <div class="modal-text" id="modalText"></div>
-            <div class="modal-source" id="modalLink"></div>
+    
+    <!-- Модальное окно для новости -->
+    <div id="newsModal" class="modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:1000;align-items:center;justify-content:center;">
+        <div style="background:#0f0f1a;max-width:700px;width:90%;border-radius:24px;padding:28px;border:1px solid rgba(255,255,255,0.1);position:relative;">
+            <button class="close-modal" style="position:absolute;top:20px;right:24px;background:none;border:none;color:white;font-size:28px;cursor:pointer;">✕</button>
+            <div class="modal-title" style="font-size:24px;font-weight:700;margin-bottom:16px;padding-right:30px;"></div>
+            <div class="modal-meta" style="font-size:12px;color:#666;margin-bottom:20px;"></div>
+            <div class="modal-text" style="font-size:15px;line-height:1.6;margin-bottom:24px;max-height:400px;overflow-y:auto;"></div>
+            <div class="modal-source" style="padding-top:20px;border-top:1px solid rgba(255,255,255,0.1);font-size:12px;"></div>
         </div>
     </div>
 
     <script>
-        // RSS-ссылки ваших источников (20 штук)
+        // Ваш ID папки Inoreader
+        const INOREADER_URL = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?theme=dark&style=cards';
+        
+        // ============ ПОГОДА ============
+        async function getWeather() {
+            try {
+                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
+                const data = await response.json();
+                if (data.current_weather) {
+                    const temp = Math.round(data.current_weather.temperature);
+                    const weatherCode = data.current_weather.weathercode;
+                    const weatherMap = { 0:['☀️','Ясно'], 1:['🌤️','Облачно'], 2:['⛅','Переменная'], 3:['☁️','Пасмурно'], 61:['🌧️','Дождь'], 71:['🌨️','Снег'] };
+                    const weather = weatherMap[weatherCode] || ['🌡️', 'Облачно'];
+                    document.getElementById('weatherIcon').textContent = weather[0];
+                    document.getElementById('weatherTemp').textContent = `${temp}°C`;
+                    document.getElementById('weatherDesc').textContent = weather[1];
+                }
+            } catch(e) { console.log('Weather error'); }
+        }
+        
+        // ============ РАДИО РОССИИ ============
+        let audio = null;
+        let isPlaying = false;
+        const radioBtn = document.getElementById('radioBtn');
+        const radioStatus = document.getElementById('radioStatus');
+        
+        function initRadio() {
+            if (!audio) {
+                audio = new Audio();
+                audio.src = 'https://icecast.vgtrk.cdnvideo.ru/rrzon_mp3_128kbps';
+                audio.preload = 'none';
+                audio.onplaying = () => { 
+                    radioStatus.textContent = 'Играет'; 
+                    radioBtn.textContent = '⏸️ Остановить'; 
+                    radioBtn.classList.add('stop'); 
+                };
+                audio.onpause = () => { 
+                    radioStatus.textContent = 'Радио России'; 
+                    radioBtn.textContent = '🎙️ Включить'; 
+                    radioBtn.classList.remove('stop'); 
+                };
+                audio.onerror = () => { 
+                    radioStatus.textContent = 'Ошибка'; 
+                };
+            }
+        }
+        
+        function toggleRadio() {
+            initRadio();
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play().then(() => { isPlaying = true; }).catch(() => {});
+            }
+        }
+        radioBtn.onclick = toggleRadio;
+        document.body.addEventListener('click', initRadio, { once: true });
+        
+        // ============ ДАТА И ВРЕМЯ ============
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        }
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        
+        // ============ GOOGLE TRANSLATE ============
+        document.getElementById('googleTranslateBtn').onclick = () => {
+            window.location.href = 'https://translate.google.com/translate?sl=auto&tl=ru&u=' + encodeURIComponent(window.location.href);
+        };
+        
+        // ============ ЗАГРУЗКА НОВОСТЕЙ ДЛЯ БЛОКОВ (через RSS2JSON) ============
         const RSS_FEEDS = [
             'https://tass.ru/rss/v2.xml',
             'https://ria.ru/export/rss2/index.xml',
             'https://meduza.io/rss/all',
-            'https://lenta.ru/rss',
-            'https://www.vedomosti.ru/rss/news',
-            'https://www.kommersant.ru/RSS/news.xml',
-            'https://feeds.npr.org/1001/rss.xml',
-            'https://abcnews.go.com/abcnews/topstories',
-            'https://feeds.ap.org/rss/content/News',
             'http://feeds.bbci.co.uk/news/rss.xml',
-            'https://www.theguardian.com/world/rss',
-            'https://feeds.skynews.com/feeds/rss/uk.xml',
-            'https://www.hronikatm.com/feed/',
-            'https://turkmenportal.com/rss/ru',
-            'https://asiaplustj.info/ru/rss.xml',
-            'https://sputnik-tj.com/rss',
-            'https://tengrinews.kz/rss/all.xml',
-            'https://www3.nhk.or.jp/rss/news/cat0.xml',
-            'https://www.aljazeera.com/xml/rss/all.xml',
-            'https://www.gazeta.uz/rss/ru'
+            'https://www.theguardian.com/world/rss'
         ];
         
-        const PROXIES = [
-            async (url) => { const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); const data = await res.json(); return data.contents; },
-            async (url) => { const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`); const data = await res.json(); return data.data || (typeof data === 'string' ? data : null); }
-        ];
-        
-        let allNews = [];
-        
-        async function fetchWithProxy(url) {
-            for (const proxy of PROXIES) {
-                try {
-                    const controller = new AbortController();
-                    const timeout = setTimeout(() => controller.abort(), 10000);
-                    const result = await proxy(url);
-                    clearTimeout(timeout);
-                    if (result && result.length > 100) return result;
-                } catch(e) {}
-            }
-            throw new Error('All proxies failed');
-        }
-        
-        function getSourceName(url) {
-            if (url.includes('tass.ru')) return 'ТАСС';
-            if (url.includes('ria.ru')) return 'РИА Новости';
-            if (url.includes('meduza')) return 'Meduza';
-            if (url.includes('lenta.ru')) return 'Lenta.ru';
-            if (url.includes('vedomosti')) return 'Ведомости';
-            if (url.includes('kommersant')) return 'Коммерсантъ';
-            if (url.includes('npr.org')) return 'NPR';
-            if (url.includes('abcnews')) return 'ABC News';
-            if (url.includes('ap.org')) return 'Associated Press';
-            if (url.includes('bbc')) return 'BBC News';
-            if (url.includes('guardian')) return 'The Guardian';
-            if (url.includes('skynews')) return 'Sky News';
-            if (url.includes('hronikatm')) return 'Хроники Туркменистана';
-            if (url.includes('turkmenportal')) return 'Turkmenportal';
-            if (url.includes('asiaplustj')) return 'Asia-Plus';
-            if (url.includes('sputnik-tj')) return 'Sputnik Таджикистан';
-            if (url.includes('tengrinews')) return 'Tengrinews';
-            if (url.includes('nhk')) return 'NHK World';
-            if (url.includes('aljazeera')) return 'Al Jazeera';
-            if (url.includes('gazeta.uz')) return 'Gazeta.uz';
-            return 'Новости';
-        }
-        
-        async function fetchFeed(url) {
+        async function fetchNewsForBlocks() {
             try {
-                const xmlText = await fetchWithProxy(url);
-                const parser = new DOMParser();
-                const xml = parser.parseFromString(xmlText, 'text/xml');
-                const items = [...xml.querySelectorAll('item')];
-                const sourceName = getSourceName(url);
+                const allNews = [];
+                for (const url of RSS_FEEDS) {
+                    const proxyUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`;
+                    const response = await fetch(proxyUrl);
+                    const data = await response.json();
+                    if (data.status === 'ok' && data.items) {
+                        data.items.forEach(item => {
+                            allNews.push({
+                                title: item.title,
+                                description: item.description?.replace(/<[^>]*>/g, '').substring(0, 200) || '',
+                                link: item.link,
+                                source: url.includes('tass') ? 'ТАСС' : url.includes('ria') ? 'РИА' : url.includes('meduza') ? 'Meduza' : url.includes('bbc') ? 'BBC' : 'The Guardian',
+                                pubDate: item.pubDate
+                            });
+                        });
+                    }
+                }
+                allNews.sort((a,b) => new Date(b.pubDate) - new Date(a.pubDate));
                 
-                return items.slice(0, 5).map(item => ({
-                    title: item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || 'Новость',
-                    description: item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 250) || '',
-                    url: item.querySelector('link')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
-                    source: sourceName,
-                    publishedAt: item.querySelector('pubDate')?.textContent || new Date().toISOString()
-                }));
+                // BREAKING (первая новость)
+                if (allNews[0]) {
+                    document.getElementById('breakingTitle').textContent = allNews[0].title;
+                    document.getElementById('breakingDesc').textContent = allNews[0].description.substring(0, 150) + '...';
+                    document.getElementById('breakingDate').textContent = new Date(allNews[0].pubDate).toLocaleString('ru-RU');
+                }
+                
+                // Последние новости (следующие 6)
+                const latestGrid = document.getElementById('latestNewsGrid');
+                latestGrid.innerHTML = allNews.slice(1, 7).map(news => `
+                    <div class="news-card" onclick="openModal('${escapeHtml(news.title)}', '${escapeHtml(news.source)}', '${escapeHtml(news.description)}', '${escapeHtml(news.link)}', '${news.pubDate}')">
+                        <div class="card-category">${escapeHtml(news.source)}</div>
+                        <div class="card-title">${escapeHtml(news.title)}</div>
+                        <div class="card-desc">${escapeHtml(news.description.substring(0, 120))}...</div>
+                        <div class="card-footer">
+                            <div class="card-source">📰 ${escapeHtml(news.source)}</div>
+                            <span>🕒 ${ago(news.pubDate)}</span>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Популярное (следующие 5)
+                const trendingList = document.getElementById('trendingList');
+                trendingList.innerHTML = allNews.slice(7, 12).map((news, idx) => `
+                    <div class="trending-item" onclick="openModal('${escapeHtml(news.title)}', '${escapeHtml(news.source)}', '${escapeHtml(news.description)}', '${escapeHtml(news.link)}', '${news.pubDate}')">
+                        <div class="trending-number">${idx + 1}</div>
+                        <div class="trending-title">${escapeHtml(news.title)}</div>
+                    </div>
+                `).join('');
+                
             } catch(e) {
-                return [];
+                console.log('Error loading news:', e);
+                document.getElementById('latestNewsGrid').innerHTML = '<div style="text-align:center;padding:40px;">😕 Ошибка загрузки новостей</div>';
             }
-        }
-        
-        async function loadAllNews() {
-            const grid = document.getElementById('newsGrid');
-            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>';
-            
-            const allPromises = RSS_FEEDS.map(url => fetchFeed(url));
-            const results = await Promise.all(allPromises);
-            allNews = results.flat();
-            allNews.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
-            
-            renderNews();
         }
         
         function ago(dateStr) {
@@ -522,101 +748,32 @@
             return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
         
-        function renderNews() {
-            const grid = document.getElementById('newsGrid');
-            if (!allNews.length) {
-                grid.innerHTML = '<div class="loader"><p>😕 Новостей пока нет. Попробуйте обновить страницу.</p></div>';
-                return;
-            }
-            
-            grid.innerHTML = allNews.map(news => `
-                <div class="news-card" onclick="openModal('${escapeHtml(news.title)}', '${escapeHtml(news.source)}', '${escapeHtml(news.description)}', '${escapeHtml(news.url)}', '${news.publishedAt}')">
-                    <div class="news-source">📰 ${escapeHtml(news.source)}</div>
-                    <div class="news-title">${escapeHtml(news.title)}</div>
-                    <div class="news-desc">${escapeHtml(news.description.substring(0, 150))}${news.description.length > 150 ? '...' : ''}</div>
-                    <div class="news-footer">
-                        <span>🕒 ${ago(news.publishedAt)}</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
         window.openModal = function(title, source, text, url, date) {
-            document.getElementById('modalTitle').innerHTML = title;
-            document.getElementById('modalSource').innerHTML = source;
-            document.getElementById('modalDate').innerHTML = ago(date) + ' · ' + new Date(date).toLocaleString('ru-RU');
-            document.getElementById('modalText').innerHTML = text || 'Описание отсутствует.';
-            document.getElementById('modalLink').innerHTML = `📌 Источник: <a href="${url}" target="_blank">${source}</a> — Все права принадлежат автору.`;
-            document.getElementById('newsModal').classList.add('active');
+            const modal = document.getElementById('newsModal');
+            modal.querySelector('.modal-title').innerHTML = title;
+            modal.querySelector('.modal-meta').innerHTML = `${source} · ${ago(date)} · ${new Date(date).toLocaleString('ru-RU')}`;
+            modal.querySelector('.modal-text').innerHTML = text || 'Описание отсутствует.';
+            modal.querySelector('.modal-source').innerHTML = `📌 Источник: <a href="${url}" target="_blank">${source}</a> — Все права принадлежат автору.`;
+            modal.style.display = 'flex';
         };
         
-        function closeModal() {
-            document.getElementById('newsModal').classList.remove('active');
-        }
-        
-        // Погода
-        async function getWeather() {
-            try {
-                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
-                const data = await response.json();
-                if (data.current_weather) {
-                    const temp = Math.round(data.current_weather.temperature);
-                    const weatherCode = data.current_weather.weathercode;
-                    const weatherMap = { 0:['☀️','Ясно'], 1:['🌤️','Облачно'], 2:['⛅','Переменная'], 3:['☁️','Пасмурно'], 61:['🌧️','Дождь'], 71:['🌨️','Снег'] };
-                    const weather = weatherMap[weatherCode] || ['🌡️', 'Облачно'];
-                    document.getElementById('weatherIcon').textContent = weather[0];
-                    document.getElementById('weatherTemp').textContent = `${temp}°C`;
-                    document.getElementById('weatherDesc').textContent = weather[1];
-                }
-            } catch(e) {}
-        }
-        
-        // Радио
-        let audio = null;
-        let isPlaying = false;
-        const radioBtn = document.getElementById('radioBtn');
-        const radioStatus = document.getElementById('radioStatus');
-        
-        function initRadio() {
-            if (!audio) {
-                audio = new Audio();
-                audio.src = 'https://icecast.vgtrk.cdnvideo.ru/vestifm_mp3_128kbps';
-                audio.preload = 'none';
-                audio.onplaying = () => { radioStatus.textContent = 'Вести FM · Играет'; radioBtn.textContent = '⏸️ Остановить'; radioBtn.classList.add('stop'); };
-                audio.onpause = () => { radioStatus.textContent = 'Вести FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
-            }
-        }
-        
-        function toggleRadio() {
-            initRadio();
-            if (isPlaying) { audio.pause(); isPlaying = false; }
-            else { audio.play().then(() => { isPlaying = true; }).catch(() => {}); }
-        }
-        radioBtn.onclick = toggleRadio;
-        document.body.addEventListener('click', initRadio, { once: true });
-        
-        // Дата и время
-        function updateDateTime() {
-            const now = new Date();
-            document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-            document.getElementById('currentTime').textContent = now.toLocaleTimeString('ru-RU', { hour:'2-digit', minute:'2-digit', second:'2-digit' });
-        }
-        
-        // Google Translate
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'auto', includedLanguages: 'ru,en', layout: google.translate.TranslateElement.InlineLayout.SIMPLE }, 'google_translate_element');
-        }
+        document.querySelector('.close-modal')?.addEventListener('click', () => {
+            document.getElementById('newsModal').style.display = 'none';
+        });
+        document.getElementById('newsModal')?.addEventListener('click', (e) => {
+            if (e.target === document.getElementById('newsModal')) e.target.style.display = 'none';
+        });
         
         // Инициализация
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
         getWeather();
         setInterval(getWeather, 30 * 60 * 1000);
-        loadAllNews();
-        setInterval(loadAllNews, 30 * 60 * 1000);
-        document.getElementById('closeModalBtn').onclick = closeModal;
-        document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
+        fetchNewsForBlocks();
+        setInterval(fetchNewsForBlocks, 10 * 60 * 1000);
+        
+        // Анимация спиннера
+        const style = document.createElement('style');
+        style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
     </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
