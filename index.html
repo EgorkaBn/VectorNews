@@ -78,7 +78,50 @@
         }
         .date, .time { color: #fff; }
         
-        .widget {
+        /* Биржевые индикаторы */
+        .markets {
+            background: rgba(15,15,26,0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow-x: auto;
+        }
+        .markets-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 16px;
+            min-width: 600px;
+        }
+        .market-group {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .market-item {
+            text-align: center;
+            min-width: 70px;
+        }
+        .market-code {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+        }
+        .market-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .market-change {
+            font-size: 10px;
+        }
+        .market-change.positive { color: #10b981; }
+        .market-change.negative { color: #f43f5e; }
+        
+        /* Радио Коммерсантъ FM */
+        .radio-block {
             background: rgba(15,15,26,0.6);
             backdrop-filter: blur(10px);
             border-radius: 40px;
@@ -88,10 +131,6 @@
             gap: 12px;
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .weather-icon { font-size: 24px; }
-        .weather-temp { font-size: 14px; font-weight: 600; }
-        .weather-desc { font-size: 10px; color: #888; }
-        
         .radio-btn {
             background: #ff3366;
             border: none;
@@ -161,7 +200,7 @@
         .main-view { display: block; }
         .cards-view { display: none; }
         
-        /* Iframe Inoreader */
+        /* Iframe Inoreader (аккуратный) */
         .iframe-container {
             background: rgba(15,15,26,0.4);
             backdrop-filter: blur(10px);
@@ -173,7 +212,7 @@
         }
         .iframe-container iframe {
             width: 100%;
-            height: 700px;
+            height: 600px;
             border: none;
             border-radius: 20px;
         }
@@ -366,8 +405,9 @@
             .header { flex-direction: column; text-align: center; }
             .header-right { justify-content: center; }
             .info-bar { justify-content: center; }
-            .iframe-container iframe { height: 500px; }
+            .iframe-container iframe { height: 450px; }
             .news-grid { grid-template-columns: 1fr; }
+            .markets-inner { justify-content: flex-start; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
@@ -388,41 +428,86 @@
                         <div class="date" id="currentDate"></div>
                         <div class="time" id="currentTime"></div>
                     </div>
-                    <div class="widget" id="weatherWidget">
-                        <div class="weather-icon" id="weatherIcon">☀️</div>
-                        <div>
-                            <div class="weather-temp" id="weatherTemp">--°C</div>
-                            <div class="weather-desc" id="weatherDesc">Москва</div>
-                        </div>
-                    </div>
-                    <div class="widget">
+                    <div class="radio-block">
                         <button class="radio-btn" id="radioBtn">🎙️ Включить</button>
-                        <span class="radio-status" id="radioStatus">Вести FM</span>
+                        <span class="radio-status" id="radioStatus">Ъ FM</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Навигация по темам -->
-        <div class="nav">
-            <button class="nav-btn active" data-view="main">🌍 Главная</button>
-            <button class="nav-btn" data-view="cards" data-query="politics OR government OR election OR president OR Putin OR Biden OR Trump OR Kremlin OR White House">🏛 Политика</button>
-            <button class="nav-btn" data-view="cards" data-query="war OR conflict OR military OR Ukraine OR Israel OR Palestine OR Gaza OR Russia Ukraine">⚔️ Конфликт</button>
-            <button class="nav-btn" data-view="cards" data-query="cyber OR hacking OR data breach OR ransomware OR security OR cyberattack">🛡 Кибербезопасность</button>
-            <button class="nav-btn" data-view="cards" data-query="terror OR explosion OR fire OR accident OR crime OR disaster OR emergency">⚠️ Происшествия</button>
-            <button class="nav-btn" data-view="cards" data-query="economy OR market OR oil OR dollar OR ruble OR inflation OR crisis OR business">💰 Экономика</button>
+        <!-- Биржевые индикаторы -->
+        <div class="markets" id="marketsWidget">
+            <div class="markets-inner">
+                <div class="market-group">
+                    <div class="market-item">
+                        <div class="market-code">USD/RUB</div>
+                        <div class="market-value">81,57</div>
+                        <div class="market-change positive">+0,67%</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-code">EUR/RUB</div>
+                        <div class="market-value">94,10</div>
+                        <div class="market-change positive">+0,76%</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-code">CNY/RUB</div>
+                        <div class="market-value">11,82</div>
+                        <div class="market-change positive">+0,14%</div>
+                    </div>
+                </div>
+                <div class="market-group">
+                    <div class="market-item">
+                        <div class="market-code">IMOEX</div>
+                        <div class="market-value">2 789,61</div>
+                        <div class="market-change negative">-1,18%</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-code">RTSI</div>
+                        <div class="market-value">1 082,99</div>
+                        <div class="market-change positive">+0,02%</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-code">Brent</div>
+                        <div class="market-value">114,96</div>
+                        <div class="market-change positive">+0,45%</div>
+                    </div>
+                </div>
+                <div class="market-group">
+                    <div class="market-item">
+                        <div class="market-code">Gold</div>
+                        <div class="market-value">4 608,80</div>
+                        <div class="market-change positive">+0,20%</div>
+                    </div>
+                    <div class="market-item">
+                        <div class="market-code">BTC/USD</div>
+                        <div class="market-value">66 380</div>
+                        <div class="market-change negative">-519</div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <!-- Блок стран -->
+        <!-- Навигация по темам (расширенные ключевые слова) -->
+        <div class="nav">
+            <button class="nav-btn active" data-view="main">🌍 Главная</button>
+            <button class="nav-btn" data-view="cards" data-query="политика|президент|выборы|закон|санкции|госдеп|кремль|белый дом|конгресс|путин|байден|трамп|макрон|шольц|дипломатия|переговоры|саммит|встреча|визит|посол|договор|союз|нато|оон|внешняя политика|реформа|оппозиция|протесты">🏛 Политика</button>
+            <button class="nav-btn" data-view="cards" data-query="война|конфликт|армия|танк|ракета|удар|обстрел|бомбардировка|дрон|беспилотник|наступление|оборона|штурм|операция|сво|мобилизация|фронт|вооружение|жертвы|погибшие|раненые|эвакуация|беженцы|перемирие|украина|израиль|палестина|газа|хуситы|йемен|сирия">⚔️ Конфликт</button>
+            <button class="nav-btn" data-view="cards" data-query="кибер|кибербезопасность|хакер|хакеры|взлом|утечка данных|ddos|атака|вирус|шифровальщик|ransomware|malware|фишинг|уязвимость|безопасность|защита|кибератака|киберугроза|киберпреступность|it|интернет|сервер|облако">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-view="cards" data-query="теракт|взрыв|пожар|катастрофа|крушение|дтп|авария|наводнение|паводок|землетрясение|ураган|шторм|спасение|мчс|пострадавшие|жертвы|криминал|убийство|ограбление|нападение|задержание|арест">⚠️ Происшествия</button>
+            <button class="nav-btn" data-view="cards" data-query="экономика|ввп|кризис|рецессия|инфляция|цены|нефть|газ|баррель|доллар|евро|рубль|курс|ключевая ставка|центробанк|кредит|ипотека|налоги|бюджет|госдолг|инвестиции|бизнес|рынок|акции|санкции|импорт|экспорт">💰 Экономика</button>
+        </div>
+        
+        <!-- Блок стран (расширенные ключевые слова) -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
-                <button class="country-btn" data-view="cards" data-query="USA OR United States OR Washington OR Biden OR Trump OR America">🇺🇸 США</button>
-                <button class="country-btn" data-view="cards" data-query="Japan OR Tokyo">🇯🇵 Япония</button>
-                <button class="country-btn" data-view="cards" data-query="Tajikistan OR Dushanbe">🇹🇯 Таджикистан</button>
-                <button class="country-btn" data-view="cards" data-query="Turkmenistan OR Ashgabat">🇹🇲 Туркменистан</button>
-                <button class="country-btn" data-view="cards" data-query="Ukraine OR Kyiv">🇺🇦 Украина</button>
-                <button class="country-btn" data-view="cards" data-query="Iran OR Tehran">🇮🇷 Иран</button>
+                <button class="country-btn" data-view="cards" data-query="сша|америка|вашингтон|трамп|байден|конгресс|белый дом|республиканцы|демократы|нью-йорк|калифорния|техас">🇺🇸 США</button>
+                <button class="country-btn" data-view="cards" data-query="япония|токио|японский|осаке|киото">🇯🇵 Япония</button>
+                <button class="country-btn" data-view="cards" data-query="таджикистан|душанбе|таджик|рахмон">🇹🇯 Таджикистан</button>
+                <button class="country-btn" data-view="cards" data-query="туркменистан|ашхабад|туркмен|бердымухамедов">🇹🇲 Туркменистан</button>
+                <button class="country-btn" data-view="cards" data-query="украина|киев|украинский|донбасс|донецк|луганск|зеленский">🇺🇦 Украина</button>
+                <button class="country-btn" data-view="cards" data-query="иран|тегеран|иранский|раиси|аятолла">🇮🇷 Иран</button>
             </div>
         </div>
         
@@ -447,7 +532,7 @@
         
         <div class="footer">
             <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам</p>
-            <p style="margin-top: 8px; font-size: 11px;">Главная лента — Inoreader · Поиск по темам — NewsAPI через Cloudflare Worker</p>
+            <p style="margin-top: 8px; font-size: 11px;">Главная лента — Inoreader · Поиск по темам — RSS-агрегация · Биржевые данные — информационные агентства</p>
         </div>
     </div>
     
@@ -484,12 +569,34 @@
     </div>
 
     <script>
-        // ============ НАСТРОЙКИ ============
-        const WORKER_URL = 'https://news-proxy.galaxyenglishia.workers.dev';
+        // ============ RSS ИСТОЧНИКИ ============
+        const RSS_FEEDS = [
+            { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
+            { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+            { name: 'Meduza', url: 'https://meduza.io/rss/all' },
+            { name: 'Lenta.ru', url: 'https://lenta.ru/rss' },
+            { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news' },
+            { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml' },
+            { name: 'Коммерсантъ', url: 'https://www.kommersant.ru/RSS/news.xml' },
+            { name: 'Российская газета', url: 'https://rg.ru/xml/index.xml' },
+            { name: 'Московский комсомолец', url: 'https://www.mk.ru/rss/news/index.xml' },
+            { name: 'Газета.ru', url: 'https://www.gazeta.ru/export/rss/lenta.xml' },
+            { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+            { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+            { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+            { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News' },
+            { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' },
+            { name: 'NPR', url: 'https://feeds.npr.org/1001/rss.xml' },
+            { name: 'ABC News', url: 'https://abcnews.go.com/abcnews/topstories' },
+            { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml' },
+            { name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/uk.xml' },
+            { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml' }
+        ];
         
         let currentView = 'main';
         let currentQuery = '';
-        let currentArticles = [];
+        let allArticles = [];
+        let filteredArticles = [];
         
         // ============ ДАТА И ВРЕМЯ ============
         function updateDateTime() {
@@ -500,26 +607,7 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
         
-        // ============ ПОГОДА ============
-        async function getWeather() {
-            try {
-                const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
-                const data = await response.json();
-                if (data.current_weather) {
-                    const temp = Math.round(data.current_weather.temperature);
-                    const weatherCode = data.current_weather.weathercode;
-                    const weatherMap = { 0:['☀️','Ясно'], 1:['🌤️','Облачно'], 2:['⛅','Переменная'], 3:['☁️','Пасмурно'], 61:['🌧️','Дождь'], 71:['🌨️','Снег'] };
-                    const weather = weatherMap[weatherCode] || ['🌡️', 'Облачно'];
-                    document.getElementById('weatherIcon').textContent = weather[0];
-                    document.getElementById('weatherTemp').textContent = `${temp}°C`;
-                    document.getElementById('weatherDesc').textContent = weather[1];
-                }
-            } catch(e) {}
-        }
-        getWeather();
-        setInterval(getWeather, 30 * 60 * 1000);
-        
-        // ============ РАДИО ============
+        // ============ РАДИО КОММЕРСАНТЪ FM ============
         let audio = null;
         let isPlaying = false;
         const radioBtn = document.getElementById('radioBtn');
@@ -528,10 +616,11 @@
         function initRadio() {
             if (!audio) {
                 audio = new Audio();
-                audio.src = 'https://icecast.vgtrk.cdnvideo.ru/vestifm_mp3_128kbps';
+                audio.src = 'https://kommersant-fm.cdnvideo.ru/kommersant_fm_64.mp3';
                 audio.preload = 'none';
                 audio.onplaying = () => { radioStatus.textContent = 'Играет'; radioBtn.textContent = '⏸️ Остановить'; radioBtn.classList.add('stop'); };
-                audio.onpause = () => { radioStatus.textContent = 'Вести FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
+                audio.onpause = () => { radioStatus.textContent = 'Ъ FM'; radioBtn.textContent = '🎙️ Включить'; radioBtn.classList.remove('stop'); };
+                audio.onerror = () => { radioStatus.textContent = 'Ошибка потока'; };
             }
         }
         
@@ -543,26 +632,72 @@
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
         
-        // ============ ЗАГРУЗКА НОВОСТЕЙ ЧЕРЕЗ WORKER ============
-        async function loadNewsByQuery(query) {
-            const grid = document.getElementById('newsGrid');
-            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
-            
-            try {
-                const url = `${WORKER_URL}?q=${encodeURIComponent(query)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data.articles) {
-                    currentArticles = data.articles.filter(a => a.title && a.description && a.title !== '[Removed]');
-                    renderCards();
-                } else {
-                    grid.innerHTML = `<div class="loader"><p>😕 Новостей не найдено</p></div>`;
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                grid.innerHTML = `<div class="loader"><p>😕 Ошибка загрузки. Попробуйте позже.</p></div>`;
+        // ============ RSS ПАРСИНГ ============
+        const PROXIES = [
+            async (url) => { const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`); const data = await res.json(); return data.contents; },
+            async (url) => { const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`); const data = await res.json(); return data.data || (typeof data === 'string' ? data : null); }
+        ];
+        
+        async function fetchWithProxy(url) {
+            for (const proxy of PROXIES) {
+                try {
+                    const controller = new AbortController();
+                    const timeout = setTimeout(() => controller.abort(), 10000);
+                    const result = await proxy(url);
+                    clearTimeout(timeout);
+                    if (result && result.length > 100) return result;
+                } catch(e) {}
             }
+            throw new Error('All proxies failed');
+        }
+        
+        async function fetchRSS(source) {
+            try {
+                const xmlText = await fetchWithProxy(source.url);
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(xmlText, 'text/xml');
+                const items = [...xml.querySelectorAll('item')];
+                return items.slice(0, 8).map(item => ({
+                    title: item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || 'Новость',
+                    description: item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 300) || '',
+                    url: item.querySelector('link')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g, '') || '#',
+                    source: source.name,
+                    publishedAt: item.querySelector('pubDate')?.textContent || new Date().toISOString()
+                }));
+            } catch(e) {
+                return [];
+            }
+        }
+        
+        async function loadAllRSS() {
+            const grid = document.getElementById('newsGrid');
+            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>';
+            
+            allArticles = [];
+            for (const feed of RSS_FEEDS) {
+                const items = await fetchRSS(feed);
+                allArticles.push(...items);
+            }
+            allArticles.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+            
+            if (currentQuery) {
+                filterArticles();
+            } else {
+                renderCards(allArticles.slice(0, 30));
+            }
+        }
+        
+        function filterArticles() {
+            if (!currentQuery) {
+                filteredArticles = allArticles.slice(0, 30);
+            } else {
+                const keywords = currentQuery.toLowerCase().split('|');
+                filteredArticles = allArticles.filter(article => {
+                    const text = (article.title + ' ' + article.description).toLowerCase();
+                    return keywords.some(kw => text.includes(kw));
+                }).slice(0, 30);
+            }
+            renderCards(filteredArticles);
         }
         
         function ago(dateStr) {
@@ -582,21 +717,20 @@
             return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
         
-        function renderCards() {
+        function renderCards(articles) {
             const grid = document.getElementById('newsGrid');
-            if (!currentArticles.length) {
+            if (!articles.length) {
                 grid.innerHTML = '<div class="loader"><p>😕 Новостей не найдено</p></div>';
                 return;
             }
-            
-            grid.innerHTML = currentArticles.slice(0, 24).map(article => `
-                <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source?.name || 'Источник')}', '${escapeHtml(article.description || 'Описание отсутствует')}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
-                    <div class="card-source">📰 ${escapeHtml(article.source?.name || 'Источник')}</div>
+            grid.innerHTML = articles.map(article => `
+                <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source)}', '${escapeHtml(article.description)}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
+                    <div class="card-source">📰 ${escapeHtml(article.source)}</div>
                     <div class="card-title">${escapeHtml(article.title)}</div>
-                    <div class="card-desc">${escapeHtml((article.description || '').substring(0, 120))}${(article.description || '').length > 120 ? '...' : ''}</div>
+                    <div class="card-desc">${escapeHtml(article.description.substring(0, 120))}${article.description.length > 120 ? '...' : ''}</div>
                     <div class="card-footer">
                         <span>🕒 ${ago(article.publishedAt)}</span>
-                        <button class="translate-btn" onclick="event.stopPropagation(); translateText('${escapeHtml(article.title)}', '${escapeHtml(article.description || '')}')">🌐 Перевести</button>
+                        <button class="translate-btn" onclick="event.stopPropagation(); translateText('${escapeHtml(article.title)}', '${escapeHtml(article.description)}')">🌐 Перевести</button>
                     </div>
                 </div>
             `).join('');
@@ -606,7 +740,7 @@
         window.translateText = async function(title, desc) {
             const text = title + '. ' + desc;
             try {
-                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=${encodeURIComponent(text.substring(0, 1000))}`);
+                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=${encodeURIComponent(text.substring(0, 1000))}`);
                 const data = await response.json();
                 let translated = '';
                 if (data && data[0]) {
@@ -650,7 +784,11 @@
             currentQuery = query;
             mainView.style.display = 'none';
             cardsView.style.display = 'block';
-            loadNewsByQuery(query);
+            if (allArticles.length) {
+                filterArticles();
+            } else {
+                loadAllRSS().then(() => filterArticles());
+            }
         }
         
         // Обработчики кнопок
@@ -678,7 +816,7 @@
             };
         });
         
-        // AI-помощник
+        // ============ AI-ПОМОЩНИК ============
         const chatButton = document.getElementById('chatButton');
         const chatWindow = document.getElementById('chatWindow');
         const closeChatBtn = document.getElementById('closeChatBtn');
@@ -713,13 +851,13 @@
                 }
             }
             if (msg.includes('источник') || msg.includes('откуда')) {
-                return "📰 Новости поступают через NewsAPI — агрегатор более 80 000 источников по всему миру. Все права принадлежат авторам.";
+                return "📰 Мы собираем новости из 20 официальных RSS-источников: ТАСС, РИА, Meduza, BBC, The Guardian, Reuters, и другие. Все права принадлежат авторам.";
             }
             if (msg.includes('категория') || msg.includes('тема')) {
                 return "🏷️ На сайте есть категории: Политика, Конфликт, Кибербезопасность, Происшествия, Экономика, а также новости по странам: США, Япония, Таджикистан, Туркменистан, Украина, Иран.";
             }
             if (msg.includes('радио')) {
-                return "🎙️ На сайте работает радио «Вести FM». Нажмите кнопку «Включить» в правом верхнем углу, чтобы начать прослушивание.";
+                return "🎙️ На сайте работает радио «Коммерсантъ FM». Нажмите кнопку «Включить» в правом верхнем углу, чтобы начать прослушивание.";
             }
             return `Я могу:\n• Перевести текст — напиши "переведи [текст]"\n• Рассказать об источниках — спроси "откуда новости"\n• Помочь с категориями — спроси "какие темы"\n• Подсказать про радио — спроси "радио"`;
         }
@@ -740,6 +878,10 @@
         
         chatSend.onclick = sendMessage;
         chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+        
+        // Загрузка новостей для карточек
+        loadAllRSS();
+        setInterval(loadAllRSS, 10 * 60 * 1000);
         
         // По умолчанию показываем главную
         switchToMain();
