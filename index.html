@@ -174,7 +174,7 @@
         .inoreader-iframe-container { background: #0a0a0f; padding: 4px; }
         .inoreader-iframe-container iframe {
             width: 100%;
-            height: 600px;
+            height: 650px;
             border: none;
             background: transparent;
             border-radius: 20px;
@@ -316,7 +316,7 @@
             </div>
         </div>
         
-        <!-- Виджет Inoreader (основная лента) -->
+        <!-- Виджет Inoreader (настроен под сайт) -->
         <div class="inoreader-widget">
             <div class="inoreader-header">
                 <h3>📰 Агрегатор мировых новостей</h3>
@@ -324,9 +324,10 @@
             </div>
             <div class="inoreader-iframe-container">
                 <iframe 
-                    id="inoreaderIframe"
-                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?theme=dark&style=cards"
+                    src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
                     title="Новостная лента ВЕКТОР"
+                    width="100%" 
+                    height="650" 
                     frameborder="0"
                     allowfullscreen>
                 </iframe>
@@ -412,9 +413,8 @@
         
         // Фильтрация в Inoreader (через изменение iframe src)
         const iframe = document.getElementById('inoreaderIframe');
-        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?theme=dark&style=cards';
+        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f';
         
-        // Фильтры по темам и странам (Inoreader поддерживает поиск через параметры)
         const filters = {
             all: '',
             politics: 'политика',
