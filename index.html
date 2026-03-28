@@ -60,7 +60,6 @@
             flex-wrap: wrap;
         }
         
-        /* Блок с датой, погодой и радио (в один ряд) */
         .info-bar {
             display: flex;
             align-items: center;
@@ -158,24 +157,72 @@
         }
         .country-btn:hover, .country-btn.active { background: #5b5bd6; color: white; }
         
-        /* Лента новостей */
-        .iframe-container {
-            background: rgba(15,15,26,0.4);
-            backdrop-filter: blur(10px);
-            border-radius: 28px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.08);
-            padding: 4px;
+        /* Сетка новостей */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
             margin: 32px 0;
         }
         
-        .iframe-container iframe {
-            width: 100%;
-            height: 750px;
-            border: none;
-            background: transparent;
+        .news-card {
+            background: rgba(15,15,26,0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
+        .news-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(91,91,214,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card-source {
+            font-size: 11px;
+            color: #5b5bd6;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        .card-desc {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #666;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .translate-btn {
+            background: rgba(91,91,214,0.2);
+            border: none;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 10px;
+            color: #a5a5ff;
+            cursor: pointer;
+        }
+        
+        .loader { text-align: center; padding: 60px 20px; }
+        .spinner { width: 48px; height: 48px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #5b5bd6; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         
         .footer {
             margin-top: 48px;
@@ -184,6 +231,55 @@
             text-align: center;
             font-size: 12px;
             color: #666;
+        }
+        
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #0f0f1a;
+            max-width: 700px;
+            width: 90%;
+            border-radius: 24px;
+            padding: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .modal-title { font-size: 22px; font-weight: 700; margin-bottom: 16px; padding-right: 30px; }
+        .modal-meta { font-size: 12px; color: #666; margin-bottom: 20px; }
+        .modal-text { font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+        .modal-source { padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .modal-translate-btn {
+            background: rgba(91,91,214,0.2);
+            border: none;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 11px;
+            color: #a5a5ff;
+            cursor: pointer;
         }
         
         /* AI-помощник */
@@ -249,14 +345,7 @@
             .header { flex-direction: column; text-align: center; }
             .header-right { justify-content: center; }
             .info-bar { justify-content: center; }
-            .iframe-container iframe { height: 550px; }
-        }
-        @media (max-width: 480px) {
-            .iframe-container iframe { height: 500px; }
-            .datetime { font-size: 11px; padding: 4px 12px; }
-            .widget { padding: 4px 12px; }
-            .weather-icon { font-size: 20px; }
-            .weather-temp { font-size: 12px; }
+            .news-grid { grid-template-columns: 1fr; }
         }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
@@ -292,43 +381,51 @@
             </div>
         </div>
         
-        <!-- Навигация по темам (полные ключевые слова) -->
+        <!-- Навигация по темам -->
         <div class="nav">
-            <button class="nav-btn active" data-filter="">🌍 Главная</button>
-            <button class="nav-btn" data-filter="политика политик президент выборы голосование депутат парламент дума совет федерации закон законодательство указ постановление санкции ограничения госдеп минфин минобороны кремль белый дом конгресс путин байден трамп макрон шольц эрдоган си моди дипломатия переговоры встреча саммит визит посол договор соглашение союз альянс нато оон советбезопасности внешняя политика внутренняя политика реформа оппозиция протесты митинг инаугурация кампания кандидат">🏛 Политика</button>
-            <button class="nav-btn" data-filter="война конфликт боевые действия армия военные танк ракета удар обстрел бомбардировка авиаудар дрон беспилотник наступление контрнаступление оборона штурм операция сво мобилизация фронт линия фронта вооружение поставки оружия техника потеря жертвы погибшие раненые эвакуация беженцы гуманитарная помощь перемирие прекращение огня мирные переговоры украина израиль палестина газа сектор газа палестинцы хуситы йемен сирия ирак афганистан нагорный карабах судан эфиопия нато российская армия вс рф вс украины">⚔️ Конфликт</button>
-            <button class="nav-btn" data-filter="кибер кибербезопасность хакер хакеры взлом утечка данных персональные данные база данных ddos атака вирус шифровальщик ransomware malware фишинг спам уязвимость баг эксплойт безопасность защита шифрование vpn брандмауэр антивирус цифровая безопасность информационная безопасность кибератака киберугроза кибершпионаж киберпреступность фейк дезинформация deepfake цифровой суверенитет импортозамещение софт программное обеспечение it интернет сеть сервер облако блокчейн криптовалюта биткоин">🛡 Кибербезопасность</button>
-            <button class="nav-btn" data-filter="теракт взрыв пожар возгорание чп чрезвычайное происшествие катастрофа крушение падение столкновение дтп авария затопление наводнение паводок землетрясение цунами ураган смерч шторм обвал оползень снегопад гололед заморозки жара засуха отключение аварийное отключение обрушение завал спасение спасатели мчс пострадавшие жертвы погибшие раненые госпитализация криминал убийство ограбление разбой нападение задержание арест розыск пропал исчез найден погиб">⚠️ Происшествия</button>
-            <button class="nav-btn" data-filter="экономика ввп рост спад кризис рецессия инфляция цены рост цен продукты продовольствие бензин топливо энергоносители нефть газ баррель цена на нефть доллар евро рубль курс курс валют ключевая ставка центробанк цб кредит ипотека займ налоги фнс бюджет госдолг инвестиции бизнес предпринимательство малый бизнес рынок фондовый рынок акции облигации санкции импорт экспорт торговля продукция промышленность завод предприятие сельское хозяйство урожай туризм авиаперевозки логистика зарплата пенсия пособия соцвыплаты">💰 Экономика</button>
+            <button class="nav-btn active" data-query="world">🌍 Главная</button>
+            <button class="nav-btn" data-query="politics OR government OR election OR president OR Putin OR Biden OR Trump OR Kremlin OR White House">🏛 Политика</button>
+            <button class="nav-btn" data-query="war OR conflict OR military OR Ukraine OR Israel OR Palestine OR Gaza OR Russia Ukraine">⚔️ Конфликт</button>
+            <button class="nav-btn" data-query="cyber OR hacking OR data breach OR ransomware OR security OR cyberattack">🛡 Кибербезопасность</button>
+            <button class="nav-btn" data-query="terror OR explosion OR fire OR accident OR crime OR disaster OR emergency">⚠️ Происшествия</button>
+            <button class="nav-btn" data-query="economy OR market OR oil OR dollar OR ruble OR inflation OR crisis OR business">💰 Экономика</button>
         </div>
         
-        <!-- Блок стран (полные ключевые слова) -->
+        <!-- Блок стран -->
         <div class="countries-section">
             <div class="countries-title">🌍 Новости по странам</div>
             <div class="countries-grid">
-                <button class="country-btn" data-filter="сша америка американский вашингтон белый дом конгресс сенат палата представителей трамп байден харрис республиканцы демократы выборы в сша американские выборы нью-йорк калифорния техас флорида госдеп сша пентагон цру фбр нато американо-российские американо-китайские сша и россия сша и китай вашингтон заявил бел">🇺🇸 США</button>
-                <button class="country-btn" data-filter="япония токио японский японские осаке киото хоккайдо фудзи японии правительство японии премьер японии">🇯🇵 Япония</button>
-                <button class="country-btn" data-filter="таджикистан душанбе таджик таджикский таджикистана президент таджикистана рахмон согд хатлон">🇹🇯 Таджикистан</button>
-                <button class="country-btn" data-filter="туркменистан ашхабад туркмен туркменский туркменистана президент туркменистана бердымухамедов туркменбаши мары дашогуз">🇹🇲 Туркменистан</button>
-                <button class="country-btn" data-filter="украина киев украинский украинские донбасс донецк луганск харьков одесса львов запорожье херсон мариуполь киевская русь зеленный зеленский">🇺🇦 Украина</button>
-                <button class="country-btn" data-filter="иран тегеран иранский иранские ирана раиси аятолла хуситы персидский залив исламская революция">🇮🇷 Иран</button>
+                <button class="country-btn" data-query="USA OR United States OR Washington OR Biden OR Trump OR America">🇺🇸 США</button>
+                <button class="country-btn" data-query="Japan OR Tokyo">🇯🇵 Япония</button>
+                <button class="country-btn" data-query="Tajikistan OR Dushanbe">🇹🇯 Таджикистан</button>
+                <button class="country-btn" data-query="Turkmenistan OR Ashgabat">🇹🇲 Туркменистан</button>
+                <button class="country-btn" data-query="Ukraine OR Kyiv">🇺🇦 Украина</button>
+                <button class="country-btn" data-query="Iran OR Tehran">🇮🇷 Иран</button>
             </div>
         </div>
         
-        <!-- Лента новостей -->
-        <div class="iframe-container">
-            <iframe 
-                id="newsIframe"
-                src="https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f"
-                title="Новостная лента ВЕКТОР"
-                frameborder="0"
-                allowfullscreen>
-            </iframe>
+        <!-- Сетка новостей -->
+        <div id="newsGrid" class="news-grid">
+            <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
         </div>
         
         <div class="footer">
-            <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · 20 источников · Все права принадлежат авторам</p>
-            <p style="margin-top: 8px; font-size: 11px;">Inoreader — платформа для сбора новостей из RSS-лент по всему миру</p>
+            <p>© 2026 ВЕКТОР · Агрегатор мировых новостей · Все права принадлежат авторам</p>
+            <p style="margin-top: 8px; font-size: 11px;">Новости предоставлены NewsAPI.org</p>
+        </div>
+    </div>
+    
+    <!-- Модальное окно -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModalBtn">✕</button>
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-text" id="modalText"></div>
+            <div class="modal-source">
+                <span id="modalLink"></span>
+                <button class="modal-translate-btn" id="modalTranslateBtn">🌐 Перевести на русский</button>
+            </div>
         </div>
     </div>
     
@@ -351,7 +448,14 @@
     </div>
 
     <script>
-        // Дата и время
+        // ============ НАСТРОЙКИ NEWSAPI ============
+        const API_KEY = 'c4d548d6f05e4d11af43a0f684c14dee';
+        const API_URL = 'https://newsapi.org/v2/everything';
+        
+        let currentQuery = 'world';
+        let allArticles = [];
+        
+        // ============ ДАТА И ВРЕМЯ ============
         function updateDateTime() {
             const now = new Date();
             document.getElementById('currentDate').textContent = now.toLocaleDateString('ru-RU', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
@@ -360,7 +464,7 @@
         updateDateTime();
         setInterval(updateDateTime, 1000);
         
-        // Погода
+        // ============ ПОГОДА ============
         async function getWeather() {
             try {
                 const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
@@ -379,7 +483,7 @@
         getWeather();
         setInterval(getWeather, 30 * 60 * 1000);
         
-        // Радио
+        // ============ РАДИО ============
         let audio = null;
         let isPlaying = false;
         const radioBtn = document.getElementById('radioBtn');
@@ -403,25 +507,106 @@
         radioBtn.onclick = toggleRadio;
         document.body.addEventListener('click', initRadio, { once: true });
         
-        // Фильтрация
-        const iframe = document.getElementById('newsIframe');
-        const baseUrl = 'https://www.inoreader.com/stream/user/1003523689/tag/%D0%92%D0%95%D0%9A%D0%A2%D0%9E%D0%A0/view/html?t=%D0%9D%D0%BE%D0%B2%D0%BE%D1%81%D1%82%D0%BD%D0%B0%D1%8F%20%D0%BB%D0%B5%D0%BD%D1%82%D0%B0&l=https%3A%2F%2Fimg.freepik.com%2Fpremium-vector%2Fb-letter-logo-alphabet-design-illustration_884294-52.jpg&cs=m&n=50&sb=y&c=0xffffff&lc=0xa5a5ff&bc=0x0a0a0f';
-        
-        function updateFilter(searchTerm) {
-            if (searchTerm && searchTerm !== '') {
-                iframe.src = `${baseUrl}&q=${encodeURIComponent(searchTerm)}`;
-            } else {
-                iframe.src = baseUrl;
+        // ============ ЗАГРУЗКА НОВОСТЕЙ ИЗ NEWSAPI ============
+        async function loadNews(query) {
+            const grid = document.getElementById('newsGrid');
+            grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
+            
+            try {
+                const url = `${API_URL}?q=${encodeURIComponent(query)}&language=en&sortBy=publishedAt&pageSize=30&apiKey=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.status === 'ok' && data.articles) {
+                    allArticles = data.articles.filter(article => article.title && article.description && article.title !== '[Removed]' && article.title !== null);
+                    renderNews();
+                } else {
+                    grid.innerHTML = `<div class="loader"><p>😕 Ошибка: ${data.message || 'Не удалось загрузить новости'}</p></div>`;
+                }
+            } catch (error) {
+                console.error('Error loading news:', error);
+                grid.innerHTML = '<div class="loader"><p>😕 Ошибка подключения к NewsAPI</p></div>';
             }
         }
         
-        // Обработчики кнопок
+        function ago(dateStr) {
+            try {
+                const d = new Date(dateStr);
+                if (isNaN(d.getTime())) return 'недавно';
+                const m = Math.floor((new Date() - d) / 60000);
+                if (m < 1) return 'только что';
+                if (m < 60) return `${m} мин назад`;
+                if (m < 1440) return `${Math.floor(m/60)} ч назад`;
+                return d.toLocaleDateString('ru-RU', { day:'numeric', month:'short' });
+            } catch { return 'недавно'; }
+        }
+        
+        function escapeHtml(text) {
+            if (!text) return '';
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+        
+        function renderNews() {
+            const grid = document.getElementById('newsGrid');
+            if (!allArticles.length) {
+                grid.innerHTML = '<div class="loader"><p>😕 Новостей не найдено</p></div>';
+                return;
+            }
+            
+            grid.innerHTML = allArticles.slice(0, 24).map(article => `
+                <div class="news-card" onclick="openModal('${escapeHtml(article.title)}', '${escapeHtml(article.source.name)}', '${escapeHtml(article.description || 'Описание отсутствует')}', '${escapeHtml(article.url)}', '${article.publishedAt}')">
+                    <div class="card-source">📰 ${escapeHtml(article.source.name)}</div>
+                    <div class="card-title">${escapeHtml(article.title)}</div>
+                    <div class="card-desc">${escapeHtml((article.description || '').substring(0, 120))}${(article.description || '').length > 120 ? '...' : ''}</div>
+                    <div class="card-footer">
+                        <span>🕒 ${ago(article.publishedAt)}</span>
+                        <button class="translate-btn" onclick="event.stopPropagation(); translateText('${escapeHtml(article.title)}', '${escapeHtml(article.description || '')}')">🌐 Перевести</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // ============ ПЕРЕВОД ============
+        window.translateText = async function(title, desc) {
+            const text = title + '. ' + desc;
+            try {
+                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ru&dt=t&q=${encodeURIComponent(text.substring(0, 1000))}`);
+                const data = await response.json();
+                let translated = '';
+                if (data && data[0]) {
+                    for (const segment of data[0]) {
+                        if (segment[0]) translated += segment[0];
+                    }
+                }
+                alert('📝 Перевод:\n\n' + (translated || 'Не удалось перевести'));
+            } catch(e) { alert('Ошибка перевода'); }
+        };
+        
+        // ============ МОДАЛЬНОЕ ОКНО ============
+        window.openModal = function(title, source, text, url, date) {
+            document.getElementById('modalTitle').innerHTML = title;
+            document.getElementById('modalMeta').innerHTML = `${source} · ${ago(date)} · ${new Date(date).toLocaleString('ru-RU')}`;
+            document.getElementById('modalText').innerHTML = text || 'Описание отсутствует.';
+            document.getElementById('modalLink').innerHTML = `📌 Источник: <a href="${url}" target="_blank">${source}</a> — Все права принадлежат автору.`;
+            document.getElementById('newsModal').classList.add('active');
+            document.getElementById('modalTranslateBtn').onclick = () => translateText(title, text);
+        };
+        
+        function closeModal() {
+            document.getElementById('newsModal').classList.remove('active');
+        }
+        
+        document.getElementById('closeModalBtn').onclick = closeModal;
+        document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
+        
+        // ============ ФИЛЬТРАЦИЯ ============
         document.querySelectorAll('.nav-btn').forEach(btn => {
             btn.onclick = () => {
                 document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.country-btn').forEach(c => c.classList.remove('active'));
-                updateFilter(btn.dataset.filter);
+                currentQuery = btn.dataset.query;
+                loadNews(currentQuery);
             };
         });
         
@@ -430,12 +615,13 @@
                 document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 document.querySelectorAll('.nav-btn').forEach(n => n.classList.remove('active'));
-                document.querySelector('.nav-btn[data-filter=""]').classList.add('active');
-                updateFilter(btn.dataset.filter);
+                document.querySelector('.nav-btn[data-query="world"]').classList.add('active');
+                currentQuery = btn.dataset.query;
+                loadNews(currentQuery);
             };
         });
         
-        // AI-помощник
+        // ============ AI-ПОМОЩНИК ============
         const chatButton = document.getElementById('chatButton');
         const chatWindow = document.getElementById('chatWindow');
         const closeChatBtn = document.getElementById('closeChatBtn');
@@ -446,7 +632,7 @@
         chatButton.onclick = () => chatWindow.classList.toggle('active');
         closeChatBtn.onclick = () => chatWindow.classList.remove('active');
         
-        async function translateText(text) {
+        async function translateTextQuick(text) {
             try {
                 const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=${encodeURIComponent(text)}`);
                 const data = await response.json();
@@ -460,22 +646,17 @@
             } catch(e) { return text; }
         }
         
-        function escapeHtml(text) {
-            if (!text) return '';
-            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-        
         async function getAIResponse(message) {
             const msg = message.toLowerCase();
             if (msg.includes('переведи') || msg.includes('перевод')) {
                 const textToTranslate = msg.replace(/переведи|перевод/gi, '').trim();
                 if (textToTranslate) {
-                    const translated = await translateText(textToTranslate);
+                    const translated = await translateTextQuick(textToTranslate);
                     return `🌐 Перевод: ${translated}`;
                 }
             }
             if (msg.includes('источник') || msg.includes('откуда')) {
-                return "📰 Мы собираем новости из 20 источников через Inoreader: ТАСС, РИА Новости, BBC, The Guardian, Reuters, Al Jazeera, NHK, и другие. Все права принадлежат авторам.";
+                return "📰 Новости поступают через NewsAPI — агрегатор более 80 000 источников по всему миру. Все права принадлежат авторам.";
             }
             if (msg.includes('категория') || msg.includes('тема')) {
                 return "🏷️ На сайте есть категории: Политика, Конфликт, Кибербезопасность, Происшествия, Экономика, а также новости по странам: США, Япония, Таджикистан, Туркменистан, Украина, Иран.";
@@ -502,6 +683,10 @@
         
         chatSend.onclick = sendMessage;
         chatInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
+        
+        // Загружаем новости
+        loadNews('world');
+        setInterval(() => loadNews(currentQuery), 10 * 60 * 1000);
     </script>
 </body>
 </html>
