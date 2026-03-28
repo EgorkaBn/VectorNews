@@ -86,7 +86,7 @@
         }
         .logo p { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; margin-top: 4px; }
         
-        /* ============ РАДИО ВЕСТИ FM (КОМПАКТНЫЙ) ============ */
+        /* ============ РАДИО ВЕСТИ FM ============ */
         .radio-block {
             background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%);
             border-radius: 20px;
@@ -94,11 +94,8 @@
             min-width: 260px;
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            transition: all 0.2s;
         }
-        .radio-block:hover {
-            border-color: var(--radio-red);
-        }
+        .radio-block:hover { border-color: var(--radio-red); }
         .radio-header {
             display: flex;
             align-items: center;
@@ -107,11 +104,7 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        .radio-brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .radio-brand { display: flex; align-items: center; gap: 10px; }
         .radio-icon {
             width: 32px;
             height: 32px;
@@ -124,17 +117,8 @@
             font-weight: bold;
             color: white;
         }
-        .radio-brand h3 {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
-            margin: 0;
-        }
-        .radio-brand p {
-            font-size: 8px;
-            color: var(--text-muted);
-            margin: 2px 0 0;
-        }
+        .radio-brand h3 { font-size: 13px; font-weight: 700; color: var(--text); }
+        .radio-brand p { font-size: 8px; color: var(--text-muted); margin-top: 2px; }
         .radio-badge {
             background: rgba(197,42,42,0.2);
             padding: 3px 8px;
@@ -143,19 +127,8 @@
             color: var(--radio-red);
             border: 1px solid rgba(197,42,42,0.3);
         }
-        .radio-footer {
-            display: flex;
-            justify-content: center;
-            margin-top: 6px;
-        }
-        .radio-footer a {
-            color: var(--radio-red);
-            text-decoration: none;
-            font-size: 9px;
-        }
-        .radio-footer a:hover {
-            text-decoration: underline;
-        }
+        .radio-footer { display: flex; justify-content: center; margin-top: 6px; }
+        .radio-footer a { color: var(--radio-red); text-decoration: none; font-size: 9px; }
         
         .stats {
             display: flex;
@@ -442,7 +415,7 @@
             margin-bottom: 32px;
         }
         @media (min-width: 640px) { .footer-cols { flex-direction: row; justify-content: space-between; } }
-        .sources-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 500px; }
+        .sources-list { display: flex; flex-wrap: wrap; gap: 8px; max-width: 600px; }
         .source-tag { background: var(--surface-hover); padding: 4px 12px; border-radius: 20px; font-size: 11px; color: var(--text-secondary); }
         .copyright { text-align: center; font-size: 11px; color: var(--text-muted); padding-top: 24px; border-top: 1px solid var(--border); }
         .modal-loading {
@@ -479,7 +452,7 @@
             .stats { justify-content: center; }
         }
         
-        /* ============ AI-ПОМОЩНИК ДЕДУС ============ */
+        /* AI-помощник */
         .ai-chatbot {
             position: fixed;
             bottom: 20px;
@@ -548,11 +521,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        .chat-header-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .chat-header-info { display: flex; align-items: center; gap: 12px; }
         .chat-avatar {
             width: 40px;
             height: 40px;
@@ -563,16 +532,8 @@
             justify-content: center;
             font-size: 22px;
         }
-        .chat-header-text h3 {
-            font-size: 16px;
-            margin: 0;
-            font-weight: 700;
-        }
-        .chat-header-text p {
-            font-size: 10px;
-            margin: 2px 0 0;
-            opacity: 0.8;
-        }
+        .chat-header-text h3 { font-size: 16px; margin: 0; font-weight: 700; }
+        .chat-header-text p { font-size: 10px; margin: 2px 0 0; opacity: 0.8; }
         .close-chat {
             background: none;
             border: none;
@@ -697,10 +658,10 @@
     <div class="masthead-inner">
         <div class="logo">
             <h1>ВЕКТОР</h1>
-            <p>МИРОВЫЕ НОВОСТИ · АНАЛИТИКА · 16 ИСТОЧНИКОВ</p>
+            <p>МИРОВЫЕ НОВОСТИ · 20 ИСТОЧНИКОВ</p>
         </div>
         
-        <!-- РАДИО ВЕСТИ FM (КОМПАКТНЫЙ) -->
+        <!-- РАДИО ВЕСТИ FM -->
         <div class="radio-block">
             <div class="radio-header">
                 <div class="radio-brand">
@@ -728,7 +689,7 @@
         
         <div>
             <div class="stats">
-                <div class="stat"><div class="stat-value">16</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
+                <div class="stat"><div class="stat-value">20</div><div class="stat-label">ИСТОЧНИКОВ</div></div>
                 <div class="stat"><div class="stat-value">7</div><div class="stat-label">ДНЕЙ АРХИВА</div></div>
                 <div class="stat"><div class="stat-value" id="totalNews">—</div><div class="stat-label">НОВОСТЕЙ</div></div>
                 <div class="stat"><div class="stat-value">3</div><div class="stat-label">ОБНОВЛЕНИЯ</div></div>
@@ -766,23 +727,25 @@
         <span class="news-count" id="newsCount">—</span>
     </div>
     <div class="news-grid" id="newsGrid">
-        <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+        <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 20 источников...</p></div>
     </div>
 </main>
 <footer class="footer">
     <div class="footer-inner">
         <div class="footer-logo">ВЕКТОР</div>
-        <div class="footer-tagline">Агрегатор мировых новостей · 16 источников · Архив 7 дней · Обновление в 07:00, 13:00, 19:00 МСК</div>
+        <div class="footer-tagline">Агрегатор мировых новостей · 20 источников · Архив 7 дней · Обновление в 07:00, 13:00, 19:00 МСК</div>
         <div class="footer-cols">
             <div>
                 <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 12px;">ИСТОЧНИКИ</div>
                 <div class="sources-list">
-                    <span class="source-tag">ТАСС</span><span class="source-tag">РБК</span><span class="source-tag">Meduza</span>
-                    <span class="source-tag">Tengrinews</span><span class="source-tag">Gazeta.uz</span><span class="source-tag">Kaktus.media</span>
-                    <span class="source-tag">Asia-Plus</span><span class="source-tag">Turkmenportal</span><span class="source-tag">Хроники Туркменистана</span>
-                    <span class="source-tag">Sputnik Таджикистан</span><span class="source-tag">RT</span><span class="source-tag">Euronews</span>
-                    <span class="source-tag">Deutsche Welle</span><span class="source-tag">BBC News</span><span class="source-tag">The Guardian</span>
-                    <span class="source-tag">Al Jazeera</span>
+                    <span class="source-tag">ТАСС</span><span class="source-tag">РИА Новости</span><span class="source-tag">Meduza</span>
+                    <span class="source-tag">Lenta.ru</span><span class="source-tag">Ведомости</span><span class="source-tag">Известия</span>
+                    <span class="source-tag">NPR</span><span class="source-tag">ABC News</span><span class="source-tag">Associated Press</span>
+                    <span class="source-tag">BBC News</span><span class="source-tag">The Guardian</span><span class="source-tag">Sky News</span>
+                    <span class="source-tag">Хроники Туркменистана</span><span class="source-tag">Turkmenportal</span>
+                    <span class="source-tag">Asia-Plus</span><span class="source-tag">Sputnik Таджикистан</span>
+                    <span class="source-tag">Tengrinews</span><span class="source-tag">NHK World</span><span class="source-tag">Al Jazeera</span>
+                    <span class="source-tag">Gazeta.uz</span>
                 </div>
             </div>
             <div>
@@ -810,24 +773,45 @@
 </div>
 
 <script>
-    // ============ ИСТОЧНИКИ (16 РАБОЧИХ) ============
+    // ============ 20 ИСТОЧНИКОВ (ВСЕ РАБОЧИЕ) ============
     const SOURCES = [
+        // Россия (6)
         { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml', lang: 'ru' },
-        { name: 'РБК', url: 'https://www.rbc.ru/rss/', lang: 'ru' },
+        { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml', lang: 'ru' },
         { name: 'Meduza', url: 'https://meduza.io/rss/all', lang: 'ru' },
-        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
-        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' },
-        { name: 'Kaktus.media', url: 'https://kaktus.media/rss', lang: 'ru' },
-        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
-        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
-        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
-        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
-        { name: 'RT на русском', url: 'https://russian.rt.com/rss.xml', lang: 'ru' },
-        { name: 'Euronews', url: 'https://www.euronews.com/rss?lang=ru', lang: 'ru' },
-        { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml', lang: 'ru' },
+        { name: 'Lenta.ru', url: 'https://lenta.ru/rss', lang: 'ru' },
+        { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news', lang: 'ru' },
+        { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml', lang: 'ru' },
+        
+        // США (3)
+        { name: 'NPR', url: 'https://feeds.npr.org/1001/rss.xml', lang: 'en' },
+        { name: 'ABC News', url: 'https://abcnews.go.com/abcnews/topstories', lang: 'en' },
+        { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News', lang: 'en' },
+        
+        // Великобритания (3)
         { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml', lang: 'en' },
         { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss', lang: 'en' },
-        { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml', lang: 'en' }
+        { name: 'Sky News', url: 'https://feeds.skynews.com/feeds/rss/uk.xml', lang: 'en' },
+        
+        // Туркменистан (2)
+        { name: 'Хроники Туркменистана', url: 'https://www.hronikatm.com/feed/', lang: 'ru' },
+        { name: 'Turkmenportal', url: 'https://turkmenportal.com/rss/ru', lang: 'ru' },
+        
+        // Таджикистан (2)
+        { name: 'Asia-Plus', url: 'https://asiaplustj.info/ru/rss.xml', lang: 'ru' },
+        { name: 'Sputnik Таджикистан', url: 'https://sputnik-tj.com/rss', lang: 'ru' },
+        
+        // Казахстан (1)
+        { name: 'Tengrinews', url: 'https://tengrinews.kz/rss/all.xml', lang: 'ru' },
+        
+        // Япония (1)
+        { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml', lang: 'en' },
+        
+        // Ближний Восток (1)
+        { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml', lang: 'en' },
+        
+        // Центральная Азия (1)
+        { name: 'Gazeta.uz', url: 'https://www.gazeta.uz/rss/ru', lang: 'ru' }
     ];
 
     let allNews = [];
@@ -920,10 +904,12 @@
             for (let i = 0; i < Math.min(data.items.length, 6); i++) {
                 const item = data.items[i];
                 let title = item.title || '';
-                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 300);
+                let desc = (item.description || '').replace(/<[^>]*>/g, '').substring(0, 400);
                 let link = item.link || '';
                 let originalTitle = null;
                 
+                // Очищаем от CDATA и лишних символов
+                link = link.replace(/<!\[CDATA\[|\]\]>/g, '');
                 if (!title && desc) title = desc.substring(0, 80);
                 if (!title) title = 'Новость';
                 
@@ -932,7 +918,7 @@
                     try {
                         title = await translateText(title);
                         if (desc.length > 20) {
-                            desc = await translateText(desc.substring(0, 300));
+                            desc = await translateText(desc.substring(0, 350));
                         }
                     } catch (e) {
                         console.warn(`Translation failed for ${source.name}`);
@@ -941,10 +927,10 @@
                 
                 news.push({
                     id: `${source.name}-${i}-${Date.now()}`,
-                    title: title.substring(0, 150),
+                    title: title.substring(0, 180),
                     originalTitle: originalTitle,
                     description: desc || 'Описание отсутствует',
-                    fullText: null,
+                    fullText: desc || 'Описание отсутствует',
                     url: link,
                     source: source.name,
                     publishedAt: item.pubDate,
@@ -994,7 +980,7 @@
         const seen = new Set(cached.map(n => n.url));
         allNews = [...allFresh.filter(n => !seen.has(n.url)), ...cached];
         
-        if (allNews.length > 200) allNews = allNews.slice(0, 200);
+        if (allNews.length > 300) allNews = allNews.slice(0, 300);
         
         localStorage.setItem('vector_news', JSON.stringify(allNews));
         localStorage.setItem('vector_news_last_update', new Date().toISOString());
@@ -1197,7 +1183,7 @@
     init();
 </script>
 
-<!-- AI-ПОМОЩНИК Дедус -->
+<!-- AI-помощник ДЕДУС -->
 <style>
     .ai-chatbot {
         position: fixed;
@@ -1267,11 +1253,7 @@
         justify-content: space-between;
         align-items: center;
     }
-    .chat-header-info {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
+    .chat-header-info { display: flex; align-items: center; gap: 12px; }
     .chat-avatar {
         width: 40px;
         height: 40px;
@@ -1282,16 +1264,8 @@
         justify-content: center;
         font-size: 22px;
     }
-    .chat-header-text h3 {
-        font-size: 16px;
-        margin: 0;
-        font-weight: 700;
-    }
-    .chat-header-text p {
-        font-size: 10px;
-        margin: 2px 0 0;
-        opacity: 0.8;
-    }
+    .chat-header-text h3 { font-size: 16px; margin: 0; font-weight: 700; }
+    .chat-header-text p { font-size: 10px; margin: 2px 0 0; opacity: 0.8; }
     .close-chat {
         background: none;
         border: none;
@@ -1509,7 +1483,7 @@
         }
         
         if (msg.match(/источник|откуда|из каких|где берутся|rss/)) {
-            return "📰 Мы собираем новости из 16 проверенных источников:\n\n🇷🇺 Российские: ТАСС, РБК, Meduza, RT, Euronews, Deutsche Welle\n🌏 Центральная Азия: Tengrinews, Gazeta.uz, Kaktus.media, Asia-Plus, Turkmenportal, Хроники Туркменистана, Sputnik Таджикистан\n🌍 Международные: BBC News, The Guardian, Al Jazeera\n\nАнглийские новости автоматически переводятся на русский язык.";
+            return "📰 Мы собираем новости из 20 проверенных источников:\n\n🇷🇺 Россия: ТАСС, РИА Новости, Meduza, Lenta.ru, Ведомости, Известия\n🇺🇸 США: NPR, ABC News, Associated Press\n🇬🇧 Британия: BBC News, The Guardian, Sky News\n🇹🇲 Туркменистан: Хроники Туркменистана, Turkmenportal\n🇹🇯 Таджикистан: Asia-Plus, Sputnik Таджикистан\n🇰🇿 Казахстан: Tengrinews\n🇯🇵 Япония: NHK World\n🇸🇦 Ближний Восток: Al Jazeera\n🌏 Центральная Азия: Gazeta.uz\n\nАнглийские новости автоматически переводятся на русский язык.";
         }
         
         if (msg.match(/категория|тема|раздел|фильтр|политика|война|экономика|кибер|происшествие/)) {
@@ -1543,7 +1517,7 @@
         }
         
         if (msg.match(/что это|о сайте|вектор|агрегатор|зачем|как работает/)) {
-            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 16 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника ДЕДУС.";
+            return "✨ ВЕКТОР — это современный новостной агрегатор. Мы собираем новости из 20 российских и международных источников, переводим английские новости на русский язык и предоставляем удобные инструменты для чтения: фильтры по темам, архив на 7 дней, радио-плеер и AI-помощника ДЕДУС.";
         }
         
         return "🔍 Я пока не нашёл ответ на этот вопрос. Попробуйте спросить о:\n• последних новостях по теме\n• категориях новостей\n• источниках информации\n• обновлении ленты\n• радио на сайте";
