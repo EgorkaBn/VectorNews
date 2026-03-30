@@ -66,6 +66,12 @@
         .nav-row { margin-bottom: 0.75rem; }
         .nav-row:last-child { margin-bottom: 0; }
         
+        /* Бегущая строка */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee { animation: marquee 20s linear infinite; }
+        .ticker-text { font-family: "Outfit", sans-serif; font-weight: 600; letter-spacing: 0.05em; color: white !important; }
+        .ticker-badge { color: white !important; font-family: "Playfair Display", serif; font-weight: 700; }
+        
         /* Карточки новостей */
         .news-grid {
             display: grid;
@@ -140,6 +146,11 @@
         .spinner { width: 48px; height: 48px; border: 3px solid rgba(0,0,0,0.1); border-top-color: #B91C1C; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
+        /* Hero блок */
+        .hero-title { font-family: "Playfair Display", serif; font-weight: 900; letter-spacing: -0.03em; color: white !important; }
+        .hero-tag { font-family: "Outfit", sans-serif !important; font-weight: 700 !important; color: white !important; }
+        .hero-date { font-family: "Outfit", sans-serif; font-weight: 500; }
+        
         /* Модальное окно */
         .modal {
             display: none;
@@ -197,6 +208,9 @@
                     <span class="text-lg md:text-xl font-semibold tracking-tight -mt-1">новости</span>
                 </div>
                 <div class="flex items-center gap-2 md:gap-3">
+                    <button id="radioBtn" class="topic-btn px-4 md:px-5 py-2 md:py-2.5 shadow-lg hover:shadow-xl flex items-center gap-1.5 font-semibold">
+                        <span>▶</span> ВЕСТИ FM
+                    </button>
                     <button id="themeBtn" class="topic-btn px-4 md:px-5 py-2 md:py-2.5 shadow-lg hover:shadow-xl flex items-center gap-1.5 font-semibold">
                         <span id="themeIcon">🌙</span>
                         <span id="themeText">НОЧЬ</span>
@@ -226,6 +240,37 @@
         </div>
     </nav>
 
+    <!-- БЕГУЩАЯ СТРОКА -->
+    <div class="max-w-6xl mx-auto mb-4">
+        <div class="glass rounded-2xl p-3 md:p-4 shadow-xl overflow-hidden">
+            <div class="flex items-center h-14 md:h-16 bg-gradient-to-r from-red-600 via-orange-500 to-red-600 text-white rounded-xl px-6 md:px-8 font-semibold uppercase tracking-wide shadow-2xl">
+                <span class="flex-shrink-0 mr-4 md:mr-6 px-4 py-2 md:px-5 md:py-2.5 bg-white/30 rounded-xl text-xs md:text-sm font-bold display-font ticker-badge">🔥 ГЛАВНЫЕ</span>
+                <div class="flex-1 overflow-hidden whitespace-nowrap">
+                    <div class="flex marquee ticker-text text-sm md:text-base">
+                        <span class="px-8 md:px-10 py-2">ТАСС: Трамп анонсировал новые санкции против России</span>
+                        <span class="px-8 md:px-10 py-2">РИА: Москва готовит ответ НАТО</span>
+                        <span class="px-8 md:px-10 py-2">ВГТРК: Ситуация на Донбассе</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO БЛОК -->
+    <section class="max-w-6xl mx-auto mb-8">
+        <div class="glass rounded-[3rem] h-[65vh] md:h-[70vh] bg-gradient-to-br from-slate-800 to-slate-900 text-white shadow-4xl overflow-hidden relative">
+            <div class="absolute inset-0 bg-[url(https://images.unsplash.com/photo-1560250097-0b93528c311a?w=1920)] bg-cover opacity-20"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent"></div>
+            <div class="relative z-10 p-12 md:p-20 flex flex-col justify-end h-full">
+                <div class="space-y-4 md:space-y-6">
+                    <span class="hero-tag inline-block bg-gradient-to-r from-red-600 to-orange-500 px-6 md:px-8 py-2 md:py-3 rounded-2xl font-bold uppercase tracking-wider text-xs md:text-sm">ТАСС • Главная</span>
+                    <h1 class="hero-title text-5xl md:text-7xl lg:text-9xl font-black leading-[0.9] tracking-tight">ТРАМП<br><span class="text-4xl md:text-6xl lg:text-8xl">САНКЦИИ</span></h1>
+                    <p class="hero-date text-2xl md:text-3xl font-light tracking-wide opacity-90 font-medium">30 марта 2026</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ЛЕНТА НОВОСТЕЙ -->
     <div class="max-w-6xl mx-auto">
         <div class="glass rounded-2xl p-4 md:p-6 shadow-xl">
@@ -247,8 +292,57 @@
         </div>
     </div>
 
+    <audio id="radio" preload="metadata">
+        <source src="https://icecast-vgtrk.cdnvideo.ru/vestifm_mp3_128kbps" type="audio/mpeg">
+    </audio>
+
     <script>
-        // ============ ИСТОЧНИКИ ============
+        // ============ РАДИО ============
+        const radio = document.getElementById("radio");
+        const radioBtn = document.getElementById("radioBtn");
+        
+        radioBtn.addEventListener("click", async () => {
+            try {
+                if (radio.paused || radio.ended) {
+                    radio.volume = 0.7;
+                    await radio.play();
+                    radioBtn.innerHTML = "⏸️ ПАУЗА";
+                    radioBtn.classList.add("active");
+                } else {
+                    radio.pause();
+                    radioBtn.innerHTML = "▶ ВЕСТИ FM";
+                    radioBtn.classList.remove("active");
+                }
+            } catch(e) {
+                alert("🔊 Разрешите звук в браузере");
+            }
+        });
+
+        // ============ ТЕМНАЯ ТЕМА ============
+        const themeBtn = document.getElementById("themeBtn");
+        const themeIcon = document.getElementById("themeIcon");
+        const themeText = document.getElementById("themeText");
+        const body = document.body;
+
+        themeBtn.addEventListener("click", () => {
+            body.classList.toggle("dark");
+            if (body.classList.contains("dark")) {
+                themeIcon.textContent = "☀️";
+                themeText.textContent = "ДЕНЬ";
+            } else {
+                themeIcon.textContent = "🌙";
+                themeText.textContent = "НОЧЬ";
+            }
+            localStorage.setItem("darkMode", body.classList.contains("dark"));
+        });
+
+        if (localStorage.getItem("darkMode") === "true") {
+            body.classList.add("dark");
+            themeIcon.textContent = "☀️";
+            themeText.textContent = "ДЕНЬ";
+        }
+
+        // ============ ИСТОЧНИКИ RSS ============
         const RSS_FEEDS = [
             { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
             { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
@@ -257,7 +351,6 @@
             { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' }
         ];
 
-        // Ключевые слова для фильтрации
         const THEME_KEYWORDS = {
             politics: ['политика', 'президент', 'выборы', 'закон', 'санкции', 'госдеп', 'кремль', 'путин', 'байден', 'трамп'],
             war: ['война', 'конфликт', 'армия', 'танк', 'ракета', 'удар', 'обстрел', 'украина', 'израиль', 'палестина'],
@@ -274,7 +367,6 @@
         let currentTheme = 'all';
         let currentFiltered = [];
 
-        // ============ ЗАГРУЗКА НОВОСТЕЙ ============
         async function fetchNews() {
             const grid = document.getElementById('newsGrid');
             grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
@@ -356,7 +448,6 @@
             `).join('');
         }
         
-        // ============ ПЕРЕВОД ============
         window.translateText = async function(title, desc) {
             const text = title + '. ' + desc;
             try {
@@ -372,7 +463,6 @@
             } catch(e) { alert('Ошибка перевода'); }
         };
         
-        // ============ МОДАЛЬНОЕ ОКНО ============
         window.openModal = function(title, source, text, url, date) {
             document.getElementById('modalTitle').innerHTML = title;
             document.getElementById('modalMeta').innerHTML = `${source} · ${ago(date)} · ${new Date(date).toLocaleString('ru-RU')}`;
@@ -388,33 +478,9 @@
         document.getElementById('closeModalBtn').onclick = closeModal;
         document.getElementById('newsModal').onclick = (e) => { if (e.target === document.getElementById('newsModal')) closeModal(); };
         
-        // ============ ТЕМНАЯ ТЕМА ============
-        const themeBtn = document.getElementById('themeBtn');
-        const themeIcon = document.getElementById('themeIcon');
-        const themeText = document.getElementById('themeText');
-        const body = document.body;
-        
-        themeBtn.addEventListener('click', () => {
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                themeIcon.textContent = '☀️';
-                themeText.textContent = 'ДЕНЬ';
-            } else {
-                themeIcon.textContent = '🌙';
-                themeText.textContent = 'НОЧЬ';
-            }
-            localStorage.setItem('darkMode', body.classList.contains('dark'));
-        });
-        
-        if (localStorage.getItem('darkMode') === 'true') {
-            body.classList.add('dark');
-            themeIcon.textContent = '☀️';
-            themeText.textContent = 'ДЕНЬ';
-        }
-        
-        // ============ ФИЛЬТРАЦИЯ ============
         document.querySelectorAll('.topic-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                if (btn.id === 'radioBtn' || btn.id === 'themeBtn') return;
                 document.querySelectorAll('.topic-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentTheme = btn.dataset.theme;
@@ -422,7 +488,6 @@
             });
         });
         
-        // ЗАПУСК
         fetchNews();
         setInterval(fetchNews, 10 * 60 * 1000);
     </script>
