@@ -41,7 +41,15 @@
             background: linear-gradient(135deg, #B91C1C, #D97706);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: glow 3s ease-in-out infinite;
         }
+        
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px rgba(185,28,28,0.3), 0 0 10px rgba(217,119,6,0.2); }
+            50% { text-shadow: 0 0 20px rgba(185,28,28,0.6), 0 0 30px rgba(217,119,6,0.4); }
+            100% { text-shadow: 0 0 5px rgba(185,28,28,0.3), 0 0 10px rgba(217,119,6,0.2); }
+        }
+        
         .logo p { font-size: 12px; color: #666; }
         body.dark .logo p { color: #888; }
         
@@ -116,6 +124,21 @@
             color: white;
         }
         .btn-primary:hover { transform: scale(1.02); opacity: 0.9; }
+        
+        .saved-link {
+            background: linear-gradient(135deg, #B91C1C, #D97706);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .saved-link:hover { transform: scale(1.02); opacity: 0.9; }
         
         .nav-section {
             background: rgba(255,255,255,0.9);
@@ -227,18 +250,6 @@
             justify-content: flex-start;
             padding: 40px;
         }
-        .hero-tag {
-            background: linear-gradient(135deg, #B91C1C, #D97706);
-            display: inline-block;
-            width: fit-content;
-            padding: 6px 18px;
-            border-radius: 40px;
-            font-size: 12px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 16px;
-            font-family: "Outfit", sans-serif;
-        }
         .hero-title {
             font-family: "Playfair Display", serif;
             font-size: 52px;
@@ -308,6 +319,7 @@
             transition: all 0.3s;
             cursor: pointer;
             border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
         }
         body.dark .news-card {
             background: rgba(30,41,59,0.8);
@@ -331,6 +343,7 @@
             font-weight: 700;
             line-height: 1.4;
             margin-bottom: 10px;
+            padding-right: 30px;
         }
         .card-desc {
             font-size: 13px;
@@ -363,7 +376,7 @@
             display: flex;
             gap: 8px;
         }
-        .translate-btn, .read-btn {
+        .translate-btn, .read-btn, .save-btn {
             background: rgba(185,28,28,0.1);
             border: none;
             border-radius: 30px;
@@ -373,9 +386,25 @@
             color: #B91C1C;
             font-weight: 600;
             font-family: "Outfit", sans-serif;
+            transition: all 0.2s;
         }
-        body.dark .translate-btn, body.dark .read-btn { color: #f97316; background: rgba(249,115,22,0.15); }
-        .read-btn:hover, .translate-btn:hover { background: rgba(185,28,28,0.2); }
+        body.dark .translate-btn, body.dark .read-btn, body.dark .save-btn { color: #f97316; background: rgba(249,115,22,0.15); }
+        .read-btn:hover, .translate-btn:hover, .save-btn:hover { background: rgba(185,28,28,0.2); }
+        .save-btn.saved { background: linear-gradient(135deg, #B91C1C, #D97706); color: white; }
+        
+        .bookmark-corner {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 5;
+            background: none;
+            border: none;
+            transition: transform 0.2s;
+        }
+        .bookmark-corner:hover { transform: scale(1.1); }
+        .bookmark-corner.saved { color: #D97706; text-shadow: 0 0 3px rgba(217,119,6,0.5); }
         
         .loader {
             text-align: center;
@@ -429,17 +458,31 @@
         .modal-source { padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-family: "Outfit", sans-serif; }
         body.dark .modal-source { border-color: #334155; }
         .modal-source a { color: #B91C1C; text-decoration: none; }
+        .modal-save-btn {
+            background: linear-gradient(135deg, #B91C1C, #D97706);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+        }
         
         .footer {
             margin-top: 48px;
-            padding: 24px;
+            padding: 32px 24px;
             text-align: center;
             font-size: 12px;
             color: #666;
             border-top: 1px solid rgba(0,0,0,0.1);
             font-family: "Outfit", sans-serif;
+            background: rgba(0,0,0,0.02);
+            border-radius: 24px;
         }
-        body.dark .footer { border-color: rgba(255,255,255,0.1); color: #888; }
+        body.dark .footer { border-color: rgba(255,255,255,0.1); color: #888; background: rgba(255,255,255,0.02); }
+        .footer h4 { font-family: "Playfair Display", serif; font-size: 14px; margin-bottom: 12px; color: #B91C1C; }
+        .footer p { margin: 8px 0; line-height: 1.5; }
+        .footer .legal { font-size: 11px; color: #888; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.05); }
         
         @media (max-width: 768px) {
             body { padding: 12px; }
@@ -460,14 +503,31 @@
             cursor: pointer;
             margin-top: 20px;
         }
+        
+        .saved-page {
+            padding: 20px;
+        }
+        .saved-empty {
+            text-align: center;
+            padding: 60px;
+            color: #888;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #B91C1C;
+            text-decoration: none;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="app">
+        <!-- ШАПКА -->
         <div class="header">
             <div class="logo">
                 <h1>ВЕКТОР</h1>
-                <p>Новостная лента мировых событий</p>
+                <p>НОВОСТИ</p>
             </div>
             <div class="header-right">
                 <div class="weather-block" id="weatherBlock">
@@ -485,10 +545,12 @@
                         <button id="bbcPlayBtn">▶</button>
                     </div>
                 </div>
+                <a href="#" id="savedLinkBtn" class="saved-link">⭐ СОХРАНЁННОЕ</a>
                 <button id="themeBtn" class="btn">🌙 НОЧЬ</button>
             </div>
         </div>
         
+        <!-- НАВИГАЦИЯ ПО ТЕМАМ -->
         <div class="nav-section">
             <div class="nav-row">
                 <button class="nav-btn active" data-theme="all">🌍 Все новости</button>
@@ -501,6 +563,7 @@
             </div>
         </div>
         
+        <!-- НАВИГАЦИЯ ПО СТРАНАМ -->
         <div class="nav-section">
             <div class="nav-row">
                 <button class="nav-btn flag-btn" data-theme="usa">🇺🇸 США</button>
@@ -512,6 +575,7 @@
             </div>
         </div>
         
+        <!-- БЕГУЩАЯ СТРОКА -->
         <div class="ticker">
             <span class="ticker-label">📰 ИЗВЕСТИЯ</span>
             <div class="ticker-content">
@@ -521,15 +585,16 @@
             </div>
         </div>
         
+        <!-- HERO БЛОК (без hero-tag) -->
         <div class="hero">
             <div class="hero-bg" id="heroBg"></div>
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <span class="hero-tag" id="heroTag">🌍 Все новости</span>
                 <h1 class="hero-title" id="heroTitle">МИРОВЫЕ<br><span>СОБЫТИЯ</span></h1>
             </div>
         </div>
         
+        <!-- ЛЕНТА НОВОСТЕЙ -->
         <div class="news-header">
             <h2>📰 Новостная лента мировых событий</h2>
             <div>
@@ -541,12 +606,17 @@
             <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
         </div>
         
+        <!-- ПОДВАЛ -->
         <div class="footer">
-            <p>© 2026 ВЕКТОР · Новостной агрегатор</p>
-            <p>Все новости взяты из открытых RSS-лент официальных СМИ.</p>
+            <h4>© 2026 ВЕКТОР — Новостной агрегатор</h4>
+            <p>Все материалы, представленные на сайте, взяты из открытых и официальных источников: RSS-ленты ТАСС, РИА Новости, Reuters, BBC, The Guardian и других мировых СМИ.</p>
+            <p>ВЕКТОР не является средством массовой информации, а выступает в роли агрегатора новостей. Все права на оригинальные публикации принадлежат их законным владельцам.</p>
+            <p>Мы ценим труд журналистов и редакций. Если вы являетесь правообладателем и считаете, что ваши права нарушены — пожалуйста, свяжитесь с нами для оперативного решения вопроса.</p>
+            <div class="legal">Данный сайт использует материалы на основе добросовестного цитирования (fair use) в информационных и образовательных целях.</div>
         </div>
     </div>
     
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div id="newsModal" class="modal">
         <div class="modal-content">
             <button class="close-modal" id="closeModalBtn">✕</button>
@@ -569,26 +639,27 @@
     <script>
         // БОЛЬШАЯ БАЗА ДЕМО-НОВОСТЕЙ
         const DEMO_NEWS_BASE = [
-            { title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: 'https://tass.ru', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
-            { title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*120).toISOString() },
-            { title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: 'https://ria.ru', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
-            { title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: 'https://vedomosti.ru', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
-            { title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: 'https://kommersant.ru', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
-            { title: 'Мощное землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
-            { title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
-            { title: 'Лионель Месси оформил хет-трик и достиг отметки 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение.', source: 'ESPN', url: 'https://espn.com', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
-            { title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: 'https://bbc.com', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
-            { title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: 'https://dw.com', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
-            { title: 'Израиль нанёс удары по объектам "Хезболлы" в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: 'https://aljazeera.com', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
-            { title: 'Япония запустила новый спутник для наблюдения за КНДР', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: 'https://nhk.or.jp', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() },
-            { title: 'В США начались праймериз: Трамп лидирует в нескольких штатах', description: 'Бывший президент опережает конкурентов в борьбе за выдвижение от Республиканской партии.', source: 'Associated Press', url: 'https://apnews.com', publishedAt: new Date(Date.now() - 1000*60*60*12).toISOString() },
-            { title: 'Евросоюз утвердил 12-й пакет санкций против России', description: 'Ограничения затронут алмазную промышленность, импорт сжиженного природного газа и новые технологические сектора.', source: 'Euronews', url: 'https://euronews.com', publishedAt: new Date(Date.now() - 1000*60*60*36).toISOString() },
-            { title: 'Курс биткоина превысил $70 000 впервые за два года', description: 'Рост криптовалюты связан с ожиданием одобрения биткоин-ETF и халвингом. Эксперты прогнозируют дальнейшую волатильность.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*60*4).toISOString() }
+            { id: '1', title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: 'https://tass.ru', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
+            { id: '2', title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*120).toISOString() },
+            { id: '3', title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: 'https://ria.ru', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
+            { id: '4', title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: 'https://vedomosti.ru', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
+            { id: '5', title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: 'https://kommersant.ru', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
+            { id: '6', title: 'Мощное землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
+            { id: '7', title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
+            { id: '8', title: 'Лионель Месси оформил хет-трик и достиг отметки 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение.', source: 'ESPN', url: 'https://espn.com', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
+            { id: '9', title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: 'https://bbc.com', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
+            { id: '10', title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: 'https://dw.com', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
+            { id: '11', title: 'Израиль нанёс удары по объектам "Хезболлы" в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: 'https://aljazeera.com', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
+            { id: '12', title: 'Япония запустила новый спутник для наблюдения за КНДР', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: 'https://nhk.or.jp', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() },
+            { id: '13', title: 'В США начались праймериз: Трамп лидирует в нескольких штатах', description: 'Бывший президент опережает конкурентов в борьбе за выдвижение от Республиканской партии.', source: 'Associated Press', url: 'https://apnews.com', publishedAt: new Date(Date.now() - 1000*60*60*12).toISOString() },
+            { id: '14', title: 'Евросоюз утвердил 12-й пакет санкций против России', description: 'Ограничения затронут алмазную промышленность, импорт сжиженного природного газа и новые технологические сектора.', source: 'Euronews', url: 'https://euronews.com', publishedAt: new Date(Date.now() - 1000*60*60*36).toISOString() },
+            { id: '15', title: 'Курс биткоина превысил $70 000 впервые за два года', description: 'Рост криптовалюты связан с ожиданием одобрения биткоин-ETF и халвингом. Эксперты прогнозируют дальнейшую волатильность.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*60*4).toISOString() }
         ];
         
         // Расширяем демо-новости
         for (let i = 0; i < 20; i++) {
-            const clone = { ...DEMO_NEWS_BASE[i % DEMO_NEWS_BASE.length] };
+            const clone = JSON.parse(JSON.stringify(DEMO_NEWS_BASE[i % DEMO_NEWS_BASE.length]));
+            clone.id = (DEMO_NEWS_BASE.length + i).toString();
             clone.title = clone.title + ` (${Math.floor(i/5)+1})`;
             clone.publishedAt = new Date(Date.now() - 1000*60*60*(i+1)).toISOString();
             DEMO_NEWS_BASE.push(clone);
@@ -606,7 +677,7 @@
             turkmenistan: ['туркменистан', 'ашхабад', 'туркмен', 'бердымухамедов'],
             tajikistan: ['таджикистан', 'душанбе', 'таджик', 'рахмон'],
             middleeast: ['израиль', 'иран', 'палестина', 'ближний восток', 'газа', 'тегеран', 'иерусалим', 'ливан', 'сирия'],
-            europe: ['европа', 'ес', 'евросоюз', 'германия', 'франция', 'великобритания', 'италия', 'испания', 'польша', 'берлин', 'париж', 'лондон']
+            europe: ['европа', 'ес', 'евросоюз', 'германия', 'франция', 'великобритания', 'италия', 'испания', 'польша', 'берлин', 'paris', 'london']
         };
 
         const THEME_IMAGES = {
@@ -625,6 +696,40 @@
         let displayedCount = 24;
         let isLoadingMore = false;
         let translationCache = {};
+        let savedNews = JSON.parse(localStorage.getItem('savedNews') || '[]');
+        let currentView = 'main';
+
+        function saveToLocalStorage() {
+            localStorage.setItem('savedNews', JSON.stringify(savedNews));
+        }
+
+        function isSaved(articleId) {
+            return savedNews.some(item => item.id === articleId);
+        }
+
+        function addToSaved(article) {
+            if (!isSaved(article.id)) {
+                savedNews.push(article);
+                saveToLocalStorage();
+                return true;
+            }
+            return false;
+        }
+
+        function removeFromSaved(articleId) {
+            savedNews = savedNews.filter(item => item.id !== articleId);
+            saveToLocalStorage();
+        }
+
+        function toggleSave(article) {
+            if (isSaved(article.id)) {
+                removeFromSaved(article.id);
+                return false;
+            } else {
+                addToSaved(article);
+                return true;
+            }
+        }
 
         function timeAgo(dateString) {
             const date = new Date(dateString);
@@ -790,17 +895,24 @@
         }
 
         function updateHeroAndTicker() {
-            const heroTag = document.getElementById('heroTag');
             const heroTitle = document.getElementById('heroTitle');
             const heroBg = document.getElementById('heroBg');
             const themeNames = {
-                all: '🌍 Все новости', politics: '🏛 Политика', war: '⚔️ Конфликт', cyber: '🛡 Кибербезопасность',
-                incidents: '⚠️ Происшествия', economy: '💰 Экономика', sport: '⚽ Спорт',
-                usa: '🇺🇸 США', japan: '🇯🇵 Япония', turkmenistan: '🇹🇲 Туркменистан', tajikistan: '🇹🇯 Таджикистан',
-                middleeast: '🇸🇦 Ближний Восток', europe: '🇪🇺 Европа'
+                all: 'МИРОВЫЕ<br><span>СОБЫТИЯ</span>',
+                politics: 'НОВОСТИ<br><span>ПОЛИТИКИ</span>',
+                war: 'НОВОСТИ<br><span>КОНФЛИКТОВ</span>',
+                cyber: 'НОВОСТИ<br><span>КИБЕРБЕЗОПАСНОСТИ</span>',
+                incidents: 'НОВОСТИ<br><span>ПРОИСШЕСТВИЙ</span>',
+                economy: 'НОВОСТИ<br><span>ЭКОНОМИКИ</span>',
+                sport: 'НОВОСТИ<br><span>СПОРТА</span>',
+                usa: 'НОВОСТИ<br><span>США</span>',
+                japan: 'НОВОСТИ<br><span>ЯПОНИИ</span>',
+                turkmenistan: 'НОВОСТИ<br><span>ТУРКМЕНИСТАНА</span>',
+                tajikistan: 'НОВОСТИ<br><span>ТАДЖИКИСТАНА</span>',
+                middleeast: 'НОВОСТИ<br><span>БЛИЖНЕГО ВОСТОКА</span>',
+                europe: 'НОВОСТИ<br><span>ЕВРОПЫ</span>'
             };
-            heroTag.textContent = themeNames[currentTheme] || '🌍 Все новости';
-            heroTitle.innerHTML = currentTheme === 'all' ? 'МИРОВЫЕ<br><span>СОБЫТИЯ</span>' : 'НОВОСТИ<br><span>ПО ТЕМЕ</span>';
+            heroTitle.innerHTML = themeNames[currentTheme] || 'МИРОВЫЕ<br><span>СОБЫТИЯ</span>';
             const imgUrl = THEME_IMAGES[currentTheme] || THEME_IMAGES.all;
             heroBg.style.backgroundImage = `url('${imgUrl}')`;
             
@@ -827,22 +939,21 @@
             }, 300);
         }
 
-        function renderNews() {
+        function renderSavedPage() {
             const grid = document.getElementById('newsGrid');
             const newsCount = document.getElementById('newsCount');
-            const toShow = currentFiltered.slice(0, displayedCount);
-            const hasMore = displayedCount < currentFiltered.length;
             
-            if (currentFiltered.length === 0) {
-                grid.innerHTML = `<div class="loader"><p>😔 Новости не найдены</p><button class="retry-btn" onclick="location.reload()">🔄 Обновить</button></div>`;
-                newsCount.textContent = '0 новостей';
+            if (savedNews.length === 0) {
+                grid.innerHTML = `<div class="saved-empty"><p>⭐ У вас пока нет сохранённых новостей</p><p>Нажмите на звёздочку 🔖 на любой новости, чтобы добавить её в избранное</p></div>`;
+                newsCount.textContent = '0 сохранённых';
                 return;
             }
             
-            newsCount.textContent = `${currentFiltered.length} новостей | показано ${toShow.length}`;
+            newsCount.textContent = `${savedNews.length} сохранённых`;
             
-            grid.innerHTML = toShow.map((news, idx) => `
-                <div class="news-card" data-idx="${idx}">
+            grid.innerHTML = savedNews.map((news, idx) => `
+                <div class="news-card" data-idx="${idx}" data-id="${news.id}">
+                    <button class="bookmark-corner saved" data-id="${news.id}">⭐</button>
                     <div class="card-source">${escapeHtml(news.source || 'Источник')}</div>
                     <div class="card-title">${escapeHtml(news.title || 'Без заголовка')}</div>
                     <div class="card-desc">${escapeHtml(news.description || 'Описание отсутствует')}</div>
@@ -856,26 +967,48 @@
                 </div>
             `).join('');
             
-            if (hasMore) {
-                const loadMoreDiv = document.createElement('div');
-                loadMoreDiv.className = 'load-more-btn';
-                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё (20)</button>';
-                grid.appendChild(loadMoreDiv);
-                loadMoreDiv.querySelector('.load-more').addEventListener('click', loadMoreNews);
-            }
-            
-            const observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMore && !isLoadingMore) loadMoreNews();
-            }, { threshold: 0.1, rootMargin: '100px' });
-            const lastCard = grid.querySelector('.news-card:last-child');
-            if (lastCard) observer.observe(lastCard);
-            
+            attachCardEvents();
+        }
+
+        function attachCardEvents() {
             document.querySelectorAll('.news-card').forEach(card => {
                 card.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('translate-btn') || e.target.classList.contains('read-btn')) return;
-                    const idx = card.dataset.idx;
-                    const news = currentFiltered[idx];
+                    if (e.target.classList.contains('translate-btn') || e.target.classList.contains('read-btn') || e.target.classList.contains('bookmark-corner')) return;
+                    let news;
+                    if (currentView === 'saved') {
+                        const id = card.dataset.id;
+                        news = savedNews.find(n => n.id === id);
+                    } else {
+                        const idx = card.dataset.idx;
+                        news = currentFiltered[idx];
+                    }
                     if (news) openModal(news);
+                });
+            });
+            
+            document.querySelectorAll('.bookmark-corner').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    let article;
+                    if (currentView === 'saved') {
+                        article = savedNews.find(n => n.id === id);
+                        if (article) {
+                            removeFromSaved(id);
+                            renderSavedPage();
+                        }
+                    } else {
+                        article = allNews.find(n => n.id === id);
+                        if (article) {
+                            const nowSaved = toggleSave(article);
+                            btn.textContent = nowSaved ? '⭐' : '☆';
+                            if (nowSaved) btn.classList.add('saved');
+                            else btn.classList.remove('saved');
+                        }
+                    }
+                    if (currentView === 'main' && currentFiltered) {
+                        renderNews();
+                    }
                 });
             });
             
@@ -911,6 +1044,53 @@
                 });
             });
         }
+
+        function renderNews() {
+            const grid = document.getElementById('newsGrid');
+            const newsCount = document.getElementById('newsCount');
+            const toShow = currentFiltered.slice(0, displayedCount);
+            const hasMore = displayedCount < currentFiltered.length;
+            
+            if (currentFiltered.length === 0) {
+                grid.innerHTML = `<div class="loader"><p>😔 Новости не найдены</p><button class="retry-btn" onclick="location.reload()">🔄 Обновить</button></div>`;
+                newsCount.textContent = '0 новостей';
+                return;
+            }
+            
+            newsCount.textContent = `${currentFiltered.length} новостей | показано ${toShow.length}`;
+            
+            grid.innerHTML = toShow.map((news, idx) => `
+                <div class="news-card" data-idx="${idx}" data-id="${news.id}">
+                    <button class="bookmark-corner ${isSaved(news.id) ? 'saved' : ''}" data-id="${news.id}">${isSaved(news.id) ? '⭐' : '☆'}</button>
+                    <div class="card-source">${escapeHtml(news.source || 'Источник')}</div>
+                    <div class="card-title">${escapeHtml(news.title || 'Без заголовка')}</div>
+                    <div class="card-desc">${escapeHtml(news.description || 'Описание отсутствует')}</div>
+                    <div class="card-footer">
+                        <span class="time-ago">🕐 ${timeAgo(news.publishedAt)}</span>
+                        <div class="action-btns">
+                            <button class="read-btn" data-url="${news.url || '#'}">🔗 Читать</button>
+                            <button class="translate-btn" data-title="${escapeHtml(news.title || '').replace(/"/g, '&quot;')}" data-desc="${escapeHtml(news.description || '').replace(/"/g, '&quot;')}">🌐 EN→RU</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            if (hasMore) {
+                const loadMoreDiv = document.createElement('div');
+                loadMoreDiv.className = 'load-more-btn';
+                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё (20)</button>';
+                grid.appendChild(loadMoreDiv);
+                loadMoreDiv.querySelector('.load-more').addEventListener('click', loadMoreNews);
+            }
+            
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore && !isLoadingMore) loadMoreNews();
+            }, { threshold: 0.1, rootMargin: '100px' });
+            const lastCard = grid.querySelector('.news-card:last-child');
+            if (lastCard) observer.observe(lastCard);
+            
+            attachCardEvents();
+        }
         
         function escapeHtml(str) {
             if (!str) return '';
@@ -923,11 +1103,24 @@
         }
 
         function openModal(news) {
+            const isSavedArticle = isSaved(news.id);
             document.getElementById('modalTitle').textContent = news.title || 'Новость';
             document.getElementById('modalMeta').textContent = `${news.source || 'Источник'} · ${timeAgo(news.publishedAt)}`;
             document.getElementById('modalText').textContent = news.description || 'Описание отсутствует.';
-            document.getElementById('modalLink').innerHTML = `<a href="${news.url}" target="_blank">🔗 Читать оригинал →</a><span>ВЕКТОР</span>`;
+            document.getElementById('modalLink').innerHTML = `
+                <a href="${news.url}" target="_blank">🔗 Читать оригинал →</a>
+                <button class="modal-save-btn" id="modalSaveBtn">${isSavedArticle ? '⭐ В сохранённом' : '☆ Сохранить'}</button>
+            `;
             document.getElementById('newsModal').classList.add('active');
+            
+            const modalSaveBtn = document.getElementById('modalSaveBtn');
+            if (modalSaveBtn) {
+                modalSaveBtn.onclick = () => {
+                    const nowSaved = toggleSave(news);
+                    modalSaveBtn.textContent = nowSaved ? '⭐ В сохранённом' : '☆ Сохранить';
+                    if (currentView === 'main') renderNews();
+                };
+            }
         }
 
         document.getElementById('closeModalBtn').addEventListener('click', () => {
@@ -940,6 +1133,10 @@
         function setupNavigation() {
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
+                    if (currentView === 'saved') {
+                        currentView = 'main';
+                        document.getElementById('savedLinkBtn').textContent = '⭐ СОХРАНЁННОЕ';
+                    }
                     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
                     currentTheme = btn.dataset.theme;
@@ -978,10 +1175,22 @@
             localStorage.setItem('cachedNews', JSON.stringify(allNews));
         }
 
+        // Кнопка сохранённого
+        document.getElementById('savedLinkBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            currentView = 'saved';
+            document.getElementById('savedLinkBtn').textContent = '🏠 НА ГЛАВНУЮ';
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            renderSavedPage();
+            const heroTitle = document.getElementById('heroTitle');
+            heroTitle.innerHTML = 'СОХРАНЁННЫЕ<br><span>НОВОСТИ</span>';
+            document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
+        });
+
         setupNavigation();
         initNews();
         document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
-        setInterval(() => { if (currentFiltered.length > 0) renderNews(); }, 60000);
+        setInterval(() => { if (currentFiltered.length > 0 && currentView === 'main') renderNews(); }, 60000);
     </script>
 </body>
 </html>
