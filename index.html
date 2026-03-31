@@ -81,6 +81,68 @@
         }
         .btn-primary:hover { transform: scale(1.02); opacity: 0.9; }
         
+        .radio-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .radio-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 100;
+            min-width: 320px;
+            overflow: hidden;
+        }
+        body.dark .radio-dropdown { background: #1e293b; }
+        .radio-dropdown.active { display: block; }
+        .radio-player {
+            padding: 16px;
+        }
+        .radio-player h4 {
+            font-family: "Playfair Display", serif;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #B91C1C;
+        }
+        .bbc-iframe {
+            width: 100%;
+            height: 120px;
+            border: none;
+            border-radius: 12px;
+        }
+        .vesti-player {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 40px;
+        }
+        body.dark .vesti-player { background: rgba(255,255,255,0.1); }
+        .vesti-player button {
+            background: linear-gradient(135deg, #B91C1C, #D97706);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .close-radio {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: #666;
+        }
+        
         .nav-section {
             background: rgba(255,255,255,0.9);
             backdrop-filter: blur(20px);
@@ -239,8 +301,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
-            max-height: 900px;
-            overflow-y: auto;
             padding-right: 8px;
         }
         .news-grid::-webkit-scrollbar { width: 6px; }
@@ -265,6 +325,13 @@
             transition: all 0.2s;
         }
         .load-more:hover { opacity: 0.9; transform: scale(1.02); }
+        
+        .loading-indicator {
+            text-align: center;
+            padding: 40px;
+            grid-column: 1 / -1;
+            color: #888;
+        }
         
         .news-card {
             background: rgba(255,255,255,0.95);
@@ -321,6 +388,10 @@
             font-family: "Outfit", sans-serif;
         }
         body.dark .card-footer { border-color: rgba(255,255,255,0.05); }
+        .time-ago {
+            font-weight: 500;
+            color: #B91C1C;
+        }
         .action-btns {
             display: flex;
             gap: 8px;
@@ -405,9 +476,10 @@
         
         @media (max-width: 768px) {
             body { padding: 12px; }
-            .news-grid { grid-template-columns: 1fr; max-height: 600px; }
+            .news-grid { grid-template-columns: 1fr; }
             .nav-btn { padding: 4px 12px; font-size: 12px; }
             .hero { height: 45vh; min-height: 350px; }
+            .radio-dropdown { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-radius: 20px 20px 0 0; }
         }
     </style>
 </head>
@@ -424,7 +496,32 @@
                     <span id="weatherTemp">--°C</span>
                     <span id="currentDateTime"></span>
                 </div>
-                <button id="radioBtn" class="btn btn-primary">▶ ВЕСТИ FM</button>
+                <div class="radio-container">
+                    <button id="radioBtn" class="btn btn-primary">🎵 РАДИО ▼</button>
+                    <div id="radioDropdown" class="radio-dropdown">
+                        <div class="radio-player">
+                            <button class="close-radio" id="closeRadioBtn">✕</button>
+                            <h4>📻 ВЕСТИ FM</h4>
+                            <div class="vesti-player">
+                                <button id="vestiPlayBtn">▶ ВКЛЮЧИТЬ</button>
+                                <button id="vestiStopBtn">⏹ ВЫКЛЮЧИТЬ</button>
+                            </div>
+                            <h4 style="margin-top: 16px;">🇬🇧 BBC Radio 1</h4>
+                            <iframe
+                                src="https://www.bbc.co.uk/sounds/embed/bbc_radio_one"
+                                width="100%"
+                                height="120"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media"
+                                title="BBC Radio 1"
+                                sandbox="allow-scripts allow-same-origin allow-popups"
+                                loading="lazy"
+                                class="bbc-iframe"
+                            ></iframe>
+                            <p style="font-size: 11px; margin-top: 8px; color: #888;">BBC Radio 1 — официальный плеер BBC Sounds</p>
+                        </div>
+                    </div>
+                </div>
                 <button id="themeBtn" class="btn">🌙 НОЧЬ</button>
             </div>
         </div>
@@ -497,32 +594,30 @@
         </div>
     </div>
     
-    <audio id="radio" preload="metadata">
+    <audio id="vestiRadio" preload="metadata">
         <source src="https://icecast-vgtrk.cdnvideo.ru/vestifm_mp3_128kbps" type="audio/mpeg">
     </audio>
 
     <script>
-        // Множество CORS-прокси для надежности
         const PROXIES = [
             'https://api.allorigins.win/raw?url=',
             'https://corsproxy.io/?',
             'https://api.codetabs.com/v1/proxy?quest='
         ];
         
-        // ДЕМО-НОВОСТИ на случай, если RSS не загрузится
         const DEMO_NEWS = [
-            { title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Новый рекорд Messi: 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение. Ronaldo также продолжает погоню.', source: 'ESPN', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Израиль нанёс удары по объектам Хезболлы в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: '#', publishedAt: new Date().toISOString() },
-            { title: 'Япония запустила новый спутник для наблюдения за Северной Кореей', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: '#', publishedAt: new Date().toISOString() }
+            { title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: '#', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
+            { title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: '#', publishedAt: new Date(Date.now() - 1000*60*120).toISOString() },
+            { title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
+            { title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
+            { title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
+            { title: 'Землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
+            { title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
+            { title: 'Новый рекорд Messi: 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение. Ronaldo также продолжает погоню.', source: 'ESPN', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
+            { title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
+            { title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: '#', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
+            { title: 'Израиль нанёс удары по объектам Хезболлы в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: '#', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
+            { title: 'Япония запустила новый спутник для наблюдения за Северной Кореей', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: '#', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() }
         ];
 
         const RSS_FEEDS = [
@@ -569,24 +664,85 @@
         let allNews = [];
         let currentTheme = 'all';
         let currentFiltered = [];
-        let displayedCount = 30;
+        let displayedCount = 24;
+        let isLoadingMore = false;
         let translationCache = {};
 
-        const radio = document.getElementById("radio");
-        const radioBtn = document.getElementById("radioBtn");
-        radioBtn.addEventListener("click", async () => {
+        // Функция "живое время"
+        function timeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            if (seconds < 60) return 'только что';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes} ${getMinutesWord(minutes)} назад`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} ${getHoursWord(hours)} назад`;
+            const days = Math.floor(hours / 24);
+            if (days === 1) return 'вчера';
+            if (days < 7) return `${days} ${getDaysWord(days)} назад`;
+            return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+        }
+        
+        function getMinutesWord(n) {
+            if (n % 10 === 1 && n % 100 !== 11) return 'минуту';
+            if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'минуты';
+            return 'минут';
+        }
+        
+        function getHoursWord(n) {
+            if (n % 10 === 1 && n % 100 !== 11) return 'час';
+            if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'часа';
+            return 'часов';
+        }
+        
+        function getDaysWord(n) {
+            if (n % 10 === 1 && n % 100 !== 11) return 'день';
+            if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'дня';
+            return 'дней';
+        }
+
+        // Радио
+        const radioContainer = document.getElementById('radioContainer');
+        const radioBtn = document.getElementById('radioBtn');
+        const radioDropdown = document.getElementById('radioDropdown');
+        const closeRadioBtn = document.getElementById('closeRadioBtn');
+        const vestiRadio = document.getElementById('vestiRadio');
+        const vestiPlayBtn = document.getElementById('vestiPlayBtn');
+        const vestiStopBtn = document.getElementById('vestiStopBtn');
+
+        radioBtn.addEventListener('click', () => {
+            radioDropdown.classList.toggle('active');
+        });
+        
+        closeRadioBtn.addEventListener('click', () => {
+            radioDropdown.classList.remove('active');
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!radioContainer && !radioBtn.contains(e.target) && !radioDropdown.contains(e.target)) {
+                radioDropdown.classList.remove('active');
+            }
+        });
+        
+        vestiPlayBtn.addEventListener('click', async () => {
             try {
-                if (radio.paused || radio.ended) {
-                    radio.volume = 0.7;
-                    await radio.play();
-                    radioBtn.innerHTML = "⏸️ ПАУЗА";
-                } else {
-                    radio.pause();
-                    radioBtn.innerHTML = "▶ ВЕСТИ FM";
-                }
-            } catch(e) { alert("🔊 Разрешите звук в браузере"); }
+                vestiRadio.volume = 0.7;
+                await vestiRadio.play();
+                vestiPlayBtn.textContent = '⏸ ИГРАЕТ';
+                vestiPlayBtn.style.opacity = '0.7';
+            } catch(e) { alert('🔊 Разрешите звук в браузере'); }
+        });
+        
+        vestiStopBtn.addEventListener('click', () => {
+            vestiRadio.pause();
+            vestiRadio.currentTime = 0;
+            vestiPlayBtn.textContent = '▶ ВКЛЮЧИТЬ';
+            vestiPlayBtn.style.opacity = '1';
         });
 
+        // Тема
         const themeBtn = document.getElementById("themeBtn");
         const body = document.body;
         themeBtn.addEventListener("click", () => {
@@ -599,6 +755,7 @@
             themeBtn.innerHTML = "☀️ ДЕНЬ";
         }
 
+        // Погода и время
         async function updateWeatherAndTime() {
             try {
                 const weatherRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=55.75&longitude=37.62&current_weather=true&timezone=Europe/Moscow');
@@ -705,10 +862,26 @@
             }
         }
 
+        function loadMoreNews() {
+            if (isLoadingMore) return;
+            if (displayedCount >= currentFiltered.length) return;
+            
+            isLoadingMore = true;
+            const loadMoreBtn = document.querySelector('.load-more');
+            if (loadMoreBtn) loadMoreBtn.textContent = '⏳ Загрузка...';
+            
+            setTimeout(() => {
+                displayedCount = Math.min(displayedCount + 20, currentFiltered.length);
+                renderNews();
+                isLoadingMore = false;
+            }, 300);
+        }
+
         async function renderNews() {
             const grid = document.getElementById('newsGrid');
             const newsCount = document.getElementById('newsCount');
             const toShow = currentFiltered.slice(0, displayedCount);
+            const hasMore = displayedCount < currentFiltered.length;
             
             if (currentFiltered.length === 0 && allNews.length === 0) {
                 grid.innerHTML = '<div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>';
@@ -729,7 +902,7 @@
                     <div class="card-title">${news.title || 'Без заголовка'}</div>
                     <div class="card-desc">${news.description || 'Описание отсутствует'}</div>
                     <div class="card-footer">
-                        <span>📅 ${news.publishedAt ? new Date(news.publishedAt).toLocaleDateString('ru-RU') : 'Недавно'}</span>
+                        <span class="time-ago">🕐 ${timeAgo(news.publishedAt)}</span>
                         <div class="action-btns">
                             <button class="read-btn" data-url="${news.url || '#'}">🔗 Читать</button>
                             <button class="translate-btn" data-title="${(news.title || '').replace(/"/g, '&quot;')}" data-desc="${(news.description || '').replace(/"/g, '&quot;')}">🌐 EN→RU</button>
@@ -738,16 +911,23 @@
                 </div>
             `).join('');
             
-            if (displayedCount < currentFiltered.length) {
+            if (hasMore) {
                 const loadMoreDiv = document.createElement('div');
                 loadMoreDiv.className = 'load-more-btn';
-                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё новости</button>';
+                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё новости (20)</button>';
                 grid.appendChild(loadMoreDiv);
-                loadMoreDiv.querySelector('.load-more').addEventListener('click', () => {
-                    displayedCount += 20;
-                    renderNews();
-                });
+                loadMoreDiv.querySelector('.load-more').addEventListener('click', loadMoreNews);
             }
+            
+            // Бесконечная прокрутка
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+                    loadMoreNews();
+                }
+            }, { threshold: 0.1, rootMargin: '100px' });
+            
+            const lastCard = grid.querySelector('.news-card:last-child');
+            if (lastCard) observer.observe(lastCard);
             
             document.querySelectorAll('.news-card').forEach(card => {
                 card.addEventListener('click', (e) => {
@@ -793,7 +973,7 @@
 
         function openModal(news) {
             document.getElementById('modalTitle').textContent = news.title || 'Новость';
-            document.getElementById('modalMeta').textContent = `${news.source || 'Источник'} · ${news.publishedAt ? new Date(news.publishedAt).toLocaleString('ru-RU') : 'Недавно'}`;
+            document.getElementById('modalMeta').textContent = `${news.source || 'Источник'} · ${timeAgo(news.publishedAt)}`;
             document.getElementById('modalText').textContent = news.description || 'Описание отсутствует.';
             document.getElementById('modalLink').innerHTML = `<a href="${news.url}" target="_blank">🔗 Читать оригинал →</a><span>ВЕКТОР • Мировые события</span>`;
             document.getElementById('newsModal').classList.add('active');
@@ -813,7 +993,7 @@
                     btn.classList.add('active');
                     currentTheme = btn.dataset.theme;
                     currentFiltered = filterNewsByTheme(currentTheme);
-                    displayedCount = 30;
+                    displayedCount = 24;
                     renderNews();
                     updateHeroAndTicker();
                 });
@@ -824,7 +1004,6 @@
             const updateBadge = document.getElementById('updateBadge');
             updateBadge.textContent = '🔄 загрузка...';
             
-            // Сначала показываем кэш
             const cached = localStorage.getItem('cachedNews');
             if (cached) {
                 try {
@@ -832,7 +1011,7 @@
                     if (cachedNews.length) {
                         allNews = cachedNews;
                         currentFiltered = filterNewsByTheme(currentTheme);
-                        displayedCount = 30;
+                        displayedCount = 24;
                         renderNews();
                         updateHeroAndTicker();
                         updateBadge.textContent = '📦 из кэша';
@@ -840,7 +1019,6 @@
                 } catch(e) {}
             }
             
-            // Пытаемся загрузить свежие новости
             let allItems = [];
             const errors = [];
             
@@ -858,15 +1036,14 @@
                 allNews = allItems.sort((a,b) => new Date(b.publishedAt) - new Date(a.publishedAt));
                 localStorage.setItem('cachedNews', JSON.stringify(allNews));
                 currentFiltered = filterNewsByTheme(currentTheme);
-                displayedCount = 30;
+                displayedCount = 24;
                 renderNews();
                 updateHeroAndTicker();
                 updateBadge.textContent = `✅ ${allNews.length} новостей`;
             } else if (allNews.length === 0) {
-                // Если ничего не загрузилось, показываем демо-новости
                 allNews = DEMO_NEWS;
                 currentFiltered = filterNewsByTheme(currentTheme);
-                displayedCount = 30;
+                displayedCount = 24;
                 renderNews();
                 updateHeroAndTicker();
                 updateBadge.textContent = '📰 демо-режим';
@@ -874,6 +1051,10 @@
             } else {
                 updateBadge.textContent = `✅ ${allNews.length} (кэш)`;
             }
+            
+            setInterval(() => {
+                renderNews();
+            }, 60000);
             
             setTimeout(() => {
                 if (updateBadge.textContent !== '📦 из кэша') 
