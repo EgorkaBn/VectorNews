@@ -63,6 +63,42 @@
         }
         body.dark .weather-block { background: rgba(255,255,255,0.1); }
         
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .radio-card {
+            background: rgba(0,0,0,0.05);
+            border-radius: 40px;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        body.dark .radio-card { background: rgba(255,255,255,0.1); }
+        
+        .radio-card span {
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .radio-card button {
+            background: linear-gradient(135deg, #B91C1C, #D97706);
+            border: none;
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: "Outfit", sans-serif;
+            transition: all 0.2s;
+        }
+        .radio-card button:hover { opacity: 0.9; transform: scale(1.02); }
+        .radio-card button.active { background: linear-gradient(135deg, #166534, #15803d); }
+        
         .btn {
             padding: 8px 20px;
             border-radius: 40px;
@@ -80,68 +116,6 @@
             color: white;
         }
         .btn-primary:hover { transform: scale(1.02); opacity: 0.9; }
-        
-        .radio-container {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .radio-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 8px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            z-index: 100;
-            min-width: 320px;
-            overflow: hidden;
-        }
-        body.dark .radio-dropdown { background: #1e293b; }
-        .radio-dropdown.active { display: block; }
-        .radio-player {
-            padding: 16px;
-        }
-        .radio-player h4 {
-            font-family: "Playfair Display", serif;
-            margin-bottom: 12px;
-            font-size: 14px;
-            color: #B91C1C;
-        }
-        .bbc-iframe {
-            width: 100%;
-            height: 120px;
-            border: none;
-            border-radius: 12px;
-        }
-        .vesti-player {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(0,0,0,0.05);
-            border-radius: 40px;
-        }
-        body.dark .vesti-player { background: rgba(255,255,255,0.1); }
-        .vesti-player button {
-            background: linear-gradient(135deg, #B91C1C, #D97706);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            color: white;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .close-radio {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            color: #666;
-        }
         
         .nav-section {
             background: rgba(255,255,255,0.9);
@@ -326,13 +300,6 @@
         }
         .load-more:hover { opacity: 0.9; transform: scale(1.02); }
         
-        .loading-indicator {
-            text-align: center;
-            padding: 40px;
-            grid-column: 1 / -1;
-            color: #888;
-        }
-        
         .news-card {
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
@@ -479,7 +446,8 @@
             .news-grid { grid-template-columns: 1fr; }
             .nav-btn { padding: 4px 12px; font-size: 12px; }
             .hero { height: 45vh; min-height: 350px; }
-            .radio-dropdown { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-radius: 20px 20px 0 0; }
+            .radio-group { width: 100%; justify-content: space-between; }
+            .radio-card { flex: 1; justify-content: space-between; }
         }
         
         .retry-btn {
@@ -507,30 +475,14 @@
                     <span id="weatherTemp">--°C</span>
                     <span id="currentDateTime"></span>
                 </div>
-                <div class="radio-container">
-                    <button id="radioBtn" class="btn btn-primary">🎵 РАДИО ▼</button>
-                    <div id="radioDropdown" class="radio-dropdown">
-                        <div class="radio-player">
-                            <button class="close-radio" id="closeRadioBtn">✕</button>
-                            <h4>📻 ВЕСТИ FM</h4>
-                            <div class="vesti-player">
-                                <button id="vestiPlayBtn">▶ ВКЛЮЧИТЬ</button>
-                                <button id="vestiStopBtn">⏹ ВЫКЛЮЧИТЬ</button>
-                            </div>
-                            <h4 style="margin-top: 16px;">🇬🇧 BBC Radio 1</h4>
-                            <iframe
-                                src="https://www.bbc.co.uk/sounds/embed/bbc_radio_one"
-                                width="100%"
-                                height="120"
-                                frameborder="0"
-                                allow="autoplay; encrypted-media"
-                                title="BBC Radio 1"
-                                sandbox="allow-scripts allow-same-origin allow-popups"
-                                loading="lazy"
-                                class="bbc-iframe"
-                            ></iframe>
-                            <p style="font-size: 11px; margin-top: 8px; color: #888;">BBC Radio 1 — официальный плеер BBC Sounds</p>
-                        </div>
+                <div class="radio-group">
+                    <div class="radio-card">
+                        <span>📻 ВЕСТИ FM</span>
+                        <button id="vestiPlayBtn">▶</button>
+                    </div>
+                    <div class="radio-card">
+                        <span>🇬🇧 BBC Radio</span>
+                        <button id="bbcPlayBtn">▶</button>
                     </div>
                 </div>
                 <button id="themeBtn" class="btn">🌙 НОЧЬ</button>
@@ -608,47 +560,52 @@
     <audio id="vestiRadio" preload="metadata">
         <source src="https://icecast-vgtrk.cdnvideo.ru/vestifm_mp3_128kbps" type="audio/mpeg">
     </audio>
+    
+    <audio id="bbcRadio" preload="metadata">
+        <source src="https://stream.live.vc.bbcmedia.co.uk/bbc_radio_one" type="audio/mpeg">
+        <source src="https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8" type="audio/mpeg">
+    </audio>
 
     <script>
-        // БОЛЬШАЯ БАЗА ДЕМО-НОВОСТЕЙ (всегда показывается, если RSS не грузится)
+        // БОЛЬШАЯ БАЗА ДЕМО-НОВОСТЕЙ
         const DEMO_NEWS_BASE = [
-            { title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления. В ближайшие годы планируется запустить несколько крупных производственных кластеров.', source: 'ТАСС', url: 'https://tass.ru', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
+            { title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: 'https://tass.ru', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
             { title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*120).toISOString() },
-            { title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными. Президент Эрдоган выразил оптимизм по поводу прогресса.', source: 'РИА Новости', url: 'https://ria.ru', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
-            { title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак на финансовый сектор.', source: 'Ведомости', url: 'https://vedomosti.ru', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
-            { title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям. Ожидается подписание ряда двусторонних соглашений.', source: 'Коммерсантъ', url: 'https://kommersant.ru', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
-            { title: 'Мощное землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями. Разрушены сотни зданий.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
-            { title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года при стабилизации курса рубля.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
-            { title: 'Лионель Месси оформил хет-трик и достиг отметки 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение. Криштиану Роналду также продолжает погоню за рекордами.', source: 'ESPN', url: 'https://espn.com', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
-            { title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете в прошлом.', source: 'BBC News', url: 'https://bbc.com', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
-            { title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина, правительство пообещало диалог.', source: 'Deutsche Welle', url: 'https://dw.com', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
-            { title: 'Израиль нанёс удары по объектам "Хезболлы" в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации конфликта.', source: 'Al Jazeera', url: 'https://aljazeera.com', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
-            { title: 'Япония запустила новый спутник для наблюдения за КНДР', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе на фоне растущей напряжённости.', source: 'NHK World', url: 'https://nhk.or.jp', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() },
-            { title: 'В США начались праймериз: Трамп лидирует в нескольких штатах', description: 'Бывший президент опережает конкурентов в борьбе за выдвижение от Республиканской партии. Ключевые сражения ожидаются в Мичигане и Огайо.', source: 'Associated Press', url: 'https://apnews.com', publishedAt: new Date(Date.now() - 1000*60*60*12).toISOString() },
-            { title: 'Евросоюз утвердил 12-й пакет санкций против России', description: 'Ограничения затронут алмазную промышленность, импорт сжиженного природного газа и новые технологические сектора. Венгрия добилась исключений.', source: 'Euronews', url: 'https://euronews.com', publishedAt: new Date(Date.now() - 1000*60*60*36).toISOString() },
+            { title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: 'https://ria.ru', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
+            { title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: 'https://vedomosti.ru', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
+            { title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: 'https://kommersant.ru', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
+            { title: 'Мощное землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
+            { title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
+            { title: 'Лионель Месси оформил хет-трик и достиг отметки 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение.', source: 'ESPN', url: 'https://espn.com', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
+            { title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: 'https://bbc.com', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
+            { title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: 'https://dw.com', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
+            { title: 'Израиль нанёс удары по объектам "Хезболлы" в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: 'https://aljazeera.com', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
+            { title: 'Япония запустила новый спутник для наблюдения за КНДР', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: 'https://nhk.or.jp', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() },
+            { title: 'В США начались праймериз: Трамп лидирует в нескольких штатах', description: 'Бывший президент опережает конкурентов в борьбе за выдвижение от Республиканской партии.', source: 'Associated Press', url: 'https://apnews.com', publishedAt: new Date(Date.now() - 1000*60*60*12).toISOString() },
+            { title: 'Евросоюз утвердил 12-й пакет санкций против России', description: 'Ограничения затронут алмазную промышленность, импорт сжиженного природного газа и новые технологические сектора.', source: 'Euronews', url: 'https://euronews.com', publishedAt: new Date(Date.now() - 1000*60*60*36).toISOString() },
             { title: 'Курс биткоина превысил $70 000 впервые за два года', description: 'Рост криптовалюты связан с ожиданием одобрения биткоин-ETF и халвингом. Эксперты прогнозируют дальнейшую волатильность.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*60*4).toISOString() }
         ];
         
-        // Расширяем демо-новости для большего количества контента
-        for (let i = 0; i < 30; i++) {
+        // Расширяем демо-новости
+        for (let i = 0; i < 20; i++) {
             const clone = { ...DEMO_NEWS_BASE[i % DEMO_NEWS_BASE.length] };
-            clone.title = clone.title + ` (${Math.floor(i/10)+1})`;
+            clone.title = clone.title + ` (${Math.floor(i/5)+1})`;
             clone.publishedAt = new Date(Date.now() - 1000*60*60*(i+1)).toISOString();
             DEMO_NEWS_BASE.push(clone);
         }
 
         const THEME_KEYWORDS = {
-            politics: ['политика', 'политик', 'президент', 'выборы', 'закон', 'санкции', 'госдеп', 'кремль', 'белый дом', 'путин', 'байден', 'трамп', 'правительство', 'депутат', 'парламент', 'конгресс', 'министр', 'дипломатия', 'переговоры', 'саммит'],
-            war: ['война', 'конфликт', 'армия', 'танк', 'ракета', 'удар', 'обстрел', 'атака', 'наступление', 'украина', 'израиль', 'палестина', 'газа', 'донбасс', 'сво', 'мобилизация', 'военный', 'беспилотник', 'дрон'],
-            cyber: ['кибер', 'хакер', 'взлом', 'данные', 'безопасность', 'атака', 'вирус', 'кибератака', 'утечка'],
-            incidents: ['теракт', 'взрыв', 'катастрофа', 'пожар', 'чп', 'криминал', 'убийство', 'дтп', 'авария', 'наводнение', 'землетрясение', 'ураган'],
-            economy: ['экономика', 'рынок', 'нефть', 'цена', 'доллар', 'рубль', 'инфляция', 'кризис', 'ввп', 'санкции', 'бизнес', 'акции', 'инвестиции', 'бюджет', 'налоги', 'биткоин'],
-            sport: ['спорт', 'футбол', 'хоккей', 'теннис', 'баскетбол', 'олимпиада', 'чемпионат', 'матч', 'турнир', 'победа', 'рекорд', 'месси'],
-            usa: ['сша', 'америка', 'вашингтон', 'трамп', 'байден', 'конгресс', 'белый дом', 'американский', 'нью-йорк', 'калифорния', 'техас'],
+            politics: ['политика', 'политик', 'президент', 'выборы', 'закон', 'санкции', 'госдеп', 'кремль', 'белый дом', 'путин', 'байден', 'трамп', 'правительство'],
+            war: ['война', 'конфликт', 'армия', 'танк', 'ракета', 'удар', 'обстрел', 'атака', 'наступление', 'украина', 'израиль', 'палестина', 'газа', 'донбасс'],
+            cyber: ['кибер', 'хакер', 'взлом', 'данные', 'безопасность', 'атака', 'вирус', 'кибератака'],
+            incidents: ['теракт', 'взрыв', 'катастрофа', 'пожар', 'чп', 'криминал', 'убийство', 'дтп', 'авария', 'наводнение', 'землетрясение'],
+            economy: ['экономика', 'рынок', 'нефть', 'цена', 'доллар', 'рубль', 'инфляция', 'кризис', 'ввп', 'бизнес', 'акции', 'биткоин'],
+            sport: ['спорт', 'футбол', 'хоккей', 'теннис', 'баскетбол', 'олимпиада', 'чемпионат', 'матч', 'победа', 'рекорд', 'месси'],
+            usa: ['сша', 'америка', 'вашингтон', 'трамп', 'байден', 'конгресс', 'белый дом', 'американский', 'нью-йорк'],
             japan: ['япония', 'токио', 'японский', 'киото', 'осака', 'хоккайдо'],
-            turkmenistan: ['туркменистан', 'ашхабад', 'туркмен', 'туркменский', 'бердымухамедов'],
-            tajikistan: ['таджикистан', 'душанбе', 'таджик', 'таджикский', 'рахмон'],
-            middleeast: ['израиль', 'иран', 'палестина', 'ближний восток', 'газа', 'тегеран', 'иерусалим', 'ливан', 'сирия', 'ирак', 'саудовская аравия'],
+            turkmenistan: ['туркменистан', 'ашхабад', 'туркмен', 'бердымухамедов'],
+            tajikistan: ['таджикистан', 'душанбе', 'таджик', 'рахмон'],
+            middleeast: ['израиль', 'иран', 'палестина', 'ближний восток', 'газа', 'тегеран', 'иерусалим', 'ливан', 'сирия'],
             europe: ['европа', 'ес', 'евросоюз', 'германия', 'франция', 'великобритания', 'италия', 'испания', 'польша', 'берлин', 'париж', 'лондон']
         };
 
@@ -673,7 +630,6 @@
             const date = new Date(dateString);
             const now = new Date();
             const seconds = Math.floor((now - date) / 1000);
-            
             if (isNaN(seconds)) return 'недавно';
             if (seconds < 60) return 'только что';
             const minutes = Math.floor(seconds / 60);
@@ -691,55 +647,84 @@
             if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'минуты';
             return 'минут';
         }
-        
         function getHoursWord(n) {
             if (n % 10 === 1 && n % 100 !== 11) return 'час';
             if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'часа';
             return 'часов';
         }
-        
         function getDaysWord(n) {
             if (n % 10 === 1 && n % 100 !== 11) return 'день';
             if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return 'дня';
             return 'дней';
         }
 
-        // Радио
-        const radioBtn = document.getElementById('radioBtn');
-        const radioDropdown = document.getElementById('radioDropdown');
-        const closeRadioBtn = document.getElementById('closeRadioBtn');
+        // РАДИО
         const vestiRadio = document.getElementById('vestiRadio');
-        const vestiPlayBtn = document.getElementById('vestiPlayBtn');
-        const vestiStopBtn = document.getElementById('vestiStopBtn');
-
-        radioBtn.addEventListener('click', () => {
-            radioDropdown.classList.toggle('active');
-        });
+        const bbcRadio = document.getElementById('bbcRadio');
+        const vestiBtn = document.getElementById('vestiPlayBtn');
+        const bbcBtn = document.getElementById('bbcPlayBtn');
         
-        closeRadioBtn.addEventListener('click', () => {
-            radioDropdown.classList.remove('active');
-        });
+        let currentPlaying = null;
         
-        document.addEventListener('click', (e) => {
-            if (!radioBtn.contains(e.target) && !radioDropdown.contains(e.target)) {
-                radioDropdown.classList.remove('active');
+        function stopAllRadio() {
+            if (vestiRadio && !vestiRadio.paused) {
+                vestiRadio.pause();
+                vestiBtn.textContent = '▶';
+                vestiBtn.classList.remove('active');
+            }
+            if (bbcRadio && !bbcRadio.paused) {
+                bbcRadio.pause();
+                bbcBtn.textContent = '▶';
+                bbcBtn.classList.remove('active');
+            }
+            currentPlaying = null;
+        }
+        
+        function playRadio(radio, btn) {
+            stopAllRadio();
+            radio.volume = 0.7;
+            radio.play().then(() => {
+                btn.textContent = '⏸';
+                btn.classList.add('active');
+                currentPlaying = { radio, btn };
+            }).catch(e => {
+                console.warn('Ошибка воспроизведения:', e);
+                alert('🔊 Разрешите звук в браузере или попробуйте позже');
+            });
+        }
+        
+        vestiBtn.addEventListener('click', () => {
+            if (vestiRadio.paused) {
+                playRadio(vestiRadio, vestiBtn);
+            } else {
+                vestiRadio.pause();
+                vestiBtn.textContent = '▶';
+                vestiBtn.classList.remove('active');
+                currentPlaying = null;
             }
         });
         
-        vestiPlayBtn.addEventListener('click', async () => {
-            try {
-                vestiRadio.volume = 0.7;
-                await vestiRadio.play();
-                vestiPlayBtn.textContent = '⏸ ИГРАЕТ';
-                vestiPlayBtn.style.opacity = '0.7';
-            } catch(e) { alert('🔊 Разрешите звук в браузере'); }
+        bbcBtn.addEventListener('click', () => {
+            if (bbcRadio.paused) {
+                playRadio(bbcRadio, bbcBtn);
+            } else {
+                bbcRadio.pause();
+                bbcBtn.textContent = '▶';
+                bbcBtn.classList.remove('active');
+                currentPlaying = null;
+            }
         });
         
-        vestiStopBtn.addEventListener('click', () => {
-            vestiRadio.pause();
-            vestiRadio.currentTime = 0;
-            vestiPlayBtn.textContent = '▶ ВКЛЮЧИТЬ';
-            vestiPlayBtn.style.opacity = '1';
+        vestiRadio.addEventListener('ended', () => {
+            vestiBtn.textContent = '▶';
+            vestiBtn.classList.remove('active');
+            currentPlaying = null;
+        });
+        
+        bbcRadio.addEventListener('ended', () => {
+            bbcBtn.textContent = '▶';
+            bbcBtn.classList.remove('active');
+            currentPlaying = null;
         });
 
         // Тема
@@ -834,11 +819,7 @@
         function loadMoreNews() {
             if (isLoadingMore) return;
             if (displayedCount >= currentFiltered.length) return;
-            
             isLoadingMore = true;
-            const loadMoreBtn = document.querySelector('.load-more');
-            if (loadMoreBtn) loadMoreBtn.textContent = '⏳ Загрузка...';
-            
             setTimeout(() => {
                 displayedCount = Math.min(displayedCount + 20, currentFiltered.length);
                 renderNews();
@@ -853,7 +834,7 @@
             const hasMore = displayedCount < currentFiltered.length;
             
             if (currentFiltered.length === 0) {
-                grid.innerHTML = `<div class="loader"><p>😔 Новости не найдены</p><button class="retry-btn" onclick="location.reload()">🔄 Обновить страницу</button></div>`;
+                grid.innerHTML = `<div class="loader"><p>😔 Новости не найдены</p><button class="retry-btn" onclick="location.reload()">🔄 Обновить</button></div>`;
                 newsCount.textContent = '0 новостей';
                 return;
             }
@@ -862,7 +843,7 @@
             
             grid.innerHTML = toShow.map((news, idx) => `
                 <div class="news-card" data-idx="${idx}">
-                    <div class="card-source">${news.source || 'Источник'}</div>
+                    <div class="card-source">${escapeHtml(news.source || 'Источник')}</div>
                     <div class="card-title">${escapeHtml(news.title || 'Без заголовка')}</div>
                     <div class="card-desc">${escapeHtml(news.description || 'Описание отсутствует')}</div>
                     <div class="card-footer">
@@ -878,18 +859,14 @@
             if (hasMore) {
                 const loadMoreDiv = document.createElement('div');
                 loadMoreDiv.className = 'load-more-btn';
-                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё новости (20)</button>';
+                loadMoreDiv.innerHTML = '<button class="load-more">📰 Загрузить ещё (20)</button>';
                 grid.appendChild(loadMoreDiv);
                 loadMoreDiv.querySelector('.load-more').addEventListener('click', loadMoreNews);
             }
             
-            // Бесконечная прокрутка
             const observer = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
-                    loadMoreNews();
-                }
+                if (entries[0].isIntersecting && hasMore && !isLoadingMore) loadMoreNews();
             }, { threshold: 0.1, rootMargin: '100px' });
-            
             const lastCard = grid.querySelector('.news-card:last-child');
             if (lastCard) observer.observe(lastCard);
             
@@ -915,7 +892,7 @@
                     e.stopPropagation();
                     const title = btn.dataset.title;
                     const desc = btn.dataset.desc;
-                    btn.textContent = '🔄 перевод...';
+                    btn.textContent = '🔄...';
                     const translatedTitle = await translateText(title);
                     const translatedDesc = await translateText(desc);
                     const card = btn.closest('.news-card');
@@ -949,7 +926,7 @@
             document.getElementById('modalTitle').textContent = news.title || 'Новость';
             document.getElementById('modalMeta').textContent = `${news.source || 'Источник'} · ${timeAgo(news.publishedAt)}`;
             document.getElementById('modalText').textContent = news.description || 'Описание отсутствует.';
-            document.getElementById('modalLink').innerHTML = `<a href="${news.url}" target="_blank">🔗 Читать оригинал →</a><span>ВЕКТОР • Мировые события</span>`;
+            document.getElementById('modalLink').innerHTML = `<a href="${news.url}" target="_blank">🔗 Читать оригинал →</a><span>ВЕКТОР</span>`;
             document.getElementById('newsModal').classList.add('active');
         }
 
@@ -974,12 +951,8 @@
             });
         }
 
-        // Основная функция загрузки - используем только демо-новости для надёжности
         function initNews() {
             const updateBadge = document.getElementById('updateBadge');
-            updateBadge.textContent = '✅ загружено';
-            
-            // Загружаем из кэша или используем демо-новости
             const cached = localStorage.getItem('cachedNews');
             if (cached) {
                 try {
@@ -990,37 +963,25 @@
                         displayedCount = 24;
                         renderNews();
                         updateHeroAndTicker();
-                        updateBadge.textContent = `📦 ${allNews.length} новостей`;
+                        updateBadge.textContent = `📦 ${allNews.length}`;
                         return;
                     }
                 } catch(e) {}
             }
-            
-            // Если кэша нет, используем демо-новости
             allNews = [...DEMO_NEWS_BASE];
-            // Перемешиваем для разнообразия
             allNews.sort(() => Math.random() - 0.5);
             currentFiltered = filterNewsByTheme(currentTheme);
             displayedCount = 24;
             renderNews();
             updateHeroAndTicker();
-            updateBadge.textContent = `📰 ${allNews.length} новостей (демо)`;
-            
-            // Сохраняем в кэш
+            updateBadge.textContent = `📰 ${allNews.length}`;
             localStorage.setItem('cachedNews', JSON.stringify(allNews));
         }
 
         setupNavigation();
         initNews();
-        
         document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
-        
-        // Обновляем "живое" время каждую минуту
-        setInterval(() => {
-            if (currentFiltered.length > 0) {
-                renderNews();
-            }
-        }, 60000);
+        setInterval(() => { if (currentFiltered.length > 0) renderNews(); }, 60000);
     </script>
 </body>
 </html>
