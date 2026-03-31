@@ -281,6 +281,14 @@
             margin-left: 12px;
             font-family: "Outfit", sans-serif;
         }
+        .mode-badge {
+            font-size: 10px;
+            background: rgba(0,0,0,0.05);
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 8px;
+        }
+        body.dark .mode-badge { background: rgba(255,255,255,0.1); }
         
         .news-grid {
             display: grid;
@@ -504,26 +512,15 @@
             margin-top: 20px;
         }
         
-        .saved-page {
-            padding: 20px;
-        }
         .saved-empty {
             text-align: center;
             padding: 60px;
             color: #888;
         }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #B91C1C;
-            text-decoration: none;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
     <div class="container" id="app">
-        <!-- ШАПКА -->
         <div class="header">
             <div class="logo">
                 <h1>ВЕКТОР</h1>
@@ -541,7 +538,7 @@
                         <button id="vestiPlayBtn">▶</button>
                     </div>
                     <div class="radio-card">
-                        <span>🇬🇧 BBC Radio</span>
+                        <span>🇬🇧 BBC Radio 1</span>
                         <button id="bbcPlayBtn">▶</button>
                     </div>
                 </div>
@@ -550,7 +547,6 @@
             </div>
         </div>
         
-        <!-- НАВИГАЦИЯ ПО ТЕМАМ -->
         <div class="nav-section">
             <div class="nav-row">
                 <button class="nav-btn active" data-theme="all">🌍 Все новости</button>
@@ -563,7 +559,6 @@
             </div>
         </div>
         
-        <!-- НАВИГАЦИЯ ПО СТРАНАМ -->
         <div class="nav-section">
             <div class="nav-row">
                 <button class="nav-btn flag-btn" data-theme="usa">🇺🇸 США</button>
@@ -575,7 +570,6 @@
             </div>
         </div>
         
-        <!-- БЕГУЩАЯ СТРОКА -->
         <div class="ticker">
             <span class="ticker-label">📰 ИЗВЕСТИЯ</span>
             <div class="ticker-content">
@@ -585,7 +579,6 @@
             </div>
         </div>
         
-        <!-- HERO БЛОК (без hero-tag) -->
         <div class="hero">
             <div class="hero-bg" id="heroBg"></div>
             <div class="hero-overlay"></div>
@@ -594,19 +587,18 @@
             </div>
         </div>
         
-        <!-- ЛЕНТА НОВОСТЕЙ -->
         <div class="news-header">
             <h2>📰 Новостная лента мировых событий</h2>
             <div>
                 <span class="news-count" id="newsCount"></span>
                 <span class="update-badge" id="updateBadge"></span>
+                <span class="mode-badge" id="modeBadge">⚡ загрузка</span>
             </div>
         </div>
         <div id="newsGrid" class="news-grid">
-            <div class="loader"><div class="spinner"></div><p>Загрузка новостей...</p></div>
+            <div class="loader"><div class="spinner"></div><p>Загрузка новостей из 25 источников...</p></div>
         </div>
         
-        <!-- ПОДВАЛ -->
         <div class="footer">
             <h4>© 2026 ВЕКТОР — Новостной агрегатор</h4>
             <p>Все материалы, представленные на сайте, взяты из открытых и официальных источников: RSS-ленты ТАСС, РИА Новости, Reuters, BBC, The Guardian и других мировых СМИ.</p>
@@ -616,7 +608,6 @@
         </div>
     </div>
     
-    <!-- МОДАЛЬНОЕ ОКНО -->
     <div id="newsModal" class="modal">
         <div class="modal-content">
             <button class="close-modal" id="closeModalBtn">✕</button>
@@ -627,43 +618,42 @@
         </div>
     </div>
     
-    <audio id="vestiRadio" preload="metadata">
+    <!-- РАДИО -->
+    <audio id="radioVesti" preload="metadata">
         <source src="https://icecast-vgtrk.cdnvideo.ru/vestifm_mp3_128kbps" type="audio/mpeg">
     </audio>
     
-    <audio id="bbcRadio" preload="metadata">
-        <source src="https://stream.live.vc.bbcmedia.co.uk/bbc_radio_one" type="audio/mpeg">
-        <source src="https://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8" type="audio/mpeg">
+    <audio id="radioBBC" preload="metadata">
+        <source src="http://as-hls-ww-live.akamaized.net/pool_01505109/live/ww/bbc_radio_one/bbc_radio_one.isml/bbc_radio_one-audio%3d96000.norewind.m3u8" type="application/x-mpegURL">
     </audio>
 
     <script>
-        // БОЛЬШАЯ БАЗА ДЕМО-НОВОСТЕЙ
-        const DEMO_NEWS_BASE = [
-            { id: '1', title: 'Кремль: Россия продолжит курс на укрепление технологического суверенитета', description: 'Пресс-секретарь президента РФ заявил о важности развития собственных IT-решений и микроэлектроники в условиях санкционного давления.', source: 'ТАСС', url: 'https://tass.ru', publishedAt: new Date(Date.now() - 1000*60*35).toISOString() },
-            { id: '2', title: 'Байден подписал закон о дополнительной помощи Украине на $60 млрд', description: 'Пакет включает военную технику, боеприпасы и финансовую поддержку. В Пентагоне заявили, что первая партия вооружений будет отправлена в ближайшие дни.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*120).toISOString() },
-            { id: '3', title: 'Переговоры России и Украины: новый раунд состоится в Стамбуле', description: 'Турецкая сторона подтвердила готовность выступить посредником. Ожидается обсуждение зерновой сделки и обмена пленными.', source: 'РИА Новости', url: 'https://ria.ru', publishedAt: new Date(Date.now() - 1000*60*60*3).toISOString() },
-            { id: '4', title: 'Кибератака на крупнейший банк России отражена', description: 'Злоумышленники пытались похитить данные клиентов, но система безопасности предотвратила взлом. Специалисты фиксируют рост DDoS-атак.', source: 'Ведомости', url: 'https://vedomosti.ru', publishedAt: new Date(Date.now() - 1000*60*60*5).toISOString() },
-            { id: '5', title: 'Путин встретится с лидерами стран БРИКС на саммите в Казани', description: 'Основные темы — расширение объединения, создание единой платёжной системы и противодействие западным санкциям.', source: 'Коммерсантъ', url: 'https://kommersant.ru', publishedAt: new Date(Date.now() - 1000*60*60*24).toISOString() },
-            { id: '6', title: 'Мощное землетрясение в Турции: число жертв превысило 500', description: 'Поисково-спасательные работы продолжаются. МЧС России направило в регион два борта с гуманитарной помощью и спасателями.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*2).toISOString() },
-            { id: '7', title: 'ЦБ сохранил ключевую ставку на уровне 16%', description: 'Регулятор отметил замедление инфляции, но не исключил повышения во втором полугодии. Эксперты ожидают снижения ставки к концу года.', source: 'Известия', url: 'https://iz.ru', publishedAt: new Date(Date.now() - 1000*60*60*8).toISOString() },
-            { id: '8', title: 'Лионель Месси оформил хет-трик и достиг отметки 800 голов за карьеру', description: 'Аргентинский футболист забил три мяча в матче за "Интер Майами", установив уникальное достижение.', source: 'ESPN', url: 'https://espn.com', publishedAt: new Date(Date.now() - 1000*60*60*15).toISOString() },
-            { id: '9', title: 'NASA показало новые снимки Марса от ровера Perseverance', description: 'Марсоход обнаружил следы древней реки в кратере Езеро. Учёные считают, что это подтверждает теорию о существовании воды на Красной планете.', source: 'BBC News', url: 'https://bbc.com', publishedAt: new Date(Date.now() - 1000*60*60*48).toISOString() },
-            { id: '10', title: 'В Германии прошли многотысячные протесты фермеров', description: 'Аграрии требуют отмены повышения налогов на дизельное топливо. Демонстрации перекрыли центр Берлина.', source: 'Deutsche Welle', url: 'https://dw.com', publishedAt: new Date(Date.now() - 1000*60*30).toISOString() },
-            { id: '11', title: 'Израиль нанёс удары по объектам "Хезболлы" в Ливане', description: 'ЦАХАЛ заявил, что это ответ на ракетный обстрел северных территорий. ООН призывает стороны к деэскалации.', source: 'Al Jazeera', url: 'https://aljazeera.com', publishedAt: new Date(Date.now() - 1000*60*10).toISOString() },
-            { id: '12', title: 'Япония запустила новый спутник для наблюдения за КНДР', description: 'Аппарат будет отслеживать пуски баллистических ракет. Токио усиливает разведывательные возможности в регионе.', source: 'NHK World', url: 'https://nhk.or.jp', publishedAt: new Date(Date.now() - 1000*60*60*20).toISOString() },
-            { id: '13', title: 'В США начались праймериз: Трамп лидирует в нескольких штатах', description: 'Бывший президент опережает конкурентов в борьбе за выдвижение от Республиканской партии.', source: 'Associated Press', url: 'https://apnews.com', publishedAt: new Date(Date.now() - 1000*60*60*12).toISOString() },
-            { id: '14', title: 'Евросоюз утвердил 12-й пакет санкций против России', description: 'Ограничения затронут алмазную промышленность, импорт сжиженного природного газа и новые технологические сектора.', source: 'Euronews', url: 'https://euronews.com', publishedAt: new Date(Date.now() - 1000*60*60*36).toISOString() },
-            { id: '15', title: 'Курс биткоина превысил $70 000 впервые за два года', description: 'Рост криптовалюты связан с ожиданием одобрения биткоин-ETF и халвингом. Эксперты прогнозируют дальнейшую волатильность.', source: 'Reuters', url: 'https://reuters.com', publishedAt: new Date(Date.now() - 1000*60*60*4).toISOString() }
+        // ============ НАСТРОЙКИ ============
+        // ⚠️ ВАЖНО: Укажите URL вашего PHP-скрипта на хостинге!
+        const PHP_PROXY_URL = 'https://ваш-хостинг.ru/api/news_proxy.php'; // ЗАМЕНИТЕ НА ВАШ URL!
+        
+        // CORS-прокси (резервный вариант)
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest='
         ];
         
-        // Расширяем демо-новости
-        for (let i = 0; i < 20; i++) {
-            const clone = JSON.parse(JSON.stringify(DEMO_NEWS_BASE[i % DEMO_NEWS_BASE.length]));
-            clone.id = (DEMO_NEWS_BASE.length + i).toString();
-            clone.title = clone.title + ` (${Math.floor(i/5)+1})`;
-            clone.publishedAt = new Date(Date.now() - 1000*60*60*(i+1)).toISOString();
-            DEMO_NEWS_BASE.push(clone);
-        }
+        // RSS-источники (прямые ссылки)
+        const RSS_FEEDS = [
+            { name: 'ТАСС', url: 'https://tass.ru/rss/v2.xml' },
+            { name: 'РИА Новости', url: 'https://ria.ru/export/rss2/index.xml' },
+            { name: 'Ведомости', url: 'https://www.vedomosti.ru/rss/news' },
+            { name: 'Коммерсантъ', url: 'https://www.kommersant.ru/RSS/news.xml' },
+            { name: 'Известия', url: 'https://iz.ru/xml/rss/all.xml' },
+            { name: 'Reuters', url: 'https://www.reuters.com/rss/topNews' },
+            { name: 'BBC News', url: 'http://feeds.bbci.co.uk/news/rss.xml' },
+            { name: 'The Guardian', url: 'https://www.theguardian.com/world/rss' },
+            { name: 'Al Jazeera', url: 'https://www.aljazeera.com/xml/rss/all.xml' },
+            { name: 'Deutsche Welle', url: 'https://www.dw.com/ru/rss.xml' },
+            { name: 'NHK World', url: 'https://www3.nhk.or.jp/rss/news/cat0.xml' },
+            { name: 'Associated Press', url: 'https://feeds.ap.org/rss/content/News' }
+        ];
 
         const THEME_KEYWORDS = {
             politics: ['политика', 'политик', 'президент', 'выборы', 'закон', 'санкции', 'госдеп', 'кремль', 'белый дом', 'путин', 'байден', 'трамп', 'правительство'],
@@ -677,7 +667,7 @@
             turkmenistan: ['туркменистан', 'ашхабад', 'туркмен', 'бердымухамедов'],
             tajikistan: ['таджикистан', 'душанбе', 'таджик', 'рахмон'],
             middleeast: ['израиль', 'иран', 'палестина', 'ближний восток', 'газа', 'тегеран', 'иерусалим', 'ливан', 'сирия'],
-            europe: ['европа', 'ес', 'евросоюз', 'германия', 'франция', 'великобритания', 'италия', 'испания', 'польша', 'берлин', 'paris', 'london']
+            europe: ['европа', 'ес', 'евросоюз', 'германия', 'франция', 'великобритания', 'италия', 'испания', 'польша', 'берлин', 'париж', 'лондон']
         };
 
         const THEME_IMAGES = {
@@ -698,6 +688,7 @@
         let translationCache = {};
         let savedNews = JSON.parse(localStorage.getItem('savedNews') || '[]');
         let currentView = 'main';
+        let currentMode = 'loading';
 
         function saveToLocalStorage() {
             localStorage.setItem('savedNews', JSON.stringify(savedNews));
@@ -763,22 +754,22 @@
             return 'дней';
         }
 
-        // РАДИО
-        const vestiRadio = document.getElementById('vestiRadio');
-        const bbcRadio = document.getElementById('bbcRadio');
+        // РАДИО (исправленное)
+        const radioVesti = document.getElementById('radioVesti');
+        const radioBBC = document.getElementById('radioBBC');
         const vestiBtn = document.getElementById('vestiPlayBtn');
         const bbcBtn = document.getElementById('bbcPlayBtn');
         
         let currentPlaying = null;
         
         function stopAllRadio() {
-            if (vestiRadio && !vestiRadio.paused) {
-                vestiRadio.pause();
+            if (radioVesti && !radioVesti.paused) {
+                radioVesti.pause();
                 vestiBtn.textContent = '▶';
                 vestiBtn.classList.remove('active');
             }
-            if (bbcRadio && !bbcRadio.paused) {
-                bbcRadio.pause();
+            if (radioBBC && !radioBBC.paused) {
+                radioBBC.pause();
                 bbcBtn.textContent = '▶';
                 bbcBtn.classList.remove('active');
             }
@@ -799,10 +790,10 @@
         }
         
         vestiBtn.addEventListener('click', () => {
-            if (vestiRadio.paused) {
-                playRadio(vestiRadio, vestiBtn);
+            if (radioVesti.paused) {
+                playRadio(radioVesti, vestiBtn);
             } else {
-                vestiRadio.pause();
+                radioVesti.pause();
                 vestiBtn.textContent = '▶';
                 vestiBtn.classList.remove('active');
                 currentPlaying = null;
@@ -810,23 +801,23 @@
         });
         
         bbcBtn.addEventListener('click', () => {
-            if (bbcRadio.paused) {
-                playRadio(bbcRadio, bbcBtn);
+            if (radioBBC.paused) {
+                playRadio(radioBBC, bbcBtn);
             } else {
-                bbcRadio.pause();
+                radioBBC.pause();
                 bbcBtn.textContent = '▶';
                 bbcBtn.classList.remove('active');
                 currentPlaying = null;
             }
         });
         
-        vestiRadio.addEventListener('ended', () => {
+        radioVesti.addEventListener('ended', () => {
             vestiBtn.textContent = '▶';
             vestiBtn.classList.remove('active');
             currentPlaying = null;
         });
         
-        bbcRadio.addEventListener('ended', () => {
+        radioBBC.addEventListener('ended', () => {
             bbcBtn.textContent = '▶';
             bbcBtn.classList.remove('active');
             currentPlaying = null;
@@ -879,6 +870,68 @@
                 }
             } catch(e) { console.warn('Translation error:', e); }
             return text;
+        }
+
+        function parseRSS(xmlText, sourceName) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+            const items = xmlDoc.querySelectorAll('item');
+            const result = [];
+            for (let i = 0; i < Math.min(items.length, 10); i++) {
+                const item = items[i];
+                const title = item.querySelector('title')?.textContent?.replace(/<[^>]*>/g, '') || 'Без заголовка';
+                const description = item.querySelector('description')?.textContent?.replace(/<[^>]*>/g, '').substring(0, 300) || 'Описание отсутствует';
+                const link = item.querySelector('link')?.textContent || '#';
+                const pubDate = item.querySelector('pubDate')?.textContent || new Date().toISOString();
+                result.push({ 
+                    title, 
+                    description, 
+                    url: link, 
+                    source: sourceName, 
+                    publishedAt: pubDate,
+                    id: btoa(link + title).substring(0, 50)
+                });
+            }
+            return result;
+        }
+
+        // Загрузка через PHP-прокси
+        async function fetchViaPHP() {
+            try {
+                const response = await fetch(PHP_PROXY_URL, { timeout: 10000 });
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.length > 0) {
+                        return data;
+                    }
+                }
+            } catch(e) {
+                console.log('PHP прокси не доступен:', e.message);
+            }
+            return null;
+        }
+
+        // Загрузка через CORS-прокси (резерв)
+        async function fetchViaCORS() {
+            let allItems = [];
+            for (const feed of RSS_FEEDS) {
+                for (const proxy of CORS_PROXIES) {
+                    try {
+                        const url = proxy + encodeURIComponent(feed.url);
+                        const response = await fetch(url, { timeout: 8000 });
+                        if (response.ok) {
+                            const text = await response.text();
+                            const parsed = parseRSS(text, feed.name);
+                            if (parsed.length > 0) {
+                                allItems.push(...parsed);
+                                break;
+                            }
+                        }
+                    } catch(e) {}
+                }
+                await new Promise(r => setTimeout(r, 50));
+            }
+            return allItems;
         }
 
         function getThemeForArticle(article) {
@@ -1148,8 +1201,15 @@
             });
         }
 
-        function initNews() {
+        // ГЛАВНАЯ ЗАГРУЗКА НОВОСТЕЙ (гибридная)
+        async function loadNews() {
             const updateBadge = document.getElementById('updateBadge');
+            const modeBadge = document.getElementById('modeBadge');
+            
+            updateBadge.textContent = '🔄 загрузка...';
+            modeBadge.textContent = '⚡ проверка...';
+            
+            // Сначала пробуем загрузить из кэша (мгновенно)
             const cached = localStorage.getItem('cachedNews');
             if (cached) {
                 try {
@@ -1160,37 +1220,101 @@
                         displayedCount = 24;
                         renderNews();
                         updateHeroAndTicker();
-                        updateBadge.textContent = `📦 ${allNews.length}`;
-                        return;
+                        updateBadge.textContent = `📦 ${allNews.length} (кэш)`;
                     }
                 } catch(e) {}
             }
-            allNews = [...DEMO_NEWS_BASE];
-            allNews.sort(() => Math.random() - 0.5);
-            currentFiltered = filterNewsByTheme(currentTheme);
-            displayedCount = 24;
-            renderNews();
-            updateHeroAndTicker();
-            updateBadge.textContent = `📰 ${allNews.length}`;
-            localStorage.setItem('cachedNews', JSON.stringify(allNews));
+            
+            let freshNews = null;
+            
+            // Попытка 1: PHP-прокси (вариант 2)
+            modeBadge.textContent = '🖥️ PHP...';
+            freshNews = await fetchViaPHP();
+            
+            if (freshNews && freshNews.length > 10) {
+                currentMode = 'PHP';
+                modeBadge.textContent = '🖥️ PHP';
+                modeBadge.style.background = '#166534';
+                modeBadge.style.color = 'white';
+                console.log('✅ Новости загружены через PHP прокси');
+            } else {
+                // Попытка 2: CORS-прокси (вариант 1)
+                modeBadge.textContent = '🌐 CORS...';
+                freshNews = await fetchViaCORS();
+                if (freshNews && freshNews.length > 10) {
+                    currentMode = 'CORS';
+                    modeBadge.textContent = '🌐 CORS';
+                    modeBadge.style.background = '#D97706';
+                    modeBadge.style.color = 'white';
+                    console.log('✅ Новости загружены через CORS прокси');
+                }
+            }
+            
+            if (freshNews && freshNews.length > 10) {
+                allNews = freshNews;
+                localStorage.setItem('cachedNews', JSON.stringify(allNews));
+                currentFiltered = filterNewsByTheme(currentTheme);
+                displayedCount = 24;
+                renderNews();
+                updateHeroAndTicker();
+                updateBadge.textContent = `✅ ${allNews.length} (${currentMode})`;
+                modeBadge.textContent = currentMode === 'PHP' ? '🖥️ PHP' : '🌐 CORS';
+            } else if (allNews.length === 0) {
+                modeBadge.textContent = '⚠️ ошибка';
+                modeBadge.style.background = '#B91C1C';
+                modeBadge.style.color = 'white';
+                updateBadge.textContent = '❌ ошибка загрузки';
+                document.getElementById('newsGrid').innerHTML = `
+                    <div class="loader">
+                        <p>😔 Не удалось загрузить новости</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Проверьте:</p>
+                        <p style="font-size: 12px;">1. PHP-скрипт загружен на хостинг? URL: ${PHP_PROXY_URL}</p>
+                        <p style="font-size: 12px;">2. Нажмите кнопку ниже для повторной попытки</p>
+                        <button class="retry-btn" onclick="location.reload()">🔄 Повторить</button>
+                    </div>
+                `;
+            } else {
+                updateBadge.textContent = `📦 ${allNews.length} (кэш)`;
+                modeBadge.textContent = '📦 кэш';
+            }
         }
 
         // Кнопка сохранённого
         document.getElementById('savedLinkBtn').addEventListener('click', (e) => {
             e.preventDefault();
-            currentView = 'saved';
-            document.getElementById('savedLinkBtn').textContent = '🏠 НА ГЛАВНУЮ';
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            renderSavedPage();
-            const heroTitle = document.getElementById('heroTitle');
-            heroTitle.innerHTML = 'СОХРАНЁННЫЕ<br><span>НОВОСТИ</span>';
-            document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
+            if (currentView === 'saved') {
+                currentView = 'main';
+                document.getElementById('savedLinkBtn').textContent = '⭐ СОХРАНЁННОЕ';
+                currentFiltered = filterNewsByTheme(currentTheme);
+                displayedCount = 24;
+                renderNews();
+                updateHeroAndTicker();
+            } else {
+                currentView = 'saved';
+                document.getElementById('savedLinkBtn').textContent = '🏠 НА ГЛАВНУЮ';
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                renderSavedPage();
+                const heroTitle = document.getElementById('heroTitle');
+                heroTitle.innerHTML = 'СОХРАНЁННЫЕ<br><span>НОВОСТИ</span>';
+                document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
+            }
         });
 
         setupNavigation();
-        initNews();
+        loadNews();
         document.getElementById('heroBg').style.backgroundImage = `url('${THEME_IMAGES.all}')`;
-        setInterval(() => { if (currentFiltered.length > 0 && currentView === 'main') renderNews(); }, 60000);
+        setInterval(() => { 
+            if (currentFiltered.length > 0 && currentView === 'main') {
+                renderNews(); 
+            }
+        }, 60000);
+        
+        // Обновляем новости каждые 5 минут
+        setInterval(() => {
+            if (currentView === 'main') {
+                loadNews();
+            }
+        }, 300000);
     </script>
 </body>
 </html>
