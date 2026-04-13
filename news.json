@@ -1,0 +1,339 @@
+{
+  "generatedAt": "2026-04-13T17:11:03.000622Z",
+  "updatedAt": "2026-04-13T17:11:03.000744Z",
+  "stats": {
+    "articles": 6,
+    "clusters": 3,
+    "sources": 5
+  },
+  "themeStats": {
+    "technology": 2,
+    "economy": 2,
+    "politics": 1,
+    "cyber": 1
+  },
+  "regionStats": {
+    "global": 2,
+    "usa": 2,
+    "europe": 1,
+    "asia": 1
+  },
+  "highlights": [
+    {
+      "id": "cluster-demo-1",
+      "storyKey": "ai-regulation-platforms",
+      "title": "Крупные платформы ускоряют внедрение AI-функций на фоне новой волны регулирования",
+      "description": "Компании перестраивают продуктовые линейки и корпоративные процессы, делая AI центральной частью сервисов и инфраструктуры.",
+      "summary": "Компании перестраивают продуктовые линейки и корпоративные процессы, делая AI центральной частью сервисов и инфраструктуры. Источников: 3.",
+      "url": "https://example.com/original-ai-story",
+      "theme": "technology",
+      "regions": [
+        "global",
+        "usa"
+      ],
+      "categories": [
+        "AI",
+        "Platforms",
+        "Regulation"
+      ],
+      "entities": [
+        "OpenAI",
+        "Microsoft",
+        "Google"
+      ],
+      "publishedAt": "2026-04-13T17:11:03.000933Z",
+      "primarySource": "TechCrunch",
+      "sourceCount": 3,
+      "importanceScore": 41.6,
+      "coverage": [
+        "TechCrunch",
+        "The New York Times",
+        "NPR"
+      ],
+      "items": [
+        {
+          "id": "a1",
+          "title": "AI-функции становятся базовым слоем цифровых сервисов",
+          "source": "TechCrunch",
+          "url": "https://example.com/original-ai-story",
+          "publishedAt": "2026-04-13T17:11:03.001048Z"
+        },
+        {
+          "id": "a2",
+          "title": "Регулирование AI меняет дорожные карты платформ",
+          "source": "The New York Times",
+          "url": "https://example.com/original-ai-story-2",
+          "publishedAt": "2026-04-13T17:11:03.001101Z"
+        }
+      ],
+      "whyItMatters": "Задает направление для AI, платформ и цифровых сервисов."
+    }
+  ],
+  "clusters": [
+    {
+      "id": "cluster-demo-1",
+      "storyKey": "ai-regulation-platforms",
+      "title": "Крупные платформы ускоряют внедрение AI-функций на фоне новой волны регулирования",
+      "description": "Компании перестраивают продуктовые линейки и корпоративные процессы, делая AI центральной частью сервисов и инфраструктуры.",
+      "summary": "Компании перестраивают продуктовые линейки и корпоративные процессы, делая AI центральной частью сервисов и инфраструктуры. Источников: 3.",
+      "url": "https://example.com/original-ai-story",
+      "theme": "technology",
+      "regions": [
+        "global",
+        "usa"
+      ],
+      "categories": [
+        "AI",
+        "Platforms",
+        "Regulation"
+      ],
+      "entities": [
+        "OpenAI",
+        "Microsoft",
+        "Google"
+      ],
+      "publishedAt": "2026-04-13T17:11:03.001148Z",
+      "primarySource": "TechCrunch",
+      "sourceCount": 3,
+      "importanceScore": 41.6,
+      "coverage": [
+        "TechCrunch",
+        "The New York Times",
+        "NPR"
+      ],
+      "items": [
+        {
+          "id": "a1",
+          "title": "AI-функции становятся базовым слоем цифровых сервисов",
+          "source": "TechCrunch",
+          "url": "https://example.com/original-ai-story",
+          "publishedAt": "2026-04-13T17:11:03.001191Z"
+        },
+        {
+          "id": "a2",
+          "title": "Регулирование AI меняет дорожные карты платформ",
+          "source": "The New York Times",
+          "url": "https://example.com/original-ai-story-2",
+          "publishedAt": "2026-04-13T17:11:03.001220Z"
+        }
+      ],
+      "whyItMatters": "Задает направление для AI, платформ и цифровых сервисов."
+    },
+    {
+      "id": "cluster-demo-2",
+      "storyKey": "energy-inflation-rates",
+      "title": "Инфляция и цены на энергию снова влияют на ожидания рынков и ставки",
+      "description": "Рост стоимости энергии усиливает давление на потребительские цены и меняет ожидания инвесторов.",
+      "summary": "Рост стоимости энергии усиливает давление на потребительские цены и меняет ожидания инвесторов. Источников: 2.",
+      "url": "https://example.com/original-economy-story",
+      "theme": "economy",
+      "regions": [
+        "europe",
+        "global"
+      ],
+      "categories": [
+        "Inflation",
+        "Energy",
+        "Markets"
+      ],
+      "entities": [
+        "ECB",
+        "Brent"
+      ],
+      "publishedAt": "2026-04-13T17:11:03.001337Z",
+      "primarySource": "Euronews",
+      "sourceCount": 2,
+      "importanceScore": 37.2,
+      "coverage": [
+        "Euronews",
+        "The Guardian"
+      ],
+      "items": [],
+      "whyItMatters": "Может повлиять на рынки, цены, валюты и решения бизнеса."
+    },
+    {
+      "id": "cluster-demo-3",
+      "storyKey": "cyber-breach-infrastructure",
+      "title": "Новая серия киберинцидентов усилила внимание к безопасности корпоративной инфраструктуры",
+      "description": "Компании и госструктуры обновляют меры защиты после публикации данных о новых атаках и уязвимостях.",
+      "summary": "Компании и госструктуры обновляют меры защиты после публикации данных о новых атаках и уязвимостях. Источников: 2.",
+      "url": "https://example.com/original-cyber-story",
+      "theme": "cyber",
+      "regions": [
+        "global"
+      ],
+      "categories": [
+        "Cybersecurity",
+        "Breach",
+        "Infrastructure"
+      ],
+      "entities": [
+        "CISA",
+        "BleepingComputer"
+      ],
+      "publishedAt": "2026-04-13T17:11:03.001440Z",
+      "primarySource": "BleepingComputer",
+      "sourceCount": 2,
+      "importanceScore": 35.8,
+      "coverage": [
+        "BleepingComputer",
+        "ABC News"
+      ],
+      "items": [],
+      "whyItMatters": "Важно для безопасности данных, компаний и госструктур."
+    }
+  ],
+  "articles": [
+    {
+      "id": "a1",
+      "title": "AI-функции становятся базовым слоем цифровых сервисов",
+      "description": "Крупные технологические компании ускоряют интеграцию генеративных моделей в рабочие продукты.",
+      "url": "https://example.com/original-ai-story",
+      "source": "TechCrunch",
+      "sourceType": "tech",
+      "publishedAt": "2026-04-13T17:11:03.001563Z",
+      "categories": [
+        "AI",
+        "Products"
+      ],
+      "theme": "technology",
+      "regions": [
+        "global",
+        "usa"
+      ],
+      "entities": [
+        "OpenAI",
+        "Google"
+      ],
+      "storyKey": "ai-regulation-platforms",
+      "importanceScore": 34.1,
+      "trustLabel": "Стандартная",
+      "whyItMatters": "Задает направление для AI, платформ и цифровых сервисов."
+    },
+    {
+      "id": "a2",
+      "title": "Регулирование AI меняет дорожные карты платформ",
+      "description": "Новые нормативные рамки влияют на сроки выпуска и приоритеты продуктовых команд.",
+      "url": "https://example.com/original-ai-story-2",
+      "source": "The New York Times",
+      "sourceType": "general",
+      "publishedAt": "2026-04-13T17:11:03.001683Z",
+      "categories": [
+        "AI",
+        "Regulation"
+      ],
+      "theme": "technology",
+      "regions": [
+        "usa"
+      ],
+      "entities": [
+        "Microsoft"
+      ],
+      "storyKey": "ai-regulation-platforms",
+      "importanceScore": 32.9,
+      "trustLabel": "Стандартная",
+      "whyItMatters": "Задает направление для AI, платформ и цифровых сервисов."
+    },
+    {
+      "id": "a3",
+      "title": "Рост цен на энергию меняет рыночные ожидания в Европе",
+      "description": "Аналитики пересматривают прогнозы по инфляции и ставкам после новых сигналов сырьевого рынка.",
+      "url": "https://example.com/original-economy-story",
+      "source": "Euronews",
+      "sourceType": "general",
+      "publishedAt": "2026-04-13T17:11:03.001770Z",
+      "categories": [
+        "Inflation",
+        "Energy"
+      ],
+      "theme": "economy",
+      "regions": [
+        "europe"
+      ],
+      "entities": [
+        "ECB"
+      ],
+      "storyKey": "energy-inflation-rates",
+      "importanceScore": 31.8,
+      "trustLabel": "Стандартная",
+      "whyItMatters": "Может повлиять на рынки, цены, валюты и решения бизнеса."
+    },
+    {
+      "id": "a4",
+      "title": "Инвесторы ждут новых сигналов по ставкам и инфляции",
+      "description": "Финансовые площадки остаются чувствительными к данным по рынку труда и стоимости энергии.",
+      "url": "https://example.com/original-economy-story-2",
+      "source": "The Guardian",
+      "sourceType": "general",
+      "publishedAt": "2026-04-13T17:11:03.001828Z",
+      "categories": [
+        "Markets"
+      ],
+      "theme": "economy",
+      "regions": [
+        "global"
+      ],
+      "entities": [
+        "Brent"
+      ],
+      "storyKey": "energy-inflation-rates",
+      "importanceScore": 30.2,
+      "trustLabel": "Стандартная",
+      "whyItMatters": "Может повлиять на рынки, цены, валюты и решения бизнеса."
+    },
+    {
+      "id": "a5",
+      "title": "Компании усиливают защиту инфраструктуры после новой серии киберинцидентов",
+      "description": "Отчёты по атакам стимулируют обновление политик доступа, резервирования и мониторинга.",
+      "url": "https://example.com/original-cyber-story",
+      "source": "BleepingComputer",
+      "sourceType": "tech",
+      "publishedAt": "2026-04-13T17:11:03.001869Z",
+      "categories": [
+        "Cybersecurity"
+      ],
+      "theme": "cyber",
+      "regions": [
+        "global"
+      ],
+      "entities": [
+        "CISA"
+      ],
+      "storyKey": "cyber-breach-infrastructure",
+      "importanceScore": 29.7,
+      "trustLabel": "Стандартная",
+      "whyItMatters": "Важно для безопасности данных, компаний и госструктур."
+    },
+    {
+      "id": "a6",
+      "title": "Политические переговоры смещают акцент на регулирование стратегических технологий",
+      "description": "Решения властей все сильнее влияют на поставки оборудования, чипов и облачных сервисов.",
+      "url": "https://example.com/original-politics-story",
+      "source": "NPR",
+      "sourceType": "analysis",
+      "publishedAt": "2026-04-13T17:11:03.001904Z",
+      "categories": [
+        "Policy",
+        "Technology"
+      ],
+      "theme": "politics",
+      "regions": [
+        "usa",
+        "global"
+      ],
+      "entities": [
+        "Congress"
+      ],
+      "storyKey": "policy-strategic-tech",
+      "importanceScore": 28.4,
+      "trustLabel": "Высокая",
+      "whyItMatters": "Влияет на политику, международные отношения и регулирование."
+    }
+  ],
+  "feedHealth": [],
+  "legal": {
+    "mode": "aggregator",
+    "copyright": "Сервис публикует заголовок, краткое описание, источник и прямую ссылку на оригинал.",
+    "notice": "Оригинальные материалы принадлежат их правообладателям. Для полного чтения используется переход на сайт источника."
+  }
+}

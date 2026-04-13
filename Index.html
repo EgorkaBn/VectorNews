@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VECTOR 2026 — интеллектуальный агрегатор новостей</title>
+  <meta name="description" content="Современный новостной агрегатор с умной фильтрацией, сюжетами, быстрыми сводками и безопасной публикацией ссылок на оригинальные материалы." />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{
+      --bg:#081120;
+      --bg-soft:rgba(15,23,42,.72);
+      --panel:rgba(9,16,30,.72);
+      --panel-strong:rgba(10,18,35,.92);
+      --text:#edf2ff;
+      --muted:#93a4c6;
+      --line:rgba(255,255,255,.08);
+      --brand:#6ea8fe;
+      --brand-2:#a855f7;
+      --accent:#22c55e;
+      --danger:#fb7185;
+      --warning:#f59e0b;
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --radius:24px;
+      --radius-sm:16px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.18), transparent 22%),
+        radial-gradient(circle at top right, rgba(168,85,247,.13), transparent 22%),
+        linear-gradient(180deg,#050a13 0%, #081120 55%, #070d19 100%);
+      min-height:100vh;
+    }
+    body.light{
+      --bg:#eff4ff;
+      --bg-soft:rgba(255,255,255,.8);
+      --panel:rgba(255,255,255,.78);
+      --panel-strong:rgba(255,255,255,.94);
+      --text:#0f172a;
+      --muted:#516179;
+      --line:rgba(15,23,42,.08);
+      --brand:#1d4ed8;
+      --brand-2:#7c3aed;
+      --shadow:0 18px 40px rgba(15,23,42,.12);
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.10), transparent 22%),
+        radial-gradient(circle at top right, rgba(168,85,247,.09), transparent 22%),
+        linear-gradient(180deg,#f8fbff 0%, #eef4ff 45%, #eef1f9 100%);
+    }
+    a{color:inherit}
+    button,input{font:inherit}
+    .container{max-width:1480px;margin:0 auto;padding:24px}
+    .topbar,.panel,.hero-card,.story-card,.article-card,.drawer,.modal-content{
+      background:var(--panel);
+      border:1px solid var(--line);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+    }
+    .topbar{
+      position:sticky;top:14px;z-index:50;
+      display:grid;grid-template-columns:240px 1fr auto;gap:16px;align-items:center;
+      padding:16px 18px;border-radius:24px;margin-bottom:18px;
+    }
+    .logo{display:flex;gap:14px;align-items:center}
+    .logo-mark{
+      width:48px;height:48px;border-radius:16px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:white;font-weight:800;font-size:21px;
+      box-shadow:0 10px 25px rgba(29,78,216,.28);
+    }
+    .logo h1{margin:0;font-size:18px;line-height:1.1}
+    .logo p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .search-wrap{
+      display:flex;align-items:center;gap:10px;
+      border-radius:18px;padding:10px 14px;background:rgba(255,255,255,.04);border:1px solid var(--line)
+    }
+    body.light .search-wrap{background:rgba(15,23,42,.03)}
+    .search-wrap input{
+      flex:1;border:none;background:transparent;color:var(--text);outline:none
+    }
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .btn,.chip,.tab{
+      border:none;cursor:pointer;color:var(--text);
+      background:rgba(255,255,255,.05);border:1px solid var(--line);
+      padding:11px 14px;border-radius:16px;transition:.2s ease;
+    }
+    body.light .btn,body.light .chip,body.light .tab{background:rgba(15,23,42,.03)}
+    .btn:hover,.chip:hover,.tab:hover{transform:translateY(-1px);border-color:rgba(110,168,254,.4)}
+    .btn.primary,.chip.active,.tab.active{
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#fff;border-color:transparent;
+    }
+    .layout{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}
+    .hero-card{
+      min-height:390px;border-radius:30px;overflow:hidden;position:relative;padding:28px;
+      background-size:cover;background-position:center;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,10,19,.16) 0%, rgba(5,10,19,.78) 100%);
+    }
+    .hero-content{position:relative;z-index:2;display:flex;flex-direction:column;height:100%}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);width:max-content;font-size:12px}
+    .hero-title{margin:18px 0 10px;font-size:clamp(30px,4vw,56px);line-height:1.03;max-width:850px}
+    .hero-summary{max-width:820px;color:rgba(255,255,255,.9);font-size:16px;line-height:1.55}
+    .hero-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:18px}
+    .meta-pill{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.11);font-size:13px}
+    .sidebar{display:grid;gap:18px}
+    .panel{border-radius:24px;padding:18px}
+    .panel h3{margin:0 0 12px;font-size:16px}
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .stat{
+      padding:16px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--line)
+    }
+    body.light .stat{background:rgba(15,23,42,.03)}
+    .stat strong{display:block;font-size:26px;margin-top:6px}
+    .filters,.sections-tabs{display:flex;gap:10px;flex-wrap:wrap}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    .section-head{
+      display:flex;justify-content:space-between;gap:16px;align-items:flex-end;margin-top:28px
+    }
+    .section-head h2{margin:0;font-size:24px}
+    .section-head p{margin:4px 0 0;color:var(--muted)}
+    .story-card,.article-card{
+      border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:14px
+    }
+    .story-card:hover,.article-card:hover{transform:translateY(-2px)}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{
+      display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;
+      font-size:12px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)
+    }
+    body.light .tag{background:rgba(15,23,42,.03)}
+    .story-card h3,.article-card h3{margin:0;font-size:21px;line-height:1.25}
+    .story-card p,.article-card p{margin:0;color:var(--muted);line-height:1.55}
+    .story-footer,.article-footer{
+      display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-top:auto
+    }
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    .action{
+      border:none;border-radius:14px;padding:10px 12px;cursor:pointer;
+      background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)
+    }
+    body.light .action{background:rgba(15,23,42,.03)}
+    .priority-high{color:#fff;background:rgba(251,113,133,.18);border-color:rgba(251,113,133,.22)}
+    .priority-good{color:#fff;background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.22)}
+    .muted{color:var(--muted)}
+    .list{display:grid;gap:12px}
+    .mini-row{
+      display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-top:1px solid var(--line)
+    }
+    .mini-row:first-child{border-top:none;padding-top:0}
+    .mini-row strong{display:block;margin-bottom:4px}
+    .drawer{
+      position:fixed;right:18px;bottom:18px;z-index:60;width:min(460px,calc(100vw - 36px));
+      border-radius:24px;padding:18px;display:none
+    }
+    .drawer.open{display:block}
+    .drawer textarea{
+      width:100%;min-height:120px;border-radius:18px;border:1px solid var(--line);padding:14px;
+      background:rgba(255,255,255,.04);color:var(--text);resize:vertical
+    }
+    body.light .drawer textarea{background:rgba(15,23,42,.03)}
+    .modal{
+      position:fixed;inset:0;background:rgba(2,6,23,.6);display:none;align-items:center;justify-content:center;padding:24px;z-index:80
+    }
+    .modal.open{display:flex}
+    .modal-content{
+      width:min(860px,100%);max-height:88vh;overflow:auto;border-radius:28px;padding:24px
+    }
+    .modal-content h2{margin-top:0}
+    .footer{
+      margin:34px 0 20px;padding:22px;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.03)
+    }
+    body.light .footer{background:rgba(255,255,255,.55)}
+    .empty{padding:36px;border-radius:24px;text-align:center;color:var(--muted);border:1px dashed var(--line)}
+    .hidden{display:none !important}
+    @media (max-width: 1180px){
+      .layout{grid-template-columns:1fr}
+      .topbar{grid-template-columns:1fr;justify-items:stretch}
+      .toolbar{justify-content:flex-start}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 780px){
+      .container{padding:14px}
+      .grid-2,.grid-3,.stats{grid-template-columns:1fr}
+      .hero-card{min-height:320px;padding:20px}
+      .hero-summary{font-size:15px}
+      .topbar{top:8px}
+      .section-head{flex-direction:column;align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="topbar">
+      <div class="logo">
+        <div class="logo-mark">V</div>
+        <div>
+          <h1>VECTOR 2026</h1>
+          <p>Интеллектуальный новостной агрегатор</p>
+        </div>
+      </div>
+
+      <label class="search-wrap">
+        <span>🔎</span>
+        <input id="searchInput" type="search" placeholder="Поиск по темам, регионам, компаниям, персонам" />
+      </label>
+
+      <div class="toolbar">
+        <button class="btn" id="themeToggleBtn">🌙 Тема</button>
+        <button class="btn" id="savedBtn">⭐ Сохранённое</button>
+        <button class="btn" id="personalizeBtn">✨ Мои интересы</button>
+        <button class="btn primary" id="assistantBtn">🧠 AI-обзор</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="layout">
+        <article class="hero-card" id="heroCard" style="background-image:url('assets/all.svg')">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <span class="eyebrow" id="heroEyebrow">● Сюжет дня</span>
+            <h2 class="hero-title" id="heroTitle">Загрузка ключевого сюжета…</h2>
+            <p class="hero-summary" id="heroSummary">Собираем ленту, группируем материалы и подготавливаем краткую сводку по наиболее важным публикациям.</p>
+            <div class="hero-meta" id="heroMeta"></div>
+          </div>
+        </article>
+
+        <aside class="sidebar">
+          <section class="panel">
+            <h3>Панель редактора</h3>
+            <div class="stats">
+              <div class="stat"><span class="muted">Материалы</span><strong id="statArticles">—</strong></div>
+              <div class="stat"><span class="muted">Сюжеты</span><strong id="statClusters">—</strong></div>
+              <div class="stat"><span class="muted">Источники</span><strong id="statSources">—</strong></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <h3>Тематические режимы</h3>
+            <div class="filters" id="themeFilters"></div>
+          </section>
+
+          <section class="panel">
+            <h3>Регионы</h3>
+            <div class="filters" id="regionFilters"></div>
+          </section>
+
+          <section class="panel">
+            <h3>Сейчас быстро растёт</h3>
+            <div class="list" id="trendingList"></div>
+          </section>
+        </aside>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <div>
+            <h2>Ключевые сюжеты</h2>
+            <p>Сгруппированные истории с несколькими источниками и кратким контекстом.</p>
+          </div>
+          <div class="sections-tabs">
+            <button class="tab active" data-sort="top">По важности</button>
+            <button class="tab" data-sort="latest">Сначала новые</button>
+            <button class="tab" data-sort="sources">По числу источников</button>
+          </div>
+        </div>
+        <div class="grid-2" id="storiesGrid"></div>
+      </section>
+
+      <section>
+        <div class="section-head">
+          <div>
+            <h2>Живая лента</h2>
+            <p>Только короткий анонс, источник и ссылка на оригинал — без нарушения авторских прав.</p>
+          </div>
+          <div class="muted" id="requestMeta"></div>
+        </div>
+        <div class="grid-3" id="articlesGrid"></div>
+      </section>
+
+      <section class="footer">
+        <strong>Правовой режим публикации</strong>
+        <p>Сайт работает как агрегатор: отображает заголовок, краткий анонс, источник, дату и прямую ссылку на оригинальную публикацию. Полные тексты не копируются, а открываются на стороне правообладателя.</p>
+        <p class="muted">Рекомендация: перед публикацией на хостинге добавьте реальные контакты для обращений правообладателей и политику обработки запросов на удаление.</p>
+      </section>
+    </main>
+  </div>
+
+  <section class="drawer" id="assistantDrawer">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px">
+      <strong>AI-обзор ленты</strong>
+      <button class="btn" id="closeDrawerBtn">Закрыть</button>
+    </div>
+    <textarea id="assistantText" readonly></textarea>
+    <div class="actions" style="margin-top:12px">
+      <button class="action" id="copyBriefBtn">Скопировать</button>
+      <button class="action" id="refreshBriefBtn">Обновить обзор</button>
+    </div>
+  </section>
+
+  <div class="modal" id="storyModal">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+        <div>
+          <div class="tag-row" id="modalTags"></div>
+          <h2 id="modalTitle"></h2>
+        </div>
+        <button class="btn" id="closeModalBtn">✕</button>
+      </div>
+      <p id="modalSummary"></p>
+      <div class="panel" style="margin:18px 0">
+        <h3>Почему это важно</h3>
+        <p id="modalWhy"></p>
+      </div>
+      <div class="panel">
+        <h3>Покрытие источников</h3>
+        <div id="modalCoverage" class="list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const app = {
+      apiUrl: 'news-site.php',
+      state: {
+        payload: null,
+        sort: 'top',
+        theme: localStorage.getItem('vector_theme_filter') || 'all',
+        region: localStorage.getItem('vector_region_filter') || 'all',
+        search: '',
+        saved: JSON.parse(localStorage.getItem('vector_saved_2026') || '[]'),
+        interests: JSON.parse(localStorage.getItem('vector_interests_2026') || '["technology","economy"]'),
+        viewSavedOnly: false,
+      },
+      labels: {
+        themes: {
+          all:'Все', politics:'Политика', economy:'Экономика', technology:'Технологии', cyber:'Кибер', science:'Наука',
+          conflict:'Конфликты', incidents:'Инциденты', sport:'Спорт', culture:'Культура'
+        },
+        regions: {
+          all:'Весь мир', global:'Глобально', russia:'Россия', usa:'США', europe:'Европа', middleeast:'Ближний Восток', asia:'Азия'
+        }
+      },
+      themeBackgrounds: {
+        all:'assets/all.svg',
+        politics:'assets/politics.svg',
+        economy:'assets/economy.svg',
+        technology:'assets/technology.svg',
+        cyber:'assets/cyber.svg',
+        science:'assets/science.svg',
+        conflict:'assets/conflict.svg',
+        incidents:'assets/incidents.svg',
+        sport:'assets/sport.svg',
+        culture:'assets/culture.svg'
+      }
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+
+    function formatTime(iso) {
+      try {
+        return new Date(iso).toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+      } catch {
+        return 'недавно';
+      }
+    }
+
+    function timeAgo(iso) {
+      const seconds = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+      if (!Number.isFinite(seconds) || seconds < 60) return 'только что';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes} мин назад`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours} ч назад`;
+      const days = Math.floor(hours / 24);
+      return `${days} д назад`;
+    }
+
+    function escapeHtml(value = '') {
+      return value
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;');
+    }
+
+    function persistState() {
+      localStorage.setItem('vector_theme_filter', app.state.theme);
+      localStorage.setItem('vector_region_filter', app.state.region);
+      localStorage.setItem('vector_saved_2026', JSON.stringify(app.state.saved));
+      localStorage.setItem('vector_interests_2026', JSON.stringify(app.state.interests));
+    }
+
+    async function loadPayload() {
+      const params = new URLSearchParams({
+        sort: app.state.sort,
+        limit: '120'
+      });
+      if (app.state.theme !== 'all') params.set('theme', app.state.theme);
+      if (app.state.region !== 'all') params.set('region', app.state.region);
+      if (app.state.search) params.set('q', app.state.search);
+
+      const response = await fetch(`${app.apiUrl}?${params.toString()}`, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Ошибка загрузки');
+      const payload = await response.json();
+      app.state.payload = payload;
+      $('#requestMeta').textContent = `Обновлено: ${formatTime(payload.updatedAt || new Date().toISOString())}`;
+      return payload;
+    }
+
+    function buildFilterButtons() {
+      const themeWrap = $('#themeFilters');
+      const regionWrap = $('#regionFilters');
+      themeWrap.innerHTML = '';
+      regionWrap.innerHTML = '';
+
+      Object.entries(app.labels.themes).forEach(([key, label]) => {
+        const button = document.createElement('button');
+        button.className = `chip ${app.state.theme === key ? 'active' : ''}`;
+        button.textContent = label;
+        button.onclick = () => {
+          app.state.theme = key;
+          app.state.viewSavedOnly = false;
+          persistState();
+          refresh();
+        };
+        themeWrap.appendChild(button);
+      });
+
+      Object.entries(app.labels.regions).forEach(([key, label]) => {
+        const button = document.createElement('button');
+        button.className = `chip ${app.state.region === key ? 'active' : ''}`;
+        button.textContent = label;
+        button.onclick = () => {
+          app.state.region = key;
+          app.state.viewSavedOnly = false;
+          persistState();
+          refresh();
+        };
+        regionWrap.appendChild(button);
+      });
+    }
+
+    function updateStats(payload) {
+      $('#statArticles').textContent = payload.stats?.articles ?? 0;
+      $('#statClusters').textContent = payload.stats?.clusters ?? 0;
+      $('#statSources').textContent = payload.stats?.sources ?? 0;
+    }
+
+    function chooseHero(payload) {
+      const featured = payload.highlights?.[0] || payload.clusters?.[0];
+      if (!featured) {
+        $('#heroTitle').textContent = 'Нет данных';
+        $('#heroSummary').textContent = 'Сервис не смог получить публикации из подключённых RSS-источников.';
+        $('#heroMeta').innerHTML = '';
+        return;
+      }
+      $('#heroCard').style.backgroundImage = `url('${app.themeBackgrounds[featured.theme] || app.themeBackgrounds.all}')`;
+      $('#heroEyebrow').textContent = `● Сюжет дня · ${app.labels.themes[featured.theme] || 'Все'}`;
+      $('#heroTitle').textContent = featured.title;
+      $('#heroSummary').textContent = featured.summary || featured.description || '';
+      $('#heroMeta').innerHTML = `
+        <span class="meta-pill">Источников: ${featured.sourceCount || featured.coverage?.length || 1}</span>
+        <span class="meta-pill">Регион: ${(featured.regions || []).map(region => app.labels.regions[region] || region).join(', ')}</span>
+        <span class="meta-pill">Обновлено: ${timeAgo(featured.publishedAt)}</span>
+      `;
+    }
+
+    function buildTrending(payload) {
+      const items = (payload.clusters || []).slice(0, 5);
+      $('#trendingList').innerHTML = items.map(item => `
+        <div class="mini-row">
+          <div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span class="muted">${escapeHtml((item.regions || []).map(region => app.labels.regions[region] || region).join(', '))}</span>
+          </div>
+          <div class="muted">${item.sourceCount || 1} ист.</div>
+        </div>
+      `).join('') || '<div class="empty">Пока нет сюжетов</div>';
+    }
+
+    function isSaved(id) {
+      return app.state.saved.includes(id);
+    }
+
+    function toggleSaved(id) {
+      if (isSaved(id)) {
+        app.state.saved = app.state.saved.filter(item => item !== id);
+      } else {
+        app.state.saved.push(id);
+      }
+      persistState();
+      renderArticles(app.state.payload);
+    }
+
+    function applySavedFilter(payload) {
+      if (!app.state.viewSavedOnly) return payload;
+      return {
+        ...payload,
+        clusters: (payload.clusters || []).filter(item => isSaved(item.id)),
+        articles: (payload.articles || []).filter(item => isSaved(item.id)),
+        highlights: (payload.highlights || []).filter(item => isSaved(item.id)),
+      };
+    }
+
+    function renderStories(payload) {
+      const grid = $('#storiesGrid');
+      const stories = payload.clusters || [];
+      if (!stories.length) {
+        grid.innerHTML = '<div class="empty">По этому фильтру сюжеты не найдены.</div>';
+        return;
+      }
+      grid.innerHTML = stories.slice(0, 8).map(item => `
+        <article class="story-card">
+          <div class="tag-row">
+            <span class="tag">${app.labels.themes[item.theme] || 'Все'}</span>
+            <span class="tag">${item.sourceCount || 1} источников</span>
+            <span class="tag ${item.importanceScore > 36 ? 'priority-high' : 'priority-good'}">приоритет ${Math.round(item.importanceScore || 0)}</span>
+          </div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.summary || item.description || '')}</p>
+          <div class="tag-row">
+            ${(item.entities || []).slice(0,4).map(entity => `<span class="tag">${escapeHtml(entity)}</span>`).join('')}
+          </div>
+          <div class="story-footer">
+            <span class="muted">Обновлено ${timeAgo(item.publishedAt)}</span>
+            <div class="actions">
+              <button class="action" data-story-open="${item.id}">Контекст</button>
+              <a class="action" href="${item.url}" target="_blank" rel="noopener noreferrer">Источник</a>
+              <button class="action" data-story-save="${item.id}">${isSaved(item.id) ? '★ Сохранено' : '☆ Сохранить'}</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      $$('[data-story-open]').forEach(button => {
+        button.onclick = () => openStoryModal(button.dataset.storyOpen);
+      });
+      $$('[data-story-save]').forEach(button => {
+        button.onclick = () => {
+          toggleSaved(button.dataset.storySave);
+          renderStories(app.state.payload);
+        };
+      });
+    }
+
+    function renderArticles(payload) {
+      const grid = $('#articlesGrid');
+      const articles = payload.articles || [];
+      if (!articles.length) {
+        grid.innerHTML = '<div class="empty">По этому фильтру лента пуста.</div>';
+        return;
+      }
+      grid.innerHTML = articles.slice(0, 18).map(item => `
+        <article class="article-card">
+          <div class="tag-row">
+            <span class="tag">${escapeHtml(item.source)}</span>
+            <span class="tag">${app.labels.themes[item.theme] || 'Все'}</span>
+            <span class="tag">${item.trustLabel || 'Стандартная'}</span>
+          </div>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.description || '')}</p>
+          <div class="panel" style="padding:14px;border-radius:18px;box-shadow:none">
+            <strong style="display:block;margin-bottom:6px">Почему это важно</strong>
+            <span class="muted">${escapeHtml(item.whyItMatters || '')}</span>
+          </div>
+          <div class="article-footer">
+            <span class="muted">${timeAgo(item.publishedAt)} · ${escapeHtml((item.regions || []).map(region => app.labels.regions[region] || region).join(', '))}</span>
+            <div class="actions">
+              <a class="action" href="${item.url}" target="_blank" rel="noopener noreferrer">Оригинал</a>
+              <button class="action" data-copy="${item.url}">Копировать</button>
+              <button class="action" data-save="${item.id}">${isSaved(item.id) ? '★' : '☆'}</button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      $$('[data-copy]').forEach(button => {
+        button.onclick = async () => {
+          await navigator.clipboard.writeText(button.dataset.copy);
+          button.textContent = 'Скопировано';
+          setTimeout(() => button.textContent = 'Копировать', 1200);
+        };
+      });
+      $$('[data-save]').forEach(button => {
+        button.onclick = () => {
+          toggleSaved(button.dataset.save);
+          renderArticles(app.state.payload);
+          renderStories(app.state.payload);
+        };
+      });
+    }
+
+    function generateBrief(payload) {
+      const top = (payload.clusters || []).slice(0, 5);
+      const interests = app.state.interests.map(theme => app.labels.themes[theme] || theme).join(', ');
+      const lines = [
+        'Краткая AI-сводка по ленте VECTOR 2026',
+        '',
+        `Интересы пользователя: ${interests || 'не заданы'}`,
+        `Материалов: ${payload.stats?.articles ?? 0}, сюжетов: ${payload.stats?.clusters ?? 0}, источников: ${payload.stats?.sources ?? 0}`,
+        '',
+        ...top.map((story, index) => `${index + 1}. ${story.title} — ${story.sourceCount || 1} источников, тема: ${app.labels.themes[story.theme] || 'Все'}, обновлено ${timeAgo(story.publishedAt)}. ${story.whyItMatters || ''}`)
+      ];
+      return lines.join('\n');
+    }
+
+    function openStoryModal(id) {
+      const story = (app.state.payload?.clusters || []).find(item => item.id === id);
+      if (!story) return;
+      $('#modalTitle').textContent = story.title;
+      $('#modalSummary').textContent = story.summary || story.description || '';
+      $('#modalWhy').textContent = story.whyItMatters || '';
+      $('#modalTags').innerHTML = `
+        <span class="tag">${app.labels.themes[story.theme] || 'Все'}</span>
+        <span class="tag">${story.sourceCount || 1} источников</span>
+        ${(story.regions || []).map(region => `<span class="tag">${app.labels.regions[region] || region}</span>`).join('')}
+      `;
+      $('#modalCoverage').innerHTML = (story.items || []).slice(0, 12).map(item => `
+        <div class="mini-row">
+          <div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span class="muted">${escapeHtml(item.source)} · ${formatTime(item.publishedAt)}</span>
+          </div>
+          <a class="action" href="${item.url}" target="_blank" rel="noopener noreferrer">Открыть</a>
+        </div>
+      `).join('');
+      $('#storyModal').classList.add('open');
+    }
+
+    function closeStoryModal() {
+      $('#storyModal').classList.remove('open');
+    }
+
+    async function refresh() {
+      buildFilterButtons();
+      const payload = await loadPayload();
+      app.state.payload = payload;
+      const filtered = applySavedFilter(payload);
+      updateStats(filtered);
+      chooseHero(filtered);
+      buildTrending(filtered);
+      renderStories(filtered);
+      renderArticles(filtered);
+      $('#assistantText').value = generateBrief(filtered);
+    }
+
+    function bindEvents() {
+      $('#themeToggleBtn').onclick = () => {
+        document.body.classList.toggle('light');
+        localStorage.setItem('vector_body_theme', document.body.classList.contains('light') ? 'light' : 'dark');
+      };
+      if (localStorage.getItem('vector_body_theme') === 'light') {
+        document.body.classList.add('light');
+      }
+
+      $('#savedBtn').onclick = async () => {
+        app.state.viewSavedOnly = !app.state.viewSavedOnly;
+        $('#savedBtn').classList.toggle('primary', app.state.viewSavedOnly);
+        if (app.state.payload) {
+          const filtered = applySavedFilter(app.state.payload);
+          updateStats(filtered);
+          chooseHero(filtered);
+          buildTrending(filtered);
+          renderStories(filtered);
+          renderArticles(filtered);
+          $('#assistantText').value = generateBrief(filtered);
+        }
+      };
+
+      $('#personalizeBtn').onclick = () => {
+        const input = prompt('Введите интересующие темы через запятую.\nДоступно: politics, economy, technology, cyber, science, conflict, incidents, sport, culture', app.state.interests.join(', '));
+        if (input === null) return;
+        app.state.interests = input.split(',').map(v => v.trim()).filter(Boolean);
+        persistState();
+        if (app.state.payload) $('#assistantText').value = generateBrief(app.state.payload);
+      };
+
+      $('#assistantBtn').onclick = () => $('#assistantDrawer').classList.add('open');
+      $('#closeDrawerBtn').onclick = () => $('#assistantDrawer').classList.remove('open');
+      $('#closeModalBtn').onclick = closeStoryModal;
+      $('#storyModal').onclick = (event) => {
+        if (event.target.id === 'storyModal') closeStoryModal();
+      };
+
+      $('#copyBriefBtn').onclick = async () => {
+        await navigator.clipboard.writeText($('#assistantText').value);
+      };
+      $('#refreshBriefBtn').onclick = () => {
+        if (app.state.payload) $('#assistantText').value = generateBrief(app.state.payload);
+      };
+
+      $('#searchInput').addEventListener('input', debounce(async (event) => {
+        app.state.search = event.target.value.trim();
+        await refresh();
+      }, 320));
+
+      $$('.tab').forEach(button => {
+        button.onclick = async () => {
+          $$('.tab').forEach(tab => tab.classList.remove('active'));
+          button.classList.add('active');
+          app.state.sort = button.dataset.sort;
+          await refresh();
+        };
+      });
+    }
+
+    function debounce(fn, delay = 300) {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    bindEvents();
+    refresh().catch(error => {
+      console.error(error);
+      $('#storiesGrid').innerHTML = '<div class="empty">Не удалось загрузить сюжеты.</div>';
+      $('#articlesGrid').innerHTML = '<div class="empty">Не удалось загрузить ленту.</div>';
+    });
+  </script>
+</body>
+</html>
